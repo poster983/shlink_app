@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 
-void main() {
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:get/get.dart';
+
+import 'package:shlink_app/widgets/add_server.dart';
+
+
+//types
+import './types/Server.dart';
+
+void main() async {
+
+  //init Hive DB
+  await Hive.initFlutter();
+  await Hive.openBox('preferences');
+  await Hive.openBox('servers');
+  await Hive.openBox('add_server_autofill');
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Shlink',
       theme: ThemeData(
         // This is the theme of your application.
@@ -26,7 +45,15 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Shlink'),
+
+      initialRoute: '/home',
+      getPages: [
+        GetPage(name: '/home', page: () => MyHomePage(title: 'Shlink')),
+      ],
+      /*home: MyHomePage(title: 'Shlink'),
+      routes: <String, WidgetBuilder> {
+        //'/addserver': (BuildContext context) => AddServerPage(),
+      },*/
     );
   }
 }
@@ -53,6 +80,18 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+    GetBar(
+          title: "title",
+          animationDuration: new Duration(milliseconds: 300),
+          messageText: new RaisedButton(
+                  onPressed: () {Get.back();},
+                  child: Text('Dismiss'),
+                ),
+          duration: Duration(seconds: 3),
+        ).show();
+
+    /*Get.rawSnackbar(
+                titleText: Text('text'), messageText: Text(_counter.toString()));*/
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -72,7 +111,28 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        actions: [
+          new IconButton(
+            icon: new Icon(Icons.add, semanticLabel: "Add new Server"), 
+            onPressed: () {
+              Get.bottomSheet(AddServerSheet(),
+                isScrollControlled: true,
+                
+              );
+              /*showModalBottomSheet<void>(
+                context: context,
+                //useRootNavigator: true,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+                isScrollControlled: true,
+                builder: (context) => AddServerSheet()
+              );*/
+             //Navigator.push(context, MaterialPageRoute(builder: (context) => AddServerPage()));
+            }
+          )
+        ],
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
