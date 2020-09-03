@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:share/share.dart';
 
 /// A Card for shortning URLS
 class ShortenerCard extends StatefulWidget {
@@ -111,6 +112,16 @@ class _ShortenerCardState extends State<ShortenerCard> {
                   autovalidate: true,
                   onFieldSubmitted: (v) { setState((){});}
                 ),
+                new Row(children: [ // Service picker and custom route textbox
+                  new TextFormField(  // Custom Path 
+                    decoration: InputDecoration(
+                        prefix: new Text("/"),
+                        labelText: 'Custom Path (Optional)',
+                        //suffixIcon: 
+                    )
+                  )
+                ],)
+
               ]
             )
           )
