@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:shlink_app/types/Server.dart';
+import 'package:shlink_app/types/Shlink.dart';
 import "../common.dart";
 
 class AddServerSheet extends StatefulWidget {
@@ -29,7 +29,7 @@ class AddServerSheet extends StatefulWidget {
 class _AddServerSheetState extends State<AddServerSheet> {
   final _formKey = GlobalKey<FormState>();
   var autofill = Hive.box("add_server_autofill");
-  var serverBox = Hive.box("servers");
+  var serverBox = Hive.box("shlink_servers");
 
 
   @override
@@ -76,13 +76,13 @@ class _AddServerSheetState extends State<AddServerSheet> {
       autofill.deleteAll(["host", "name", "apiKey"]);
 
       //save to server box
-      var newServer = new Server(host: host, name: name, apiKey: apiKey);
+      var newServer = new Shlink(host: host, name: name, apiKey: apiKey);
       var key = Uuid().v4();
       serverBox.put(key, newServer.toJson());
 
       
       
-      Get.back();
+      Get.back(closeOverlays: true);
     } else {
       showSnackBar(text: "Invalid Form");
       
@@ -96,10 +96,10 @@ class _AddServerSheetState extends State<AddServerSheet> {
     //print(Get.previousRoute);
     return new SingleChildScrollView( 
       child: Container(
-        decoration: new BoxDecoration(
-          color: Theme.of(context).cardColor,
+       /* decoration: new BoxDecoration(
+          color: 
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))
-        ),
+        ),*/
         
         padding: EdgeInsets.only(
           top: 50,
@@ -130,6 +130,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
                   onChanged: (val) {
                     autofill.put('name', val);
                   },
+                  //autofocus: true,
                   initialValue: autofill.get("name"),
                   //autovalidate: true
                 ),
@@ -142,6 +143,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
                   onChanged: (val) {
                     autofill.put('host', val);
                   },
+                  autocorrect: false,
                   initialValue: (autofill.get("host")!=null)?autofill.get("host"):"https://",
                   autovalidate: true
                 ),
@@ -154,6 +156,8 @@ class _AddServerSheetState extends State<AddServerSheet> {
                   onChanged: (val) {
                     autofill.put('apiKey', val);
                   },
+                  autocorrect: false,
+                  enableSuggestions: false,
                   //autovalidate: true
                 ),
                 new SizedBox(height: 15),
@@ -161,8 +165,12 @@ class _AddServerSheetState extends State<AddServerSheet> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //Cancel Buttom
-                    new RaisedButton(
-                      onPressed: (){Get.back(closeOverlays: true);},
+                    new OutlineButton(
+                      onPressed: (){
+                        //whipe autofill
+                        autofill.deleteAll(["host", "name", "apiKey"]);
+                        Get.back(closeOverlays: true);
+                      },
                       child: Text('Cancel'),
                     ),
                     new SizedBox(width: 20),
@@ -213,3 +221,61 @@ class _AddServerSheetState extends State<AddServerSheet> {
 
 
 }
+
+/// Shows Add server sheet as a dialog or bottom sheet depending on context
+/// 
+/// 
+void showAddServerDialog() {
+  if(Get.context.isLargeTablet) {
+    Get.dialog(new Dialog(
+      child: AddServerSheet()
+    ));
+  } else {
+    showModalBottomSheet<void>(
+        context: Get.context,
+        isScrollControlled: true,
+        backgroundColor: Color.fromARGB(0, 0, 0, 0),
+        builder: (BuildContext context) {
+          return new Container(
+              child: AddServerSheet(),
+              margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Get.theme.cardColor, 
+                borderRadius: BorderRadius.circular(30)
+              ),
+            );
+        }
+    );
+    /*Get.bottomSheet(
+      /*new Container(
+        child: AddServerSheet(),
+        margin: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Get.theme.cardColor, 
+          borderRadius: BorderRadius.circular(30)
+        ),
+      ),*/
+      /*BottomSheet(
+        animationController: ,
+          enableDrag: false,
+          backgroundColor: Color.fromARGB(0, 0, 0, 0),
+          onClosing: () {},
+          builder: (BuildContext context) {
+            return new Container(
+              child: AddServerSheet(),
+              margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Get.theme.cardColor, 
+                borderRadius: BorderRadius.circular(30)
+              ),
+            ); 
+          }
+      ),*/
+      isScrollControlled: true,
+      
+      
+      
+      
+    );*/
+  }
+}//https://stackoverflow.com/questions/55929366/implementing-transitions-in-a-bottomsheet
