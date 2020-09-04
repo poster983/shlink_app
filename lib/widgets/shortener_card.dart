@@ -17,8 +17,13 @@ class ShortenerCard extends StatefulWidget {
 
 class _ShortenerCardState extends State<ShortenerCard> {
   final _formKey = GlobalKey<FormState>();
-  var longURLControll = new TextEditingController();
-  var urlProtocall = "";
+  var _longURLControll = new TextEditingController();
+  var _longURLFocus = new FocusNode();
+
+  var _urlProtocall = "";
+
+
+  
 
   /// Gets the clipboard data from the 
   /// [onlyValid] if set to true it will only paste if the URL is valid
@@ -28,11 +33,11 @@ class _ShortenerCardState extends State<ShortenerCard> {
         var res = validateURL(clipboard.text);
         if(onlyValid != null && onlyValid ) {
           if(res == null ) {
-            longURLControll.text = clipboard.text;
+            _longURLControll.text = clipboard.text;
             setState((){});
           }
         } else {
-            longURLControll.text = clipboard.text;
+            _longURLControll.text = clipboard.text;
             setState((){});
         }
         
@@ -46,14 +51,14 @@ class _ShortenerCardState extends State<ShortenerCard> {
       var url = Uri.parse(value);
       var host = (url.host.isEmpty)?value:url.host; // The parser puts the host in the scheme if no scheme is found. But we need the host all the time
       if(!GetUtils.isURL(host)) {
-        urlProtocall = "";
+        _urlProtocall = "";
         return "Invalid URL";
       } else {
         //If the url is valid, but has no protocall then add it to the prefix
         if(!url.hasScheme) {
-          urlProtocall = "http://";
+          _urlProtocall = "http://";
         } else {
-          urlProtocall = "";
+          _urlProtocall = "";
         }
       }
       return null;
@@ -63,7 +68,18 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
   _ShortenerCardState() {
     pasteClipboardURL(onlyValid: true);
+    _longURLFocus.addListener(() { // Detect focus change for Long URL Textbox
+      if(!_longURLFocus.hasFocus) {
+        setState((){}); // update widget state for HTTP
+      }
+    });
+  }
 
+  @override
+  void dispose() {
+    _longURLFocus.dispose();
+    _longURLControll.dispose();
+    super.dispose();
   }
   
 
@@ -95,12 +111,14 @@ class _ShortenerCardState extends State<ShortenerCard> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     prefix: new GestureDetector( // Protocall prefix.  Tap to remove
-                      child: new Text(urlProtocall),
-                      onTap: () {setState((){ urlProtocall = ""; });},
+                      child: new Text(_urlProtocall),
+                      onTap: () {setState((){ _urlProtocall = ""; });},
                     ),
+                    icon: Icon(Icons.link),
                     suffixIcon: new Row(mainAxisSize: MainAxisSize.min, children: [ // add buttons to input
-                      new IconButton(icon: Icon(Icons.clear), onPressed: () { urlProtocall = ""; longURLControll.clear(); setState((){}); }), // clear
                       new IconButton(icon: Icon(Icons.paste), onPressed: () => pasteClipboardURL() ),
+                      new IconButton(icon: Icon(Icons.clear), onPressed: () { _urlProtocall = ""; _longURLControll.clear(); setState((){}); }), // clear
+                      
                     ]),
                     labelText: 'Long URL',
                   ),
@@ -108,17 +126,20 @@ class _ShortenerCardState extends State<ShortenerCard> {
                     
                   },
                   //autofocus: true,
-                  controller: longURLControll,
+                  controller: _longURLControll,
                   autovalidate: true,
-                  onFieldSubmitted: (v) { setState((){});}
+                  focusNode: _longURLFocus,
+                  //onFieldSubmitted: (v) { setState((){});}
                 ),
                 new Row(children: [ // Service picker and custom route textbox
-                  new TextFormField(  // Custom Path 
+                  new Flexible(
+                    child: new TextFormField(  // Custom Path 
                     decoration: InputDecoration(
                         prefix: new Text("/"),
                         labelText: 'Custom Path (Optional)',
                         //suffixIcon: 
                     )
+                  )
                   )
                 ],)
 

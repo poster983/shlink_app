@@ -1,4 +1,4 @@
-class Service {
+/*class Service {
   String apiKey;
 
   Uri host;
@@ -7,4 +7,4 @@ class Service {
 
   final DateTime dayAdded;
   Service(this.dayAdded)
-}
+}*/
