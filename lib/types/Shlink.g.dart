@@ -9,13 +9,14 @@ part of 'Shlink.dart';
 Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
   return Shlink(
     host: Uri.parse(json['host'] as String),
-    apiKey: json['apiKey'] as String,
     name: json['name'] as String,
-  );
+    apiKey: json['apiKey'] as String,
+  )..dayAdded = DateTime.parse(json['dayAdded'] as String);
 }
 
 Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
       'apiKey': instance.apiKey,
       'host': instance.host.toString(),
       'name': instance.name,
+      'dayAdded': instance.dayAdded.toIso8601String(),
     };

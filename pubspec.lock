@@ -487,6 +487,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
+  shlink:
+    dependency: "direct main"
+    description:
+      name: shlink
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   sky_engine:
     dependency: transitive
     description: flutter

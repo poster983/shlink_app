@@ -13,11 +13,11 @@ class AppTheme {
     ),
     //primaryColor: Colors.red,
     buttonTheme: ButtonThemeData(
-      buttonColor: Colors.redAccent,
+      buttonColor: Color(0xFFE03A3C),
       textTheme: ButtonTextTheme.primary,
     ),
     brightness: Brightness.light,
-    accentColor: Colors.red,
+    accentColor: Color(0xFFE03A3C),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     
   );
@@ -26,11 +26,11 @@ class AppTheme {
     primarySwatch: Colors.red,
     //primarySwatch: Colors.grey,
     buttonTheme: ButtonThemeData(
-      buttonColor: Colors.red,
+      buttonColor: Color(0xFFE03A3C),
       textTheme: ButtonTextTheme.primary,
     ),
 
-    accentColor: Colors.red,
+    accentColor: Color(0xFFE03A3C),
     brightness: Brightness.dark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );

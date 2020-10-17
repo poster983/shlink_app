@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
+import 'package:shlink_app/widgets/shorten_button.dart';
 
 /// A Card for shortning URLS
 class ShortenerCard extends StatefulWidget {
@@ -87,7 +89,6 @@ class _ShortenerCardState extends State<ShortenerCard> {
   @override
   Widget build(BuildContext context) {
     
-    
     return Card(
       elevation: 5.0,
       shape: RoundedRectangleBorder(
@@ -106,6 +107,9 @@ class _ShortenerCardState extends State<ShortenerCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+
+                /*** LONG URL  */
+
                 new TextFormField( 
                   validator: (v) => validateURL(v),
                   decoration: InputDecoration(
@@ -131,17 +135,39 @@ class _ShortenerCardState extends State<ShortenerCard> {
                   focusNode: _longURLFocus,
                   //onFieldSubmitted: (v) { setState((){});}
                 ),
+
+                /** SERVICE AND CUSTOM PATH  */
+
+
                 new Row(children: [ // Service picker and custom route textbox
                   new Flexible(
+                      child: new TextFormField(  // Custom Path 
+                      decoration: InputDecoration(
+                          labelText: 'TEMP!! Service Dropdown',
+                          icon: Icon(Icons.cloud_queue),
+                          //suffixIcon: 
+                      )
+                    )
+                  ),
+                  new SizedBox(width: 5),
+                  new Flexible(
                     child: new TextFormField(  // Custom Path 
-                    decoration: InputDecoration(
+                      decoration: InputDecoration(
                         prefix: new Text("/"),
                         labelText: 'Custom Path (Optional)',
                         //suffixIcon: 
                     )
                   )
                   )
-                ],)
+                ],),
+                
+                /** ADVANCED OPTIONS */
+
+
+                /** SUBMIT AND GET LINK */
+                new SizedBox(height: 10),
+                new ShortenButton()
+                
 
               ]
             )
