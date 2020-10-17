@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink_app/types/Service.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
@@ -9,7 +10,9 @@ part 'Shlink.g.dart';
 @JsonSerializable(nullable: false)
 class Shlink implements Service{
 
-  final String type = "Shlink";
+  @visibleForTesting
+  ServiceType get type => ServiceType.Shlink;
+  set type(t) => {}; // This is stupid.  Why is this required Json Serializable?
 
   String apiKey;
 
@@ -52,7 +55,6 @@ class Shlink implements Service{
     ShlinkAPI.ShortUrl short = await _shlinkAPI.create(
       new ShlinkAPI.CreateShortURL(link, customSlug: slug)
     );
-
     return ShortUrl.fromShlinkAPI(short);
   }
 }

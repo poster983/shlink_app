@@ -10,6 +10,8 @@ import 'package:shlink_app/common.dart';
 import 'package:shlink_app/widgets/add_server.dart';
 import 'package:shlink_app/widgets/shortener_card.dart';
 
+import 'Services.dart';
+
 
 //types
 
@@ -18,7 +20,7 @@ void main() async {
   //init Hive DB
   await Hive.initFlutter();
   await Hive.openBox('preferences');
-  await Hive.openBox('shlink_servers');
+  await Hive.openBox('services');
   await Hive.openBox('add_server_autofill');
 
   runApp(MyApp());
@@ -65,9 +67,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  
+  
   int _counter = 0;
 
   void _incrementCounter() {
+    
     GetBar(
           title: "title",
           animationDuration: new Duration(milliseconds: 300),
@@ -106,6 +111,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         actions: [
           new IconButton(
+            icon: Icon(Icons.delete), 
+            onPressed: () {
+              Hive.box("services").deleteFromDisk();
+              showSnackBar(text: "Deleted all services");
+            }
+          ),
+          new IconButton(
             icon: Icon(Icons.brightness_medium), 
             onPressed: () {
               if(Get.isDarkMode){
@@ -131,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          
            showAddServerDialog();
         },
         tooltip: 'Add Server',

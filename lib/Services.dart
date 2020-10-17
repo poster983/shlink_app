@@ -1,6 +1,21 @@
+import 'package:shlink_app/types/Service.dart';
+import 'package:hive/hive.dart';
+import 'package:shlink_app/types/Shlink.dart';
 
-/// A Class to interface with the saves services
-/*class Services  {
 
-  static 
-}*/
+/// A Class to interface with the saved services
+class Services  {
+  final serverBox = Hive.box("services");
+  Services();
+
+  List<Service> get list {
+    return serverBox.values.map((serv) {
+
+      switch(serv["type"]) {
+        case "Shlink": 
+          return new Shlink.fromJson(serv.cast<String,dynamic>());
+          break;
+      }
+    }).toList();
+  }
+}

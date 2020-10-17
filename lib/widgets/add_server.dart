@@ -29,7 +29,7 @@ class AddServerSheet extends StatefulWidget {
 class _AddServerSheetState extends State<AddServerSheet> {
   final _formKey = GlobalKey<FormState>();
   var autofill = Hive.box("add_server_autofill");
-  var serverBox = Hive.box("shlink_servers");
+  var serverBox = Hive.box("services");
 
 
   @override

@@ -13,7 +13,9 @@ class Service {
 
   final SupportedFeatures features;
 
-  Service({this.host, this.name, this.dayAdded, this.features, this.apiKey});
+  final ServiceType type;
+
+  Service({this.host, this.name, this.dayAdded, this.features, this.apiKey, this.type});
 
   Future<List<ShortUrl>> history() async {
     throw UnimplementedError();
@@ -22,7 +24,10 @@ class Service {
   
   /// Shorten:  Will shorten a link using the Shlink service
   Future<ShortUrl> shorten(String link, {String slug}) async {
-    return null;
+    throw UnimplementedError();
   }
 }
 
+enum ServiceType {
+  Shlink
+}

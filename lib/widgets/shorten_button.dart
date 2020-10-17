@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/animation.dart';
+import 'package:shlink_app/common.dart';
 
 class ShortenButton extends StatefulWidget {
   ShortenButton({Key key}) : super(key: key);
@@ -48,7 +49,7 @@ class _ShortenButtonState extends State<ShortenButton> with TickerProviderStateM
             loading = !loading;
 
           });
-          
+          showSnackBar(text: "Shortening");
         },
         child: new Text((loading)?"Loading":"Shorten"),
         //borderRadius: BorderRadius.all(Radius.circular(_buttonRadiusAnimation.value)),

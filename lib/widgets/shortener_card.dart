@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
+import 'package:shlink_app/widgets/service_chooser.dart';
 import 'package:shlink_app/widgets/shorten_button.dart';
 
 /// A Card for shortning URLS
@@ -141,13 +142,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
                 new Row(children: [ // Service picker and custom route textbox
                   new Flexible(
-                      child: new TextFormField(  // Custom Path 
-                      decoration: InputDecoration(
-                          labelText: 'TEMP!! Service Dropdown',
-                          icon: Icon(Icons.cloud_queue),
-                          //suffixIcon: 
-                      )
-                    )
+                      child: new ServiceChooser()
                   ),
                   new SizedBox(width: 5),
                   new Flexible(
