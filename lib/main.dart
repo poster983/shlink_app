@@ -6,17 +6,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
+import 'package:shlink_app/controllers/AppController.dart';
 
 import 'package:shlink_app/widgets/add_server.dart';
 import 'package:shlink_app/widgets/shortener_card.dart';
 
 import 'Services.dart';
 
-
 //types
 
 void main() async {
-
   //init Hive DB
   await Hive.initFlutter();
   await Hive.openBox('preferences');
@@ -28,14 +27,13 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Shlink',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-
       initialRoute: '/home',
       getPages: [
         GetPage(name: '/home', page: () => MyHomePage(title: 'Shlink')),
@@ -50,6 +48,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
+  final AppController controller = Get.put(AppController());
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -67,21 +66,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
-  
   int _counter = 0;
 
   void _incrementCounter() {
-    
     GetBar(
-          title: "title",
-          animationDuration: new Duration(milliseconds: 300),
-          messageText: new RaisedButton(
-                  onPressed: () {Get.back();},
-                  child: Text('Dismiss'),
-                ),
-          duration: Duration(seconds: 3),
-        ).show();
+      title: "title",
+      animationDuration: new Duration(milliseconds: 300),
+      messageText: new RaisedButton(
+        onPressed: () {
+          Get.back();
+        },
+        child: Text('Dismiss'),
+      ),
+      duration: Duration(seconds: 3),
+    ).show();
 
     /*Get.rawSnackbar(
                 titleText: Text('text'), messageText: Text(_counter.toString()));*/
@@ -94,8 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -111,40 +107,33 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         actions: [
           new IconButton(
-            icon: Icon(Icons.delete), 
-            onPressed: () {
-              Hive.box("services").deleteFromDisk();
-              showSnackBar(text: "Deleted all services");
-            }
-          ),
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                Hive.box("services").deleteFromDisk();
+                showSnackBar(text: "Deleted all services");
+              }),
           new IconButton(
-            icon: Icon(Icons.brightness_medium), 
-            onPressed: () {
-              if(Get.isDarkMode){
-                Get.changeTheme(AppTheme.lightTheme);  
-              } else {
-                Get.changeTheme(AppTheme.darkTheme);
-              }
-              
-            }
-          )
+              icon: Icon(Icons.brightness_medium),
+              onPressed: () {
+                if (Get.isDarkMode) {
+                  Get.changeTheme(AppTheme.lightTheme);
+                } else {
+                  Get.changeTheme(AppTheme.darkTheme);
+                }
+              })
         ],
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            new ShortenerCard()
-          ],
-        
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [new ShortenerCard()],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          
-           showAddServerDialog();
+          showAddServerDialog();
         },
         tooltip: 'Add Server',
         child: Icon(Icons.add),

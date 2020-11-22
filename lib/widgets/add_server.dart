@@ -1,9 +1,9 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:shlink_app/controllers/AppController.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:shlink_app/types/Shlink.dart';
@@ -21,16 +21,15 @@ class AddServerSheet extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  
   @override
   _AddServerSheetState createState() => _AddServerSheetState();
 }
 
 class _AddServerSheetState extends State<AddServerSheet> {
+  final AppController controller = Get.find();
   final _formKey = GlobalKey<FormState>();
   var autofill = Hive.box("add_server_autofill");
   var serverBox = Hive.box("services");
-
 
   @override
   void dispose() {
@@ -42,31 +41,30 @@ class _AddServerSheetState extends State<AddServerSheet> {
     if (value.isEmpty) {
       return 'Please enter some text';
     }
-    
+
     return null;
   }
 
   String urlValidator(value) {
-    if(!value.isEmpty) {
+    if (!value.isEmpty) {
       var url = Uri.parse(value);
-      if(!url.hasScheme) {
+      if (!url.hasScheme) {
         return "Please include https:// or http://";
       }
-      if(url.hasAbsolutePath) {
+      if (url.hasAbsolutePath) {
         return "Only include the base URL";
       }
 
-      if(!GetUtils.isURL(url.host)) {
+      if (!GetUtils.isURL(url.host)) {
         return "Invalid URL";
       }
       return null;
-    } 
+    }
     return "URL cannot be empty";
   }
 
   void submitForm(context) {
     if (_formKey.currentState.validate()) {
-      
       showSnackBar(text: "Processing Data");
       //get form data
       String name = autofill.get("name");
@@ -79,119 +77,114 @@ class _AddServerSheetState extends State<AddServerSheet> {
       var newServer = new Shlink(host: host, name: name, apiKey: apiKey);
       var key = Uuid().v4();
       serverBox.put(key, newServer.toJson());
+      controller.updateServices();
 
-      
-      
       Get.back(closeOverlays: true);
     } else {
       showSnackBar(text: "Invalid Form");
-      
     }
   }
 
-  
-  
   @override
   Widget build(BuildContext context) {
     //print(Get.previousRoute);
-    return new SingleChildScrollView( 
-      child: Container(
-       /* decoration: new BoxDecoration(
+    return new SingleChildScrollView(
+        child: Container(
+            /* decoration: new BoxDecoration(
           color: 
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))
         ),*/
-        
-        padding: EdgeInsets.only(
-          top: 50,
-          bottom: MediaQuery.of(context).viewInsets.bottom
-        ),
-        child: Padding(
-        
-        padding: const EdgeInsets.symmetric(horizontal:18 ),
-        child: Form(
-          key: _formKey,
-          
-          //color: Colors.amber,
-          
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new Text("Add a Shlink Server", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                new SizedBox(height: 25), //padding
-                //First the Name of the server
-                new TextFormField(validator: stringValidator, 
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    
-                    labelText: 'Server Name',
-                  ),
-                  onChanged: (val) {
-                    autofill.put('name', val);
-                  },
-                  //autofocus: true,
-                  initialValue: autofill.get("name"),
-                  //autovalidate: true
-                ),
-                new SizedBox(height: 15), //padding
-                new TextFormField(validator: urlValidator, 
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Host',
-                  ),
-                  onChanged: (val) {
-                    autofill.put('host', val);
-                  },
-                  autocorrect: false,
-                  initialValue: (autofill.get("host")!=null)?autofill.get("host"):"https://",
-                  autovalidate: true
-                ),
-                new SizedBox(height: 15),
-                new TextFormField(validator: stringValidator, 
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'API Key',
-                  ),
-                  onChanged: (val) {
-                    autofill.put('apiKey', val);
-                  },
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  //autovalidate: true
-                ),
-                new SizedBox(height: 15),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //Cancel Buttom
-                    new OutlineButton(
-                      onPressed: (){
-                        //whipe autofill
-                        autofill.deleteAll(["host", "name", "apiKey"]);
-                        Get.back(closeOverlays: true);
-                      },
-                      child: Text('Cancel'),
-                    ),
-                    new SizedBox(width: 20),
-                    // SUBMIT BUTTON
-                    new RaisedButton(
-                      onPressed: ()=>submitForm(context),
-                      child: Text('Add'),
-                    ),
-                  ],
-                ),
-                
-                
-                new SizedBox(height: 45), //padding
 
-              ],
-            ),
-          )
-        )
-        )
-      )
-    );
+            padding: EdgeInsets.only(
+                top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Form(
+                    key: _formKey,
+
+                    //color: Colors.amber,
+
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          new Text(
+                            "Add a Shlink Server",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24),
+                          ),
+                          new SizedBox(height: 25), //padding
+                          //First the Name of the server
+                          new TextFormField(
+                            validator: stringValidator,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Server Name',
+                            ),
+                            onChanged: (val) {
+                              autofill.put('name', val);
+                            },
+                            //autofocus: true,
+                            initialValue: autofill.get("name"),
+                            //autovalidate: true
+                          ),
+                          new SizedBox(height: 15), //padding
+                          new TextFormField(
+                              validator: urlValidator,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Host',
+                              ),
+                              onChanged: (val) {
+                                autofill.put('host', val);
+                              },
+                              autocorrect: false,
+                              initialValue: (autofill.get("host") != null)
+                                  ? autofill.get("host")
+                                  : "https://",
+                              autovalidate: true),
+                          new SizedBox(height: 15),
+                          new TextFormField(
+                            validator: stringValidator,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'API Key',
+                            ),
+                            onChanged: (val) {
+                              autofill.put('apiKey', val);
+                            },
+                            autocorrect: false,
+                            enableSuggestions: false,
+                            //autovalidate: true
+                          ),
+                          new SizedBox(height: 15),
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //Cancel Buttom
+                              new OutlineButton(
+                                onPressed: () {
+                                  //whipe autofill
+                                  autofill
+                                      .deleteAll(["host", "name", "apiKey"]);
+                                  Get.back(closeOverlays: true);
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              new SizedBox(width: 20),
+                              // SUBMIT BUTTON
+                              new RaisedButton(
+                                onPressed: () => submitForm(context),
+                                child: Text('Add'),
+                              ),
+                            ],
+                          ),
+
+                          new SizedBox(height: 45), //padding
+                        ],
+                      ),
+                    )))));
 
     /*const Text('Modal BottomSheet'),
             RaisedButton(
@@ -218,18 +211,14 @@ class _AddServerSheetState extends State<AddServerSheet> {
       ),
     );*/
   }
-
-
 }
 
 /// Shows Add server sheet as a dialog or bottom sheet depending on context
-/// 
-/// 
+///
+///
 void showAddServerDialog() {
-  if(Get.context.isLargeTablet) {
-    Get.dialog(new Dialog(
-      child: AddServerSheet()
-    ));
+  if (Get.context.isLargeTablet) {
+    Get.dialog(new Dialog(child: AddServerSheet()));
   } else {
     showModalBottomSheet<void>(
         context: Get.context,
@@ -237,15 +226,13 @@ void showAddServerDialog() {
         backgroundColor: Color.fromARGB(0, 0, 0, 0),
         builder: (BuildContext context) {
           return new Container(
-              child: AddServerSheet(),
-              margin: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Get.theme.cardColor, 
-                borderRadius: BorderRadius.circular(30)
-              ),
-            );
-        }
-    );
+            child: AddServerSheet(),
+            margin: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                color: Get.theme.cardColor,
+                borderRadius: BorderRadius.circular(30)),
+          );
+        });
     /*Get.bottomSheet(
       /*new Container(
         child: AddServerSheet(),
@@ -278,4 +265,4 @@ void showAddServerDialog() {
       
     );*/
   }
-}//https://stackoverflow.com/questions/55929366/implementing-transitions-in-a-bottomsheet
+} //https://stackoverflow.com/questions/55929366/implementing-transitions-in-a-bottomsheet

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/animation.dart';
 import 'package:shlink_app/common.dart';
+import 'package:shlink_app/controllers/AppController.dart';
 
 class ShortenButton extends StatefulWidget {
   ShortenButton({Key key}) : super(key: key);
@@ -13,11 +14,13 @@ class ShortenButton extends StatefulWidget {
 
 class _ShortenButtonState extends State<ShortenButton>
     with TickerProviderStateMixin {
+  final AppController controller = Get.find();
+
   var loading = false;
   Widget _currentWidget;
-  AnimationController _controller;
+  //AnimationController _controller;
   AnimationController _pulseAnimationController;
-  var _buttonRadiusAnimation;
+  //var _buttonRadiusAnimation;
   var _pulseAnimation;
 
   @override
@@ -25,12 +28,12 @@ class _ShortenButtonState extends State<ShortenButton>
     super.initState();
     //_currentWidget = button();
 
-    _controller = AnimationController(
+    /*_controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
     );
     _buttonRadiusAnimation =
-        new Tween(begin: 8.0, end: 50.0).animate(_controller);
+        new Tween(begin: 8.0, end: 50.0).animate(_controller);*/
 
     _pulseAnimationController = AnimationController(
       duration: const Duration(seconds: 1),
@@ -45,7 +48,7 @@ class _ShortenButtonState extends State<ShortenButton>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controller.dispose();
+    //_controller.dispose();
     _pulseAnimationController.dispose();
   }
 
@@ -61,7 +64,9 @@ class _ShortenButtonState extends State<ShortenButton>
                   });
                   showSnackBar(text: "Shortening");
                 },
-                child: new Text((loading) ? "Loading" : "Shorten"),
+                child: Obx(() => new Text((loading)
+                    ? "Loading"
+                    : "Shorten with ${controller.serviceList.elementAt(controller.selectedService.value).name}")), //controller.serviceList[controller.selectedService.value].name
                 //borderRadius: BorderRadius.all(Radius.circular(_buttonRadiusAnimation.value)),
               ),
               decoration: BoxDecoration(

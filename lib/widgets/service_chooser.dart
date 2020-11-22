@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
+import 'package:shlink_app/controllers/AppController.dart';
 import 'package:shlink_app/types/Service.dart';
 
 import '../Services.dart';
@@ -13,6 +15,7 @@ class ServiceChooser extends StatefulWidget {
 }
 
 class _ServiceChooserState extends State<ServiceChooser> {
+  final AppController controller = Get.find();
   Services services = new Services();
   List<Service> serviceList;
   Service dropdownValue;
@@ -31,6 +34,38 @@ class _ServiceChooserState extends State<ServiceChooser> {
 
   @override
   Widget build(BuildContext context) {
+    return Obx(() => DropdownButton<Service>(
+          value: controller.serviceList[controller.selectedService.value],
+          icon: Icon(Icons.arrow_downward),
+          iconSize: 24,
+          elevation: 16,
+          style: TextStyle(color: Get.theme.textTheme.button.color),
+          underline: Container(
+            height: 2,
+            color: Get.theme.accentColor,
+          ),
+          onChanged: (Service newValue) {
+            setState(() {
+              controller.selectedService.value = controller.serviceList
+                  .indexWhere((element) => newValue == element);
+            });
+          },
+          items: controller.serviceList
+              .map<DropdownMenuItem<Service>>((Service value) {
+            if (dropdownValue == null) {
+              dropdownValue =
+                  controller.serviceList[controller.selectedService.value];
+            }
+            return DropdownMenuItem<Service>(
+              value: value,
+              child: Text(value.name),
+            );
+          }).toList(),
+        ));
+  }
+}
+
+/* Widget build(BuildContext context) {
     return DropdownButton<Service>(
       value: dropdownValue,
       icon: Icon(Icons.arrow_downward),
@@ -57,4 +92,4 @@ class _ServiceChooserState extends State<ServiceChooser> {
       }).toList(),
     );
   }
-}
+ */
