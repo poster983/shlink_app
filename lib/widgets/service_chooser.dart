@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shlink_app/types/Service.dart';
@@ -18,14 +19,18 @@ class _ServiceChooserState extends State<ServiceChooser> {
   @override
   void initState() {
     super.initState();
+    serviceList = services.list;
     //dropdownValue = services.list[0];
-
   }
-  
+
+  update() {
+    setState(() {
+      serviceList = services.list;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    serviceList = services.list;
-    
     return DropdownButton<Service>(
       value: dropdownValue,
       icon: Icon(Icons.arrow_downward),
@@ -42,7 +47,7 @@ class _ServiceChooserState extends State<ServiceChooser> {
         });
       },
       items: serviceList.map<DropdownMenuItem<Service>>((Service value) {
-        if(dropdownValue == null) {
+        if (dropdownValue == null) {
           dropdownValue = serviceList[0];
         }
         return DropdownMenuItem<Service>(
@@ -52,5 +57,4 @@ class _ServiceChooserState extends State<ServiceChooser> {
       }).toList(),
     );
   }
-
 }
