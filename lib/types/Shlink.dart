@@ -8,8 +8,7 @@ import 'ShortUrl.dart';
 part 'Shlink.g.dart';
 
 @JsonSerializable(nullable: false)
-class Shlink implements Service{
-
+class Shlink implements Service {
   @visibleForTesting
   ServiceType get type => ServiceType.Shlink;
   set type(t) => {}; // This is stupid.  Why is this required Json Serializable?
@@ -24,7 +23,6 @@ class Shlink implements Service{
 
   ShlinkAPI.Shlink _shlinkAPI;
 
-
   @override
   SupportedFeatures get features => new SupportedFeatures(slug: true);
 
@@ -32,13 +30,12 @@ class Shlink implements Service{
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
   }
 
-
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
   Map<String, dynamic> toJson() => _$ShlinkToJson(this);
 
-
   @override
-   /// Shorten:  Will return a history of all links on the server
+
+  /// Shorten:  Will return a history of all links on the server
   Future<List<ShortUrl>> history() async {
     List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
 
@@ -47,14 +44,20 @@ class Shlink implements Service{
     }).toList();
   }
 
-
   /// Shorten:  Will shorten a link using the Shlink service
   @override
-  Future<ShortUrl> shorten(String link, {String slug}) async {
-    
+  Future<ShortUrl> shorten(Uri link, {String slug}) async {
+    try {
     ShlinkAPI.ShortUrl short = await _shlinkAPI.create(
-      new ShlinkAPI.CreateShortURL(link, customSlug: slug)
+        new ShlinkAPI.CreateShortURL(
+          link.toString(),
+            customSlug: slug
+        )
     );
-    return ShortUrl.fromShlinkAPI(short);
+      return ShortUrl.fromShlinkAPI(short);
+    } catch(err) {
+      throw err;
+    }
+    
   }
 }

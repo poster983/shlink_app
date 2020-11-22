@@ -28,7 +28,7 @@ class Service {
   }
 
   /// Shorten:  Will shorten a link using the Shlink service
-  Future<ShortUrl> shorten(String link, {String slug}) async {
+  Future<ShortUrl> shorten(Uri link, {String slug}) async {
     throw UnimplementedError();
   }
 

@@ -6,7 +6,12 @@ import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
 
 class ShortenButton extends StatefulWidget {
-  ShortenButton({Key key}) : super(key: key);
+  ShortenButton({Key key, this.onPressed, this.loading = false})
+      : super(key: key);
+
+  final VoidCallback onPressed;
+  bool loading;
+  bool get enabled => onPressed != null;
 
   @override
   _ShortenButtonState createState() => _ShortenButtonState();
@@ -15,8 +20,6 @@ class ShortenButton extends StatefulWidget {
 class _ShortenButtonState extends State<ShortenButton>
     with TickerProviderStateMixin {
   final AppController controller = Get.find();
-
-  var loading = false;
   Widget _currentWidget;
   //AnimationController _controller;
   AnimationController _pulseAnimationController;
@@ -58,13 +61,8 @@ class _ShortenButtonState extends State<ShortenButton>
         builder: (BuildContext context, Widget child) {
           return Container(
               child: new CupertinoButton.filled(
-                onPressed: () {
-                  setState(() {
-                    loading = !loading;
-                  });
-                  showSnackBar(text: "Shortening");
-                },
-                child: Obx(() => new Text((loading)
+                onPressed: widget.onPressed,
+                child: Obx(() => new Text((widget.loading)
                     ? "Loading"
                     : "Shorten with ${controller.serviceList.elementAt(controller.selectedService.value).name}")), //controller.serviceList[controller.selectedService.value].name
                 //borderRadius: BorderRadius.all(Radius.circular(_buttonRadiusAnimation.value)),
