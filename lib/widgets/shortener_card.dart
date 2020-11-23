@@ -22,24 +22,28 @@ class _ShortenerCardState extends State<ShortenerCard> {
   var _longURLControll = new TextEditingController();
   var _longURLFocus = new FocusNode();
   bool isLoading = false;
+  bool formValid = false;
   String shortURL = "";
 
   var _urlProtocall = "";
+  var _urlProtocallToggle = "http://";
 
   /// Gets the clipboard data from the
   /// [onlyValid] if set to true it will only paste if the URL is valid
   ///
   void pasteClipboardURL({bool onlyValid}) {
     Clipboard.getData('text/plain').then((clipboard) {
-      var res = validateURL(clipboard.text);
-      if (onlyValid != null && onlyValid) {
-        if (res == null) {
+      if(clipboard != null) {
+        var res = validateURL(clipboard.text);
+        if (onlyValid != null && onlyValid) {
+          if (res == null) {
+            _longURLControll.text = clipboard.text;
+            setState(() {});
+          }
+        } else {
           _longURLControll.text = clipboard.text;
           setState(() {});
         }
-      } else {
-        _longURLControll.text = clipboard.text;
-        setState(() {});
       }
     });
   }
@@ -53,22 +57,35 @@ class _ShortenerCardState extends State<ShortenerCard> {
               .host; // The parser puts the host in the scheme if no scheme is found. But we need the host all the time
       if (!GetUtils.isURL(host)) {
         _urlProtocall = "";
+        formValid = false;
+        
         return "Invalid URL";
       } else {
         //If the url is valid, but has no protocall then add it to the prefix
         if (!url.hasScheme) {
-          _urlProtocall = "http://";
+          _urlProtocall = _urlProtocallToggle;
         } else {
           _urlProtocall = "";
         }
       }
+      formValid = true;
       return null;
     }
+    formValid = false;
     return "URL cannot be empty";
   }
 
   _ShortenerCardState() {
     pasteClipboardURL(onlyValid: true);
+
+    _longURLControll.addListener(() {
+      setState(() {
+        
+        formValid = validateURL(_longURLControll.text)==null?true:false;
+      });
+      
+    });
+
     _longURLFocus.addListener(() {
       // Detect focus change for Long URL Textbox
       if (!_longURLFocus.hasFocus) {
@@ -88,18 +105,20 @@ class _ShortenerCardState extends State<ShortenerCard> {
         
         controller.serviceList
           .elementAt(controller.selectedService.value)
-          .shorten(Uri.parse(_longURLControll.text))
+          .shorten(Uri.parse(_urlProtocall + _longURLControll.text))
           .then((value) {
             setState(() {
               isLoading = false;
             });
             print(value.shortUrl);
             shortURL = value.shortUrl.toString();
+            
+            Clipboard.setData(ClipboardData(text: shortURL));
             Share.share(shortURL);
 
           })
           .catchError((err) {
-            showSnackBar(text: "There was an error");
+            showSnackBar(text: err.title);
             setState(() {
               isLoading = false;
             });
@@ -155,9 +174,21 @@ class _ShortenerCardState extends State<ShortenerCard> {
                               child: new Text(_urlProtocall),
                               onTap: () {
                                 setState(() {
-                                  _urlProtocall = "";
+                                  if(_urlProtocallToggle == "http://") {
+                                    _urlProtocallToggle = "https://";
+                                  } else {
+                                    _urlProtocallToggle = "http://";
+                                  }
+                                  _urlProtocall = _urlProtocallToggle;
+                                  
                                 });
                               },
+                              
+                              onLongPress: () {
+                                setState(() {
+                                  _urlProtocall = "";
+                                });
+                              }
                             ),
                             icon: Icon(Icons.link),
                             suffixIcon: new Row(
@@ -179,6 +210,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
                           ),
                           onChanged: (val) {},
                           //autofocus: true,
+                          keyboardType: TextInputType.url,
                           autocorrect: false,
                           controller: _longURLControll,
                           autovalidate: true,
@@ -208,7 +240,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
                         /** SUBMIT AND GET LINK */
                         new SizedBox(height: 10),
-                        new ShortenButton(onPressed: submit, loading: isLoading),
+                        new ShortenButton(onPressed: formValid?submit:null, loading: isLoading),
                         new SizedBox(height: 10),
                         new Text("Short URL: " + shortURL)
 

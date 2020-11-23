@@ -56,7 +56,7 @@ class Shlink implements Service {
     );
       return ShortUrl.fromShlinkAPI(short);
     } catch(err) {
-      throw err;
+      return Future.error(err);
     }
     
   }

@@ -140,6 +140,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
                                 autofill.put('host', val);
                               },
                               autocorrect: false,
+                              keyboardType: TextInputType.url,
                               initialValue: (autofill.get("host") != null)
                                   ? autofill.get("host")
                                   : "https://",

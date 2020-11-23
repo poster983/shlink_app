@@ -34,7 +34,9 @@ dependencies:
       ref: dev
   uuid: ^2.2.2
   share: '>=0.6.5 <2.0.0'
+  receive_sharing_intent: ^1.4.2
   shlink: ^0.7.0
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -47,6 +49,16 @@ dev_dependencies:
   build_runner: ^1.10.2
   json_serializable: ^3.4.1
   hive_generator: ^0.7.1
+  flutter_launcher_icons: "^0.8.0"
+
+#flutter pub run flutter_launcher_icons:main
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon/leg_android.png"
+  image_path_ios: "assets/app_icon/ios_icon.png"
+  adaptive_icon_background: "assets/app_icon/adaptive_icon_background.png"
+  adaptive_icon_foreground: "assets/app_icon/adaptive_icon_foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

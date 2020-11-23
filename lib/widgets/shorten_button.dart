@@ -43,8 +43,8 @@ class _ShortenButtonState extends State<ShortenButton>
       vsync: this,
     );
     _pulseAnimation =
-        new Tween(begin: 6.0, end: 16.0).animate(_pulseAnimationController);
-    _pulseAnimationController.repeat(reverse: true);
+        new Tween(begin: 0.0, end: 16.0).animate(_pulseAnimationController);
+    
   }
 
   @override
@@ -56,6 +56,11 @@ class _ShortenButtonState extends State<ShortenButton>
   }
 
   Widget button() {
+    if(widget.enabled) {
+      _pulseAnimationController.repeat(reverse: true);
+    } else {
+      _pulseAnimationController.stop();
+    }
     return AnimatedBuilder(
         animation: _pulseAnimationController,
         builder: (BuildContext context, Widget child) {
@@ -71,7 +76,7 @@ class _ShortenButtonState extends State<ShortenButton>
                   borderRadius: BorderRadius.circular(25),
                   boxShadow: [
                     BoxShadow(
-                      color: Get.theme.accentColor.withAlpha(60),
+                      color: Get.theme.accentColor.withAlpha(widget.enabled?60:0),
                       blurRadius: 10.0,
                       spreadRadius: _pulseAnimation.value == null
                           ? 6.0
