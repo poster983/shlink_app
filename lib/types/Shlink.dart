@@ -17,6 +17,8 @@ class Shlink implements Service {
 
   Uri host;
 
+  Uri doamin;
+
   String name;
 
   DateTime dayAdded = new DateTime.now();
@@ -28,6 +30,8 @@ class Shlink implements Service {
 
   Shlink({this.host, this.name, this.apiKey}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
+    //temp
+    doamin = Uri.parse(this.host.host);
   }
 
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
@@ -60,4 +64,5 @@ class Shlink implements Service {
     }
     
   }
+
 }

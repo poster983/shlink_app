@@ -7,6 +7,8 @@ class Service {
 
   final Uri host;
 
+  final Uri domain;
+
   final String name;
 
   final DateTime dayAdded;
@@ -21,7 +23,8 @@ class Service {
       this.dayAdded,
       this.features,
       this.apiKey,
-      this.type});
+      this.type,
+      this.domain});
 
   Future<List<ShortUrl>> history() async {
     throw UnimplementedError();
