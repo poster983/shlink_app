@@ -23,7 +23,7 @@ void main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(ShortUrlAdapter());
-  Hive.registerAdapter(DateTimeAdapter());
+  Hive.registerAdapter(UriAdapter());
   
   await Hive.openBox('preferences');
   await Hive.openBox('services');

@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
-class DateTimeAdapter extends TypeAdapter<Uri> {
+/// Hive adapter for the URI class.  Uses tostring and parse 
+class UriAdapter extends TypeAdapter<Uri> {
   @override
   final typeId = 1;
 
