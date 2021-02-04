@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink_app/types/Service.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
@@ -16,8 +17,8 @@ class Shlink implements Service {
   String apiKey;
 
   Uri host;
-
-  Uri doamin;
+  @JsonKey(nullable: true)
+  Uri domain;
 
   String name;
 
@@ -31,21 +32,48 @@ class Shlink implements Service {
   Shlink({this.host, this.name, this.apiKey}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
     //temp
-    doamin = Uri.parse(this.host.host);
+    domain = Uri.parse(this.host.host);
   }
 
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
   Map<String, dynamic> toJson() => _$ShlinkToJson(this);
 
+  
+
+  /// history:  Will return a history of all links on the server
   @override
-
-  /// Shorten:  Will return a history of all links on the server
   Future<List<ShortUrl>> history() async {
+    print(host);
+    try {
     List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
-
+    
     return urls.map((url) {
       return ShortUrl.fromShlinkAPI(url);
     }).toList();
+
+    } catch (err) {
+      return Future.error(err);
+    }
+  }
+
+  /// refreshHistory: Will update the hivedb history
+  @override
+  Future<bool> refreshHistory() async {
+    try {
+      var historyBox = Hive.box<ShortUrl>("history");
+      List<ShortUrl> urls = await history();
+      print("refreshedHistory: ${urls.length}");
+      urls.forEach((e) {
+        historyBox.put(e.shortUrl.toString(), e);
+        print(e.shortUrl.toString());
+      });
+
+      return true;
+    } catch (err) {
+      return Future.error(err);
+    }
+    
+
   }
 
   /// Shorten:  Will shorten a link using the Shlink service
@@ -64,5 +92,7 @@ class Shlink implements Service {
     }
     
   }
+
+  
 
 }

@@ -30,6 +30,10 @@ class Service {
     throw UnimplementedError();
   }
 
+  Future<bool> refreshHistory() async {
+    throw UnimplementedError();
+  }
+
   /// Shorten:  Will shorten a link using the Shlink service
   Future<ShortUrl> shorten(Uri link, {String slug}) async {
     throw UnimplementedError();

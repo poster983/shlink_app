@@ -7,8 +7,11 @@ import 'package:get/get.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
+import 'package:shlink_app/types/ShortUrl.dart';
+import 'package:shlink_app/types/hive_types/uri_adapter.dart';
 
 import 'package:shlink_app/widgets/add_server.dart';
+import 'package:shlink_app/widgets/history/history_list.dart';
 import 'package:shlink_app/widgets/shortener_card.dart';
 
 import 'Services.dart';
@@ -18,9 +21,14 @@ import 'Services.dart';
 void main() async {
   //init Hive DB
   await Hive.initFlutter();
+
+  Hive.registerAdapter(ShortUrlAdapter());
+  Hive.registerAdapter(DateTimeAdapter());
+  
   await Hive.openBox('preferences');
   await Hive.openBox('services');
   await Hive.openBox('add_server_autofill');
+  await Hive.openBox<ShortUrl>('history');
 
   runApp(MyApp());
 }
@@ -129,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        children: [new ShortenerCard()],
+        children: [new ShortenerCard(), new HistoryList()],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

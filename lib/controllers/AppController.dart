@@ -22,6 +22,9 @@ class AppController extends GetxController {
   }
 
   void updateHistory() {
+    serviceList.forEach((element) {
+      element.refreshHistory();
+    });
     print("Will update the history");
   }
 

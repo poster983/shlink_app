@@ -13,6 +13,8 @@ Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
     apiKey: json['apiKey'] as String,
   )
     ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
+    ..domain =
+        json['domain'] == null ? null : Uri.parse(json['domain'] as String)
     ..dayAdded = DateTime.parse(json['dayAdded'] as String);
 }
 
@@ -20,6 +22,7 @@ Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
       'type': _$ServiceTypeEnumMap[instance.type],
       'apiKey': instance.apiKey,
       'host': instance.host.toString(),
+      'domain': instance.domain?.toString(),
       'name': instance.name,
       'dayAdded': instance.dayAdded.toIso8601String(),
     };
