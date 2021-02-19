@@ -12,20 +12,12 @@ class AppController extends GetxController {
   //final _newestShortLink = ShortUrl().obs;
   AppController() {
     updateServices();
-    updateHistory();
   }
   void updateServices() {
     selectedService.value = 0;
     serviceList(services.list);
     //inspect(services.list);
     //serviceList. = services.list;
-  }
-
-  void updateHistory() {
-    serviceList.forEach((element) {
-      element.refreshHistory();
-    });
-    print("Will update the history");
   }
 
   /*set newestShortLink(ShortUrl link) {

@@ -69,7 +69,7 @@ class _ShortenButtonState extends State<ShortenButton>
                 onPressed: widget.onPressed,
                 child: Obx(() => new Text((widget.loading)
                     ? "Loading"
-                    : "Shorten with ${controller.serviceList.elementAt(controller.selectedService.value).name}")), //controller.serviceList[controller.selectedService.value].name
+                    : (controller.serviceList.length == 0)?"Shorten":"Shorten with ${controller.serviceList.elementAt(controller.selectedService.value).name}")), //controller.serviceList[controller.selectedService.value].name
                 //borderRadius: BorderRadius.all(Radius.circular(_buttonRadiusAnimation.value)),
               ),
               decoration: BoxDecoration(

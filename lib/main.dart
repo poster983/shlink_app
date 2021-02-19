@@ -30,6 +30,8 @@ void main() async {
   await Hive.openBox('add_server_autofill');
   await Hive.openBox<ShortUrl>('history');
 
+  new Services().updateHistory();
+
   runApp(MyApp());
 }
 
@@ -74,6 +76,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final AppController controller = Get.find();
   int _counter = 0;
 
   void _incrementCounter() {
@@ -128,6 +131,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 } else {
                   Get.changeTheme(AppTheme.darkTheme);
                 }
+              }),
+              new IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  controller.services.updateHistory();
               })
         ],
         // Here we take the value from the MyHomePage object that was created by

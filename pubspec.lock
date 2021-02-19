@@ -527,10 +527,12 @@ packages:
   shlink:
     dependency: "direct main"
     description:
-      name: shlink
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: "297abcf76515c8778757610db2067e24911280a4"
+      url: "https://github.com/poster983/dart_shlink.git"
+    source: git
+    version: "0.8.0"
   sky_engine:
     dependency: transitive
     description: flutter

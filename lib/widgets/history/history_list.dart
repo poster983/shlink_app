@@ -18,41 +18,40 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(child: Text("History:"),),
-        ValueListenableBuilder(
-          valueListenable: Hive.box<ShortUrl>('history').listenable(),
-          builder: (context, box, widget) {
-            //Do filtering inside the updated builder
-            //TODO: FILTERING
-            List<ShortUrl> filteredHistory = box.values.toList();
-            print(filteredHistory.length);
+    return ValueListenableBuilder(
+            valueListenable: Hive.box<ShortUrl>('history').listenable(),
+            builder: (context, box, widget) {
+              //Do filtering inside the updated builder
+              //TODO: FILTERING
+              List<ShortUrl> filteredHistory = box.values.toList();
+              print(filteredHistory.length);
 
-            // LIST 
-            return ListView.builder(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(8),
-                    itemCount: filteredHistory.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: 50,
-                        
-                        child: Center(child: Column(children: [
-                          Text('${filteredHistory[index].shortUrl}'),
-                          Text('${filteredHistory[index].longUrl}'),
-                        ]))
-                      );
-                    }
-                  );
+              // LIST 
+              return Flexible(
+                child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.all(8),
+                      itemCount: filteredHistory.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          //height: 50,
+                          
+                          child: Center(child: Column(children: [
+                            Text('${filteredHistory[index].shortUrl}'),
+                            Text('${filteredHistory[index].longUrl}'),
+                          ]))
+                        );
+                      }
+                    
+                )
+              );
 
 
 
 
-          },
-        )
-      ]
-    );
+            },
+          );
   }
 
 

@@ -35,7 +35,8 @@ class _ServiceChooserState extends State<ServiceChooser> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => DropdownButton<Service>(
-          value: controller.serviceList[controller.selectedService.value],
+          value: (controller.serviceList.length == 0)?null:controller.serviceList[controller.selectedService.value],
+          hint: Text("Select Service"),
           icon: Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,

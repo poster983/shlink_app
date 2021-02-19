@@ -8,11 +8,12 @@ class UriAdapter extends TypeAdapter<Uri> {
   @override
   Uri read(BinaryReader reader) {
     var url = reader.readString();
+    print(url);
     return Uri.parse(url);
   }
 
   @override
   void write(BinaryWriter writer, Uri obj) {
-    writer.write(obj.toString());
+    writer.writeString(obj.toString());
   }
 }

@@ -65,7 +65,7 @@ class Shlink implements Service {
       print("refreshedHistory: ${urls.length}");
       urls.forEach((e) {
         historyBox.put(e.shortUrl.toString(), e);
-        print(e.shortUrl.toString());
+        //print(e.shortUrl.toString());
       });
 
       return true;

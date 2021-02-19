@@ -18,4 +18,11 @@ class Services  {
       }
     }).toList();
   }
+
+  void updateHistory() {
+    list.forEach((element) {
+      element.refreshHistory();
+    });
+    print("Will update the history");
+  }
 }
