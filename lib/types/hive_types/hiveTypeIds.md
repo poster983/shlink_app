@@ -8,6 +8,10 @@
 ### Class: Uri
 - ID: 1
 
+## ServiceType.dart
+### Enum: ServiceType
+- ID: 2
+
 ## hive:date_time_adapter.dart
 ### Class: DateTime
 - ID: 16

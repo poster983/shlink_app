@@ -4,6 +4,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink_app/types/Service.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 import 'package:shlink/shlink.dart' as ShlinkAPI;
+import 'ServiceType.dart';
+import 'package:http/http.dart' as http;
 
 import 'ShortUrl.dart';
 part 'Shlink.g.dart';
@@ -18,7 +20,7 @@ class Shlink implements Service {
 
   Uri host;
   @JsonKey(nullable: true)
-  Uri domain;
+  List<Uri> domains;
 
   String name;
 
@@ -32,7 +34,7 @@ class Shlink implements Service {
   Shlink({this.host, this.name, this.apiKey}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
     //temp
-    domain = Uri.parse(this.host.host);
+    //domain = Uri.parse(this.host.host);
   }
 
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
@@ -48,7 +50,7 @@ class Shlink implements Service {
     List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
     
     return urls.map((url) {
-      return ShortUrl.fromShlinkAPI(url);
+      return ShortUrl.fromShlinkAPI(url, );
     }).toList();
 
     } catch (err) {
@@ -90,9 +92,13 @@ class Shlink implements Service {
     } catch(err) {
       return Future.error(err);
     }
-    
   }
 
-  
+
+  /** HELPER FUNCTIONS */
+  /*Future<Map<String, dynamic>> _getDomains() async {
+    final res = await http.get(Uri.https(host.authority, 'rest/v2/domains'));
+
+  }*/
 
 }

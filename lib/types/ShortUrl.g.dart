@@ -23,13 +23,14 @@ class ShortUrlAdapter extends TypeAdapter<ShortUrl> {
       dateCreated: fields[3] as DateTime,
       visitCount: fields[4] as int,
       tags: (fields[5] as List)?.cast<String>(),
+      serviceType: fields[6] as ServiceType,
     );
   }
 
   @override
   void write(BinaryWriter writer, ShortUrl obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.longUrl)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class ShortUrlAdapter extends TypeAdapter<ShortUrl> {
       ..writeByte(4)
       ..write(obj.visitCount)
       ..writeByte(5)
-      ..write(obj.tags);
+      ..write(obj.tags)
+      ..writeByte(6)
+      ..write(obj.serviceType);
   }
 
   @override
@@ -67,6 +70,7 @@ ShortUrl _$ShortUrlFromJson(Map<String, dynamic> json) {
     dateCreated: DateTime.parse(json['dateCreated'] as String),
     visitCount: json['visitCount'] as int,
     tags: (json['tags'] as List).map((e) => e as String).toList(),
+    serviceType: _$enumDecode(_$ServiceTypeEnumMap, json['serviceType']),
   );
 }
 
@@ -77,4 +81,32 @@ Map<String, dynamic> _$ShortUrlToJson(ShortUrl instance) => <String, dynamic>{
       'dateCreated': instance.dateCreated.toIso8601String(),
       'visitCount': instance.visitCount,
       'tags': instance.tags,
+      'serviceType': _$ServiceTypeEnumMap[instance.serviceType],
     };
+
+T _$enumDecode<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError('A value must be provided. Supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+
+  final value = enumValues.entries
+      .singleWhere((e) => e.value == source, orElse: () => null)
+      ?.key;
+
+  if (value == null && unknownValue == null) {
+    throw ArgumentError('`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+  return value ?? unknownValue;
+}
+
+const _$ServiceTypeEnumMap = {
+  ServiceType.Shlink: 'Shlink',
+  ServiceType.Kuttit: 'Kuttit',
+  ServiceType.GenericREST: 'GenericREST',
+};

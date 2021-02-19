@@ -13,8 +13,9 @@ Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
     apiKey: json['apiKey'] as String,
   )
     ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
-    ..domain =
-        json['domain'] == null ? null : Uri.parse(json['domain'] as String)
+    ..domains = (json['domains'] as List)
+        ?.map((e) => e == null ? null : Uri.parse(e as String))
+        ?.toList()
     ..dayAdded = DateTime.parse(json['dayAdded'] as String);
 }
 
@@ -22,7 +23,7 @@ Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
       'type': _$ServiceTypeEnumMap[instance.type],
       'apiKey': instance.apiKey,
       'host': instance.host.toString(),
-      'domain': instance.domain?.toString(),
+      'domains': instance.domains?.map((e) => e?.toString())?.toList(),
       'name': instance.name,
       'dayAdded': instance.dayAdded.toIso8601String(),
     };
@@ -50,4 +51,6 @@ T _$enumDecode<T>(
 
 const _$ServiceTypeEnumMap = {
   ServiceType.Shlink: 'Shlink',
+  ServiceType.Kuttit: 'Kuttit',
+  ServiceType.GenericREST: 'GenericREST',
 };

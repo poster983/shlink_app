@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
+import 'package:shlink_app/types/ServiceType.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/hive_types/uri_adapter.dart';
 
@@ -24,6 +25,7 @@ void main() async {
 
   Hive.registerAdapter(ShortUrlAdapter());
   Hive.registerAdapter(UriAdapter());
+  Hive.registerAdapter(ServiceTypeAdapter());
   
   await Hive.openBox('preferences');
   await Hive.openBox('services');
@@ -41,12 +43,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Shlink',
+      title: 'Shortish',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       initialRoute: '/home',
       getPages: [
-        GetPage(name: '/home', page: () => MyHomePage(title: 'Shlink')),
+        GetPage(name: '/home', page: () => MyHomePage(title: 'Shortish')),
       ],
       /*home: MyHomePage(title: 'Shlink'),
       routes: <String, WidgetBuilder> {

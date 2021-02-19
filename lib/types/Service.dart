@@ -1,13 +1,14 @@
 import 'package:shlink_app/types/SupportedFeatures.dart';
 
 import 'ShortUrl.dart';
+import 'ServiceType.dart';
 
 class Service {
   final String apiKey;
 
   final Uri host;
 
-  final Uri domain;
+  final List<Uri> domains;
 
   final String name;
 
@@ -24,7 +25,7 @@ class Service {
       this.features,
       this.apiKey,
       this.type,
-      this.domain});
+      this.domains});
 
   Future<List<ShortUrl>> history() async {
     throw UnimplementedError();
@@ -42,4 +43,4 @@ class Service {
   //bool operator ==()
 }
 
-enum ServiceType { Shlink }
+
