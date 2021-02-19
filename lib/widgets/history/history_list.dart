@@ -24,6 +24,9 @@ class _HistoryListState extends State<HistoryList> {
               //Do filtering inside the updated builder
               //TODO: FILTERING
               List<ShortUrl> filteredHistory = box.values.toList();
+              filteredHistory.sort((a,b) { // Sort by date. Newest At Top
+                return a.dateCreated.isAfter(b.dateCreated)?-1:1;
+              });
               print(filteredHistory.length);
 
               // LIST 

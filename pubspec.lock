@@ -231,12 +231,10 @@ packages:
   get:
     dependency: "direct main"
     description:
-      path: "."
-      ref: dev
-      resolved-ref: b41a610f2ae9c3ec6823b3abfa7c48de8e74bbcd
-      url: "https://github.com/jonataslaw/getx.git"
-    source: git
-    version: "3.17.1"
+      name: get
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.25.4"
   glob:
     dependency: transitive
     description:
@@ -529,7 +527,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "297abcf76515c8778757610db2067e24911280a4"
+      resolved-ref: "24a70031f03020978070c2e0dcff6de65da4e535"
       url: "https://github.com/poster983/dart_shlink.git"
     source: git
     version: "0.8.0"
@@ -615,6 +613,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.5"
+  universal_io:
+    dependency: transitive
+    description:
+      name: universal_io
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   uuid:
     dependency: "direct main"
     description:
@@ -664,6 +669,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  zone_local:
+    dependency: transitive
+    description:
+      name: zone_local
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
   flutter: ">=1.16.0 <2.0.0"
