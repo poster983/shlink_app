@@ -19,6 +19,7 @@ jobs:
       - run: flutter build web --release
       - run: |
           cd build/web
+          echo "shortish.app" > CNAME
           git init
           # type configurations: your user.email and user.name followed lines 
           # git config --global user.email your_email 
