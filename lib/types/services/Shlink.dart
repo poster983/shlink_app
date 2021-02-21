@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:shlink_app/types/Service.dart';
+import 'package:shlink_app/types/Domain.dart';
+import 'package:shlink_app/types/api_response_types/ShlinkGetDomains.dart';
+import 'package:shlink_app/types/services/Service.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 import 'package:shlink/shlink.dart' as ShlinkAPI;
 import 'ServiceType.dart';
 import 'package:http/http.dart' as http;
 
-import 'ShortUrl.dart';
+import '../ShortUrl.dart';
 part 'Shlink.g.dart';
 
 @JsonSerializable(nullable: false)
@@ -19,22 +23,33 @@ class Shlink implements Service {
   String apiKey;
 
   Uri host;
-  @JsonKey(nullable: true)
-  List<Uri> domains;
+  //@JsonKey(nullable: true)
+
+  List<Domain> get domains {
+    _getDomains().then((value) => {_domainsCache = value}).catchError((err) => {throw err});
+    return _domainsCache;
+  }
+  set domains(list) => {_domainsCache = list};
+  List<Domain> _domainsCache;
 
   String name;
 
-  DateTime dayAdded = new DateTime.now();
+  DateTime dayAdded;
+
+  List<ShortUrl> historyCache;
 
   ShlinkAPI.Shlink _shlinkAPI;
 
   @override
-  SupportedFeatures get features => new SupportedFeatures(slug: true);
+  SupportedFeatures get features => new SupportedFeatures(slug: true, multipleDomains: true);
 
   Shlink({this.host, this.name, this.apiKey}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
+    dayAdded = new DateTime.now();
     //temp
     //domain = Uri.parse(this.host.host);
+    _getDomains().then((value) => {_domainsCache = value}).catchError((err) => {throw err});
+   //_domainsCache = await _getDomains();
   }
 
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
@@ -47,12 +62,13 @@ class Shlink implements Service {
   Future<List<ShortUrl>> history() async {
     print(host);
     try {
-    List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
+      List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
     
-    return urls.map((url) {
-      return ShortUrl.fromShlinkAPI(url, );
-    }).toList();
-
+      final historyList = urls.map((url) {
+        return ShortUrl.fromShlinkAPI(url);
+      }).toList();
+      //historyCache = historyList;
+      return historyList;
     } catch (err) {
       return Future.error(err);
     }
@@ -96,9 +112,14 @@ class Shlink implements Service {
 
 
   /** HELPER FUNCTIONS */
-  /*Future<Map<String, dynamic>> _getDomains() async {
-    final res = await http.get(Uri.https(host.authority, 'rest/v2/domains'));
-
-  }*/
+  Future<List<Domain>> _getDomains() async {
+    try {
+      final res = await http.get(Uri.https(host.authority, 'rest/v2/domains'), headers: {"X-Api-Key": apiKey});
+      return ShlinkGetDomains.fromJson(jsonDecode(res.body)).toDomainList();
+    } catch(err) {
+      throw err;
+    }
+    
+  }
 
 }

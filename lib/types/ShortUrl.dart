@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink/shlink.dart' as ShlinkAPI;
-import 'package:shlink_app/types/ServiceType.dart';
+import 'package:shlink_app/types/services/ServiceType.dart';
 part 'ShortUrl.g.dart';
 
 @HiveType(typeId : 0)

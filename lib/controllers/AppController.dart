@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:shlink_app/Services.dart';
-import 'package:shlink_app/types/Service.dart';
+import 'package:shlink_app/types/services/Service.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 
 class AppController extends GetxController {

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
-import 'package:shlink_app/types/ServiceType.dart';
+import 'package:shlink_app/types/services/ServiceType.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/hive_types/uri_adapter.dart';
 

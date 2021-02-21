@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:shlink_app/controllers/AppController.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:shlink_app/types/Shlink.dart';
+import 'package:shlink_app/types/services/Shlink.dart';
 import "../common.dart";
 
 class AddServerSheet extends StatefulWidget {

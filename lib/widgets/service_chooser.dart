@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/get.dart';
 import 'package:shlink_app/controllers/AppController.dart';
-import 'package:shlink_app/types/Service.dart';
+import 'package:shlink_app/types/services/Service.dart';
 
 import '../Services.dart';
 

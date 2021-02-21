@@ -1,6 +1,7 @@
+import 'package:shlink_app/types/Domain.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 
-import 'ShortUrl.dart';
+import '../ShortUrl.dart';
 import 'ServiceType.dart';
 
 class Service {
@@ -8,7 +9,7 @@ class Service {
 
   final Uri host;
 
-  final List<Uri> domains;
+  final List<Domain> domains;
 
   final String name;
 
@@ -18,6 +19,8 @@ class Service {
 
   final ServiceType type;
 
+  final List<ShortUrl> historyCache;
+
   Service(
       {this.host,
       this.name,
@@ -25,7 +28,8 @@ class Service {
       this.features,
       this.apiKey,
       this.type,
-      this.domains});
+      this.domains,
+      this.historyCache});
 
   Future<List<ShortUrl>> history() async {
     throw UnimplementedError();
