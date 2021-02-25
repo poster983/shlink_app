@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink_app/types/Domain.dart';
+import 'package:shlink_app/types/JSONTypeConverters.dart';
 import 'package:shlink_app/types/api_response_types/ShlinkGetDomains.dart';
 import 'package:shlink_app/types/services/Service.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
@@ -24,12 +26,15 @@ class Shlink implements Service {
 
   Uri host;
   //@JsonKey(nullable: true)
-
+  @JsonKey(ignore: true)
   List<Domain> get domains {
     _getDomains().then((value) => {_domainsCache = value}).catchError((err) => {throw err});
     return _domainsCache;
   }
+  @JsonKey(ignore: true)
   set domains(list) => {_domainsCache = list};
+
+  @JsonKey(ignore: false)
   List<Domain> _domainsCache;
 
   String name;
@@ -39,18 +44,27 @@ class Shlink implements Service {
   List<ShortUrl> historyCache;
 
   ShlinkAPI.Shlink _shlinkAPI;
+  
+  bool disabled;
+
+  @JsonKey(fromJson: JSONTypeConverters.colorFromJSON, toJson: JSONTypeConverters.colorToJSON)
+  Color color;
+
+  
 
   @override
   SupportedFeatures get features => new SupportedFeatures(slug: true, multipleDomains: true);
 
-  Shlink({this.host, this.name, this.apiKey}) {
+  Shlink({this.host, this.name, this.apiKey, this.color}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
     dayAdded = new DateTime.now();
     //temp
     //domain = Uri.parse(this.host.host);
     _getDomains().then((value) => {_domainsCache = value}).catchError((err) => {throw err});
    //_domainsCache = await _getDomains();
+    //__setColor(color);
   }
+  
 
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
   Map<String, dynamic> toJson() => _$ShlinkToJson(this);

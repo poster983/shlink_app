@@ -73,8 +73,8 @@ class _AddServerSheetState extends State<AddServerSheet> {
 
       //save to server box
       var newServer = new Shlink(host: host, name: name, apiKey: apiKey);
-      var key = Uuid().v4();
-      serverBox.put(key, newServer.toJson());
+      //var key = name;
+      serverBox.put(name, newServer.toJson());
       controller.updateServices();
 
       Get.back(closeOverlays: true);

@@ -23,6 +23,10 @@ class ShortUrl {
   @HiveField(6)
   final ServiceType serviceType;
 
+  String get domain {
+    return shortUrl.host;
+  }
+
   ShortUrl({this.longUrl, this.shortUrl, this.slug, this.dateCreated, this.visitCount, this.tags, this.serviceType});
   factory ShortUrl.fromShlinkAPI(ShlinkAPI.ShortUrl short) {
     return ShortUrl(
@@ -36,9 +40,7 @@ class ShortUrl {
     );
   }
 
-  String get domain {
-    return shortUrl.host;
-  }
+  
 
 
 

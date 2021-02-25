@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
+import 'package:shlink_app/types/services/GenericREST.dart';
 import 'package:shlink_app/types/services/ServiceType.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/hive_types/uri_adapter.dart';
@@ -28,9 +29,22 @@ void main() async {
   Hive.registerAdapter(ServiceTypeAdapter());
   
   await Hive.openBox('preferences');
-  await Hive.openBox('services');
+  var servicesBox = await Hive.openBox('services');
   await Hive.openBox('add_server_autofill');
   await Hive.openBox<ShortUrl>('history');
+
+  //add default services
+  if(servicesBox.get("tinyurl.com")==null) {
+    GenericREST tinyurl = new GenericREST(
+      Uri.parse("https://tinyurl.com/api-create.php"), 
+      "tinyurl.com",
+      "url",
+      new Color.fromRGBO(0, 0, 153, 1),
+      httpMethod: HTTPMethod.GET,
+      );
+      servicesBox.put(tinyurl.name, tinyurl.toJson());
+      print("MAIN(): Added tinyurl.com Service");
+  }
 
   new Services().updateHistory();
 

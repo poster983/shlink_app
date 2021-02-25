@@ -1,17 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'Shlink.dart';
+part of 'GenericREST.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
-  return Shlink(
-    host: Uri.parse(json['host'] as String),
-    name: json['name'] as String,
-    apiKey: json['apiKey'] as String,
-    color: JSONTypeConverters.colorFromJSON(json['color'] as int),
+GenericREST _$GenericRESTFromJson(Map<String, dynamic> json) {
+  return GenericREST(
+    Uri.parse(json['host'] as String),
+    json['name'] as String,
+    json['longURLParameter'] as String,
+    JSONTypeConverters.colorFromJSON(json['color'] as int),
+    headers: (json['headers'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, e as String),
+    ),
+    customSlugParameter: json['customSlugParameter'] as String,
+    httpMethod: _$enumDecode(_$HTTPMethodEnumMap, json['httpMethod']),
+    urlParameters: (json['urlParameters'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, e as String),
+    ),
+    reqBody: (json['reqBody'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, e as String),
+    ),
+    contentType: _$enumDecode(_$ContentTypeEnumMap, json['contentType']),
   )
     ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
     ..dayAdded = DateTime.parse(json['dayAdded'] as String)
@@ -21,13 +33,20 @@ Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
     ..disabled = json['disabled'] as bool;
 }
 
-Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
+Map<String, dynamic> _$GenericRESTToJson(GenericREST instance) =>
+    <String, dynamic>{
       'type': _$ServiceTypeEnumMap[instance.type],
-      'apiKey': instance.apiKey,
-      'host': instance.host.toString(),
       'name': instance.name,
       'dayAdded': instance.dayAdded.toIso8601String(),
+      'host': instance.host.toString(),
+      'customSlugParameter': instance.customSlugParameter,
+      'longURLParameter': instance.longURLParameter,
       'historyCache': instance.historyCache,
+      'headers': instance.headers,
+      'reqBody': instance.reqBody,
+      'urlParameters': instance.urlParameters,
+      'httpMethod': _$HTTPMethodEnumMap[instance.httpMethod],
+      'contentType': _$ContentTypeEnumMap[instance.contentType],
       'disabled': instance.disabled,
       'color': JSONTypeConverters.colorToJSON(instance.color),
     };
@@ -52,6 +71,16 @@ T _$enumDecode<T>(
   }
   return value ?? unknownValue;
 }
+
+const _$HTTPMethodEnumMap = {
+  HTTPMethod.GET: 'GET',
+  HTTPMethod.POST: 'POST',
+};
+
+const _$ContentTypeEnumMap = {
+  ContentType.FormEncoded: 'FormEncoded',
+  ContentType.JSON: 'JSON',
+};
 
 const _$ServiceTypeEnumMap = {
   ServiceType.Shlink: 'Shlink',

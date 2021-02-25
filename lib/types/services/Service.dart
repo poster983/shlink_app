@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:shlink_app/types/Domain.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 
@@ -21,6 +23,10 @@ class Service {
 
   final List<ShortUrl> historyCache;
 
+  final bool disabled;
+
+  final Color color;
+
   Service(
       {this.host,
       this.name,
@@ -29,7 +35,9 @@ class Service {
       this.apiKey,
       this.type,
       this.domains,
-      this.historyCache});
+      this.historyCache,
+      this.disabled,
+      this.color});
 
   Future<List<ShortUrl>> history() async {
     throw UnimplementedError();
@@ -48,3 +56,13 @@ class Service {
 }
 
 
+class UnsupportedFeatureError extends Error {
+  final String message;
+  UnsupportedFeatureError([this.message]);
+  String toString() {
+    var message = this.message;
+    return (message != null)
+        ? "UnsupportedFeatureError: $message"
+        : "UnsupportedFeatureError";
+  }
+}
