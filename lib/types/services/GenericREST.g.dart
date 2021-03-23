@@ -6,29 +6,29 @@ part of 'GenericREST.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GenericREST _$GenericRESTFromJson(Map<String, dynamic> json) {
+GenericREST _$GenericRESTFromJson(Map json) {
   return GenericREST(
     Uri.parse(json['host'] as String),
     json['name'] as String,
     json['longURLParameter'] as String,
     JSONTypeConverters.colorFromJSON(json['color'] as int),
-    headers: (json['headers'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(k, e as String),
+    headers: (json['headers'] as Map)?.map(
+      (k, e) => MapEntry(k as String, e as String),
     ),
     customSlugParameter: json['customSlugParameter'] as String,
     httpMethod: _$enumDecode(_$HTTPMethodEnumMap, json['httpMethod']),
-    urlParameters: (json['urlParameters'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(k, e as String),
+    urlParameters: (json['urlParameters'] as Map)?.map(
+      (k, e) => MapEntry(k as String, e as String),
     ),
-    reqBody: (json['reqBody'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(k, e as String),
+    reqBody: (json['reqBody'] as Map)?.map(
+      (k, e) => MapEntry(k as String, e as String),
     ),
     contentType: _$enumDecode(_$ContentTypeEnumMap, json['contentType']),
   )
     ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
     ..dayAdded = DateTime.parse(json['dayAdded'] as String)
     ..historyCache = (json['historyCache'] as List)
-        .map((e) => ShortUrl.fromJson(e as Map<String, dynamic>))
+        .map((e) => ShortUrl.fromJson(Map<String, dynamic>.from(e as Map)))
         .toList()
     ..disabled = json['disabled'] as bool;
 }
