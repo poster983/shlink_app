@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -170,8 +171,17 @@ class GenericREST implements Service {
             longUrl: link,
             slug: (slug != null) ? slug : short.path,
             shortUrl: short,
-            serviceType: ServiceType.GenericREST);
+            serviceType: ServiceType.GenericREST,
+            serviceName: name);
         print(shortUrl.toJson());
+        historyCache.add(shortUrl);
+        try {
+          var historyBox = Hive.box<ShortUrl>("history");
+          historyBox.put(shortUrl.shortUrl.toString(), shortUrl);
+        } catch (e) {
+          throw e;
+        }
+
         return shortUrl;
       } else {
         throw Exception(res.body);

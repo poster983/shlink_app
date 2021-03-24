@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -22,6 +23,8 @@ class ShortUrl {
   final List<String> tags;
   @HiveField(6)
   final ServiceType serviceType;
+  @HiveField(7)
+  final String serviceName;
 
   String get domain {
     return shortUrl.host;
@@ -34,8 +37,10 @@ class ShortUrl {
       this.dateCreated,
       this.visitCount,
       this.tags,
-      this.serviceType});
-  factory ShortUrl.fromShlinkAPI(ShlinkAPI.ShortUrl short) {
+      this.serviceType,
+      this.serviceName});
+  factory ShortUrl.fromShlinkAPI(ShlinkAPI.ShortUrl short,
+      {@required String serviceName}) {
     return ShortUrl(
         longUrl: Uri.parse(short.longUrl),
         shortUrl: Uri.parse(short.shortUrl),
@@ -43,7 +48,8 @@ class ShortUrl {
         dateCreated: short.dateCreated,
         visitCount: short.visitsCount,
         tags: short.tags,
-        serviceType: ServiceType.Shlink);
+        serviceType: ServiceType.Shlink,
+        serviceName: serviceName);
   }
 
   factory ShortUrl.fromJson(Map<String, dynamic> json) =>

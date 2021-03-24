@@ -28,9 +28,12 @@ class Shlink implements Service {
   //@JsonKey(nullable: true)
   @JsonKey(ignore: true)
   List<Domain> get domains {
-    _getDomains().then((value) => {_domainsCache = value}).catchError((err) => {throw err});
+    _getDomains()
+        .then((value) => {_domainsCache = value})
+        .catchError((err) => {throw err});
     return _domainsCache;
   }
+
   @JsonKey(ignore: true)
   set domains(list) => {_domainsCache = list};
 
@@ -44,32 +47,32 @@ class Shlink implements Service {
   List<ShortUrl> historyCache;
 
   ShlinkAPI.Shlink _shlinkAPI;
-  
+
   bool disabled;
 
-  @JsonKey(fromJson: JSONTypeConverters.colorFromJSON, toJson: JSONTypeConverters.colorToJSON)
+  @JsonKey(
+      fromJson: JSONTypeConverters.colorFromJSON,
+      toJson: JSONTypeConverters.colorToJSON)
   Color color;
 
-  
-
   @override
-  SupportedFeatures get features => new SupportedFeatures(slug: true, multipleDomains: true);
+  SupportedFeatures get features =>
+      new SupportedFeatures(slug: true, multipleDomains: true);
 
   Shlink({this.host, this.name, this.apiKey, this.color}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
     dayAdded = new DateTime.now();
     //temp
     //domain = Uri.parse(this.host.host);
-    _getDomains().then((value) => {_domainsCache = value}).catchError((err) => {throw err});
-   //_domainsCache = await _getDomains();
+    _getDomains()
+        .then((value) => {_domainsCache = value})
+        .catchError((err) => {throw err});
+    //_domainsCache = await _getDomains();
     //__setColor(color);
   }
-  
 
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
   Map<String, dynamic> toJson() => _$ShlinkToJson(this);
-
-  
 
   /// history:  Will return a history of all links on the server
   @override
@@ -77,7 +80,7 @@ class Shlink implements Service {
     print(host);
     try {
       List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
-    
+
       final historyList = urls.map((url) {
         return ShortUrl.fromShlinkAPI(url);
       }).toList();
@@ -104,36 +107,28 @@ class Shlink implements Service {
     } catch (err) {
       return Future.error(err);
     }
-    
-
   }
 
   /// Shorten:  Will shorten a link using the Shlink service
   @override
   Future<ShortUrl> shorten(Uri link, {String slug}) async {
     try {
-    ShlinkAPI.ShortUrl short = await _shlinkAPI.create(
-        new ShlinkAPI.CreateShortURL(
-          link.toString(),
-            customSlug: slug
-        )
-    );
-      return ShortUrl.fromShlinkAPI(short);
-    } catch(err) {
+      ShlinkAPI.ShortUrl short = await _shlinkAPI.create(
+          new ShlinkAPI.CreateShortURL(link.toString(), customSlug: slug));
+      return ShortUrl.fromShlinkAPI(short, serviceName: name);
+    } catch (err) {
       return Future.error(err);
     }
   }
 
-
   /** HELPER FUNCTIONS */
   Future<List<Domain>> _getDomains() async {
     try {
-      final res = await http.get(Uri.https(host.authority, 'rest/v2/domains'), headers: {"X-Api-Key": apiKey});
+      final res = await http.get(Uri.https(host.authority, 'rest/v2/domains'),
+          headers: {"X-Api-Key": apiKey});
       return ShlinkGetDomains.fromJson(jsonDecode(res.body)).toDomainList();
-    } catch(err) {
+    } catch (err) {
       throw err;
     }
-    
   }
-
 }
