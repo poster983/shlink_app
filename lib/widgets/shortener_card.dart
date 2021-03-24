@@ -21,6 +21,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
   final _formKey = GlobalKey<FormState>();
   var _longURLControll = new TextEditingController();
   var _longURLFocus = new FocusNode();
+  var _slugControll = new TextEditingController();
   bool isLoading = false;
   bool formValid = false;
   String shortURL = "";
@@ -103,7 +104,8 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
         controller.serviceList
             .elementAt(controller.selectedService.value)
-            .shorten(Uri.parse(_urlProtocall + _longURLControll.text))
+            .shorten(Uri.parse(_urlProtocall + _longURLControll.text),
+                slug: (_slugControll.text.isEmpty) ? null : _slugControll.text)
             .then((value) {
           setState(() {
             isLoading = false;
@@ -227,12 +229,14 @@ class _ShortenerCardState extends State<ShortenerCard> {
                             new Flexible(
                                 flex: 4,
                                 child: new TextFormField(
+                                    autocorrect: false,
+                                    controller: _slugControll,
                                     // Custom Path
                                     decoration: InputDecoration(
-                                  prefix: new Text("/"),
-                                  labelText: 'Custom Path (Optional)',
-                                  //suffixIcon:
-                                )))
+                                      prefix: new Text("/"),
+                                      labelText: 'Custom Path (Optional)',
+                                      //suffixIcon:
+                                    )))
                           ],
                         ),
 

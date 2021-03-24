@@ -131,6 +131,11 @@ class GenericREST implements Service {
       bodyMap = new Map<String, String>();
     }
 
+    if (slug != null && slug.isNotEmpty) {
+      queryMap[customSlugParameter] = slug;
+      bodyMap[customSlugParameter] = slug;
+    }
+
     if (httpMethod == HTTPMethod.GET) {
       queryMap[longURLParameter] = link.toString();
     } else {
