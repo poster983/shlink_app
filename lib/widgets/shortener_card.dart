@@ -214,18 +214,25 @@ class _ShortenerCardState extends State<ShortenerCard> {
                         /** SERVICE AND CUSTOM PATH  */
 
                         new Row(
+                          mainAxisSize: MainAxisSize.min, // see 3
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             // Service picker and custom route textbox
-                            new Flexible(child: new ServiceChooser()),
+                            new Flexible(
+                                child: new ServiceChooser(),
+                                fit: FlexFit.tight,
+                                flex: 1),
+
                             new SizedBox(width: 5),
                             new Flexible(
+                                flex: 4,
                                 child: new TextFormField(
                                     // Custom Path
                                     decoration: InputDecoration(
-                              prefix: new Text("/"),
-                              labelText: 'Custom Path (Optional)',
-                              //suffixIcon:
-                            )))
+                                  prefix: new Text("/"),
+                                  labelText: 'Custom Path (Optional)',
+                                  //suffixIcon:
+                                )))
                           ],
                         ),
 

@@ -46,6 +46,35 @@ void main() async {
     print("MAIN(): Added tinyurl.com Service");
   }
 
+  if (servicesBox.get("is.gd") == null) {
+    GenericREST defaultService = new GenericREST(
+      host: Uri.parse("https://is.gd/create.php"),
+      name: "is.gd",
+      longURLParameter: "url",
+      urlParameters: {"format": "json"},
+      customSlugParameter: "shorturl",
+      shortenedURLParameter: "shorturl",
+      color: new Color.fromRGBO(183, 9, 0, 1),
+      httpMethod: HTTPMethod.GET,
+    );
+    servicesBox.put(defaultService.name, defaultService.toJson());
+    print("MAIN(): Added is.gd Service");
+  }
+  if (servicesBox.get("v.gd") == null) {
+    GenericREST defaultService = new GenericREST(
+      host: Uri.parse("https://v.gd/create.php"),
+      name: "v.gd",
+      urlParameters: {"format": "json"},
+      longURLParameter: "url",
+      customSlugParameter: "shorturl",
+      shortenedURLParameter: "shorturl",
+      color: new Color.fromRGBO(3, 145, 9, 1),
+      httpMethod: HTTPMethod.GET,
+    );
+    servicesBox.put(defaultService.name, defaultService.toJson());
+    print("MAIN(): Added v.gd Service");
+  }
+
   new Services().updateHistory();
 
   runApp(MyApp());
@@ -137,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.delete),
               onPressed: () {
                 Hive.box("services").deleteFromDisk();
+                Hive.box<ShortUrl>("history").deleteFromDisk();
                 showSnackBar(text: "Deleted all services");
               }),
           new IconButton(

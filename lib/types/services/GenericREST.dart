@@ -82,6 +82,7 @@ class GenericREST implements Service {
       this.httpMethod = HTTPMethod.POST,
       this.urlParameters,
       this.reqBody,
+      this.shortenedURLParameter,
       this.contentType = ContentType.JSON}) {
     dayAdded = new DateTime.now();
     historyCache = List<ShortUrl>();
@@ -146,7 +147,7 @@ class GenericREST implements Service {
         url.queryParameters = urlParameters;
         params = params[longURLParameter]
          = */
-
+        print(url);
         res = await http.get(url, headers: headers);
       } else {
         //create headers map
@@ -191,7 +192,6 @@ class GenericREST implements Service {
       } else {
         throw Exception(res.body);
       }
-      print(res);
     } catch (err) {
       print(err);
       throw err;
@@ -199,6 +199,7 @@ class GenericREST implements Service {
   }
 
   Uri _parseShortenBody(String body) {
+    print(body);
     //parse plaintext
     if (shortenedURLParameter == null) {
       try {
@@ -207,7 +208,18 @@ class GenericREST implements Service {
         throw e;
       }
     } else {
-      return null;
+      Map<String, dynamic> parsedBody = jsonDecode(body);
+      print(parsedBody);
+      if (parsedBody[shortenedURLParameter] != null) {
+        try {
+          return Uri.parse(parsedBody[shortenedURLParameter]);
+        } catch (e) {
+          throw e;
+        }
+      } else {
+        throw Exception(
+            "Shortened URL not found.  Check your Shortened URL Parameter for this service");
+      }
     }
   }
 

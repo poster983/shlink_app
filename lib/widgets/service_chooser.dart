@@ -34,17 +34,19 @@ class _ServiceChooserState extends State<ServiceChooser> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => DropdownButton<Service>(
-          value: (controller.serviceList.length == 0)?null:controller.serviceList[controller.selectedService.value],
+    return Obx(() => DropdownButtonFormField<Service>(
+          value: (controller.serviceList.length == 0)
+              ? null
+              : controller.serviceList[controller.selectedService.value],
           hint: Text("Select Service"),
           icon: Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,
           style: TextStyle(color: Get.theme.textTheme.button.color),
-          underline: Container(
+          /*underline: Container(
             height: 2,
             color: Get.theme.accentColor,
-          ),
+          ),*/
           onChanged: (Service newValue) {
             setState(() {
               controller.selectedService.value = controller.serviceList
@@ -59,7 +61,7 @@ class _ServiceChooserState extends State<ServiceChooser> {
             }
             return DropdownMenuItem<Service>(
               value: value,
-              child: Text(value.name),
+              child: Text(value.name, overflow: TextOverflow.ellipsis),
             );
           }).toList(),
         ));
