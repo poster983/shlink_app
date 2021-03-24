@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -71,8 +72,12 @@ class GenericREST implements Service {
   ///DO NOT USE - FOR CONSTRUCTOR ONLY
   void __setColor(Color c) => color = c;*/
 
-  GenericREST(this.host, this.name, this.longURLParameter, this.color,
-      {this.headers,
+  GenericREST(
+      {@required this.host,
+      @required this.name,
+      @required this.longURLParameter,
+      this.color,
+      this.headers,
       this.customSlugParameter,
       this.httpMethod = HTTPMethod.POST,
       this.urlParameters,

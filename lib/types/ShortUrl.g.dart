@@ -24,13 +24,14 @@ class ShortUrlAdapter extends TypeAdapter<ShortUrl> {
       visitCount: fields[4] as int,
       tags: (fields[5] as List)?.cast<String>(),
       serviceType: fields[6] as ServiceType,
+      serviceName: fields[7] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ShortUrl obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.longUrl)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class ShortUrlAdapter extends TypeAdapter<ShortUrl> {
       ..writeByte(5)
       ..write(obj.tags)
       ..writeByte(6)
-      ..write(obj.serviceType);
+      ..write(obj.serviceType)
+      ..writeByte(7)
+      ..write(obj.serviceName);
   }
 
   @override
@@ -71,6 +74,7 @@ ShortUrl _$ShortUrlFromJson(Map<String, dynamic> json) {
     visitCount: json['visitCount'] as int,
     tags: (json['tags'] as List).map((e) => e as String).toList(),
     serviceType: _$enumDecode(_$ServiceTypeEnumMap, json['serviceType']),
+    serviceName: json['serviceName'] as String,
   );
 }
 
@@ -82,6 +86,7 @@ Map<String, dynamic> _$ShortUrlToJson(ShortUrl instance) => <String, dynamic>{
       'visitCount': instance.visitCount,
       'tags': instance.tags,
       'serviceType': _$ServiceTypeEnumMap[instance.serviceType],
+      'serviceName': instance.serviceName,
     };
 
 T _$enumDecode<T>(

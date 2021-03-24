@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shlink_app/common.dart';
 import 'package:shlink_app/types/Domain.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
 import 'package:shlink_app/types/api_response_types/ShlinkGetDomains.dart';
@@ -59,9 +60,17 @@ class Shlink implements Service {
   SupportedFeatures get features =>
       new SupportedFeatures(slug: true, multipleDomains: true);
 
-  Shlink({this.host, this.name, this.apiKey, this.color}) {
+  Shlink(
+      {@required this.host,
+      @required this.name,
+      @required this.apiKey,
+      this.color}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
     dayAdded = new DateTime.now();
+    if (color == null) {
+      color = randomColor();
+    }
+    historyCache = [];
     //temp
     //domain = Uri.parse(this.host.host);
     _getDomains()
@@ -82,7 +91,7 @@ class Shlink implements Service {
       List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
 
       final historyList = urls.map((url) {
-        return ShortUrl.fromShlinkAPI(url);
+        return ShortUrl.fromShlinkAPI(url, serviceName: name);
       }).toList();
       //historyCache = historyList;
       return historyList;
