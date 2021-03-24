@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
-import 'package:shlink_app/types/ServiceType.dart';
+import 'package:shlink_app/types/services/GenericREST.dart';
+import 'package:shlink_app/types/services/ServiceType.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/hive_types/uri_adapter.dart';
 
@@ -26,11 +27,53 @@ void main() async {
   Hive.registerAdapter(ShortUrlAdapter());
   Hive.registerAdapter(UriAdapter());
   Hive.registerAdapter(ServiceTypeAdapter());
-  
+
   await Hive.openBox('preferences');
-  await Hive.openBox('services');
+  var servicesBox = await Hive.openBox('services');
   await Hive.openBox('add_server_autofill');
   await Hive.openBox<ShortUrl>('history');
+
+  //add default services
+  if (servicesBox.get("tinyurl.com") == null) {
+    GenericREST tinyurl = new GenericREST(
+      host: Uri.parse("https://tinyurl.com/api-create.php"),
+      name: "tinyurl.com",
+      longURLParameter: "url",
+      color: new Color.fromRGBO(0, 0, 153, 1),
+      httpMethod: HTTPMethod.GET,
+    );
+    servicesBox.put(tinyurl.name, tinyurl.toJson());
+    print("MAIN(): Added tinyurl.com Service");
+  }
+
+  if (servicesBox.get("is.gd") == null) {
+    GenericREST defaultService = new GenericREST(
+      host: Uri.parse("https://is.gd/create.php"),
+      name: "is.gd",
+      longURLParameter: "url",
+      urlParameters: {"format": "json"},
+      customSlugParameter: "shorturl",
+      shortenedURLParameter: "shorturl",
+      color: new Color.fromRGBO(183, 9, 0, 1),
+      httpMethod: HTTPMethod.GET,
+    );
+    servicesBox.put(defaultService.name, defaultService.toJson());
+    print("MAIN(): Added is.gd Service");
+  }
+  if (servicesBox.get("v.gd") == null) {
+    GenericREST defaultService = new GenericREST(
+      host: Uri.parse("https://v.gd/create.php"),
+      name: "v.gd",
+      urlParameters: {"format": "json"},
+      longURLParameter: "url",
+      customSlugParameter: "shorturl",
+      shortenedURLParameter: "shorturl",
+      color: new Color.fromRGBO(3, 145, 9, 1),
+      httpMethod: HTTPMethod.GET,
+    );
+    servicesBox.put(defaultService.name, defaultService.toJson());
+    print("MAIN(): Added v.gd Service");
+  }
 
   new Services().updateHistory();
 
@@ -123,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.delete),
               onPressed: () {
                 Hive.box("services").deleteFromDisk();
+                Hive.box<ShortUrl>("history").deleteFromDisk();
                 showSnackBar(text: "Deleted all services");
               }),
           new IconButton(
@@ -134,10 +178,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Get.changeTheme(AppTheme.darkTheme);
                 }
               }),
-              new IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () {
-                  controller.services.updateHistory();
+          new IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                controller.services.updateHistory();
               })
         ],
         // Here we take the value from the MyHomePage object that was created by

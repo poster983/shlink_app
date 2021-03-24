@@ -1,6 +1,7 @@
-import 'package:shlink_app/types/Service.dart';
+import 'package:shlink_app/types/services/GenericREST.dart';
+import 'package:shlink_app/types/services/Service.dart';
 import 'package:hive/hive.dart';
-import 'package:shlink_app/types/Shlink.dart';
+import 'package:shlink_app/types/services/Shlink.dart';
 
 
 /// A Class to interface with the saved services
@@ -14,6 +15,9 @@ class Services  {
       switch(serv["type"]) {
         case "Shlink": 
           return new Shlink.fromJson(serv.cast<String,dynamic>());
+          break;
+        case "GenericREST":
+          return new GenericREST.fromJson(serv.cast<String,dynamic>());
           break;
       }
     }).toList();

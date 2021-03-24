@@ -11,21 +11,25 @@ Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
     host: Uri.parse(json['host'] as String),
     name: json['name'] as String,
     apiKey: json['apiKey'] as String,
+    color: JSONTypeConverters.colorFromJSON(json['color'] as int),
   )
     ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
-    ..domains = (json['domains'] as List)
-        ?.map((e) => e == null ? null : Uri.parse(e as String))
-        ?.toList()
-    ..dayAdded = DateTime.parse(json['dayAdded'] as String);
+    ..dayAdded = DateTime.parse(json['dayAdded'] as String)
+    ..historyCache = (json['historyCache'] as List)
+        .map((e) => ShortUrl.fromJson(e as Map<String, dynamic>))
+        .toList()
+    ..disabled = json['disabled'] as bool;
 }
 
 Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
       'type': _$ServiceTypeEnumMap[instance.type],
       'apiKey': instance.apiKey,
       'host': instance.host.toString(),
-      'domains': instance.domains?.map((e) => e?.toString())?.toList(),
       'name': instance.name,
       'dayAdded': instance.dayAdded.toIso8601String(),
+      'historyCache': instance.historyCache,
+      'disabled': instance.disabled,
+      'color': JSONTypeConverters.colorToJSON(instance.color),
     };
 
 T _$enumDecode<T>(

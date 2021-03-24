@@ -21,6 +21,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
   final _formKey = GlobalKey<FormState>();
   var _longURLControll = new TextEditingController();
   var _longURLFocus = new FocusNode();
+  var _slugControll = new TextEditingController();
   bool isLoading = false;
   bool formValid = false;
   String shortURL = "";
@@ -33,7 +34,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
   ///
   void pasteClipboardURL({bool onlyValid}) {
     Clipboard.getData('text/plain').then((clipboard) {
-      if(clipboard != null) {
+      if (clipboard != null) {
         var res = validateURL(clipboard.text);
         if (onlyValid != null && onlyValid) {
           if (res == null) {
@@ -58,7 +59,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
       if (!GetUtils.isURL(host)) {
         _urlProtocall = "";
         formValid = false;
-        
+
         return "Invalid URL";
       } else {
         //If the url is valid, but has no protocall then add it to the prefix
@@ -80,10 +81,8 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
     _longURLControll.addListener(() {
       setState(() {
-        
-        formValid = validateURL(_longURLControll.text)==null?true:false;
+        formValid = validateURL(_longURLControll.text) == null ? true : false;
       });
-      
     });
 
     _longURLFocus.addListener(() {
@@ -102,38 +101,37 @@ class _ShortenerCardState extends State<ShortenerCard> {
         setState(() {
           isLoading = true;
         });
-        
-        controller.serviceList
-          .elementAt(controller.selectedService.value)
-          .shorten(Uri.parse(_urlProtocall + _longURLControll.text))
-          .then((value) {
-            setState(() {
-              isLoading = false;
-            });
-            print(value.shortUrl);
-            shortURL = value.shortUrl.toString();
-            
-            Clipboard.setData(ClipboardData(text: shortURL));
-            Share.share(shortURL);
 
-          })
-          .catchError((err) {
-            showSnackBar(text: err.title);
-            setState(() {
-              isLoading = false;
-            });
-            throw err;
+        controller.serviceList
+            .elementAt(controller.selectedService.value)
+            .shorten(Uri.parse(_urlProtocall + _longURLControll.text),
+                slug: (_slugControll.text.isEmpty) ? null : _slugControll.text)
+            .then((value) {
+          setState(() {
+            isLoading = false;
           });
-        
+          print(value.shortUrl);
+          shortURL = value.shortUrl.toString();
+
+          Clipboard.setData(ClipboardData(text: shortURL));
+          Share.share(shortURL);
+        }).catchError((err) {
+          try {
+            showSnackBar(text: err.title);
+          } catch (e) {
+            showSnackBar(text: err.toString());
+          }
+          setState(() {
+            isLoading = false;
+          });
+          throw err;
+        });
       } else {
         print("Service list empty");
-        
       }
     } else {
       print("INVALID FORM");
-      
     }
-    
   }
 
   @override
@@ -170,26 +168,23 @@ class _ShortenerCardState extends State<ShortenerCard> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             prefix: new GestureDetector(
-                              // Protocall prefix.  Tap to remove
-                              child: new Text(_urlProtocall),
-                              onTap: () {
-                                setState(() {
-                                  if(_urlProtocallToggle == "http://") {
-                                    _urlProtocallToggle = "https://";
-                                  } else {
-                                    _urlProtocallToggle = "http://";
-                                  }
-                                  _urlProtocall = _urlProtocallToggle;
-                                  
-                                });
-                              },
-                              
-                              onLongPress: () {
-                                setState(() {
-                                  _urlProtocall = "";
-                                });
-                              }
-                            ),
+                                // Protocall prefix.  Tap to remove
+                                child: new Text(_urlProtocall),
+                                onTap: () {
+                                  setState(() {
+                                    if (_urlProtocallToggle == "http://") {
+                                      _urlProtocallToggle = "https://";
+                                    } else {
+                                      _urlProtocallToggle = "http://";
+                                    }
+                                    _urlProtocall = _urlProtocallToggle;
+                                  });
+                                },
+                                onLongPress: () {
+                                  setState(() {
+                                    _urlProtocall = "";
+                                  });
+                                }),
                             icon: Icon(Icons.link),
                             suffixIcon: new Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -221,18 +216,27 @@ class _ShortenerCardState extends State<ShortenerCard> {
                         /** SERVICE AND CUSTOM PATH  */
 
                         new Row(
+                          mainAxisSize: MainAxisSize.min, // see 3
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             // Service picker and custom route textbox
-                            new Flexible(child: new ServiceChooser()),
+                            new Flexible(
+                                child: new ServiceChooser(),
+                                fit: FlexFit.tight,
+                                flex: 1),
+
                             new SizedBox(width: 5),
                             new Flexible(
+                                flex: 4,
                                 child: new TextFormField(
+                                    autocorrect: false,
+                                    controller: _slugControll,
                                     // Custom Path
                                     decoration: InputDecoration(
-                              prefix: new Text("/"),
-                              labelText: 'Custom Path (Optional)',
-                              //suffixIcon:
-                            )))
+                                      prefix: new Text("/"),
+                                      labelText: 'Custom Path (Optional)',
+                                      //suffixIcon:
+                                    )))
                           ],
                         ),
 
@@ -240,10 +244,11 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
                         /** SUBMIT AND GET LINK */
                         new SizedBox(height: 10),
-                        new ShortenButton(onPressed: formValid?submit:null, loading: isLoading),
+                        new ShortenButton(
+                            onPressed: formValid ? submit : null,
+                            loading: isLoading),
                         new SizedBox(height: 10),
                         new Text("Short URL: " + shortURL)
-
                       ])))),
     );
   }

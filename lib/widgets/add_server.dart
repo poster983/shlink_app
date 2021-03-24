@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:shlink_app/controllers/AppController.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:shlink_app/types/Shlink.dart';
+import 'package:shlink_app/types/services/Shlink.dart';
 import "../common.dart";
 
 class AddServerSheet extends StatefulWidget {
@@ -73,8 +73,8 @@ class _AddServerSheetState extends State<AddServerSheet> {
 
       //save to server box
       var newServer = new Shlink(host: host, name: name, apiKey: apiKey);
-      var key = Uuid().v4();
-      serverBox.put(key, newServer.toJson());
+      //var key = name;
+      serverBox.put(name, newServer.toJson());
       controller.updateServices();
 
       Get.back(closeOverlays: true);
