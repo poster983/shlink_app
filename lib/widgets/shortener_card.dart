@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
 import 'package:shlink_app/widgets/service_chooser.dart';
@@ -46,6 +46,8 @@ class _ShortenerCardState extends State<ShortenerCard> {
           setState(() {});
         }
       }
+    }).catchError((e) {
+      print(e);
     });
   }
 
@@ -112,9 +114,13 @@ class _ShortenerCardState extends State<ShortenerCard> {
           });
           print(value.shortUrl);
           shortURL = value.shortUrl.toString();
+          try {
+            Clipboard.setData(ClipboardData(text: shortURL));
+          } catch (e) {
+            print(e);
+          }
 
-          Clipboard.setData(ClipboardData(text: shortURL));
-          Share.share(shortURL);
+          //Share.share(shortURL);
         }).catchError((err) {
           try {
             showSnackBar(text: err.title);
@@ -227,7 +233,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
                             new SizedBox(width: 5),
                             new Flexible(
-                                flex: 4,
+                                flex: 3,
                                 child: new TextFormField(
                                     autocorrect: false,
                                     controller: _slugControll,

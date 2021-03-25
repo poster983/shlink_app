@@ -23,11 +23,11 @@ GenericREST _$GenericRESTFromJson(Map json) {
     reqBody: (json['reqBody'] as Map)?.map(
       (k, e) => MapEntry(k as String, e as String),
     ),
+    shortenedURLParameter: json['shortenedURLParameter'] as String,
     contentType: _$enumDecode(_$ContentTypeEnumMap, json['contentType']),
   )
     ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
     ..dayAdded = DateTime.parse(json['dayAdded'] as String)
-    ..shortenedURLParameter = json['shortenedURLParameter'] as String
     ..historyCache = (json['historyCache'] as List)
         .map((e) => ShortUrl.fromJson(Map<String, dynamic>.from(e as Map)))
         .toList()

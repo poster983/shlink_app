@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+3
+version: 1.0.0+4
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -34,7 +34,7 @@ dependencies:
   #    url: https://github.com/jonataslaw/getx.git
   #    ref: dev
   uuid: ^2.2.2
-  share: '>=0.6.5 <2.0.0'
+  share_plus: ^2.0.0
   receive_sharing_intent: ^1.4.2
   bottom_navy_bar: ^5.6.0
   #shlink: ^0.7.0

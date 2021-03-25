@@ -29,7 +29,7 @@ class AppTheme {
       buttonColor: Color(0xFFE03A3C),
       textTheme: ButtonTextTheme.primary,
     ),
-
+    
     accentColor: Color(0xFFE03A3C),
     brightness: Brightness.dark,
     visualDensity: VisualDensity.adaptivePlatformDensity,

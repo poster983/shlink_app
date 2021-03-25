@@ -1,3 +1,4 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hive/hive.dart';
@@ -11,10 +12,11 @@ import 'package:shlink_app/types/services/GenericREST.dart';
 import 'package:shlink_app/types/services/ServiceType.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/hive_types/uri_adapter.dart';
+import 'package:shlink_app/views/HistoryView.dart';
+import 'package:shlink_app/views/HomeView.dart';
 
 import 'package:shlink_app/widgets/add_server.dart';
-import 'package:shlink_app/widgets/history/history_list.dart';
-import 'package:shlink_app/widgets/shortener_card.dart';
+
 
 import 'Services.dart';
 
@@ -89,9 +91,10 @@ class MyApp extends StatelessWidget {
       title: 'Shortish',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      initialRoute: '/home',
+      initialRoute: '/',
       getPages: [
-        GetPage(name: '/home', page: () => MyHomePage(title: 'Shortish')),
+        GetPage(name: '/', page: () => MyHomePage(title: 'Shortish', pageIndex: 0)),
+        GetPage(name: '/history', page: () => MyHomePage(title: 'Shortish', pageIndex: 1)),
       ],
       /*home: MyHomePage(title: 'Shlink'),
       routes: <String, WidgetBuilder> {
@@ -102,7 +105,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  
+  MyHomePage({Key key, this.title, this.pageIndex = 0}) : super(key: key);
   final AppController controller = Get.put(AppController());
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -115,6 +119,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  int pageIndex;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -122,31 +127,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final AppController controller = Get.find();
-  int _counter = 0;
 
-  void _incrementCounter() {
-    GetBar(
-      title: "title",
-      animationDuration: new Duration(milliseconds: 300),
-      messageText: new RaisedButton(
-        onPressed: () {
-          Get.back();
-        },
-        child: Text('Dismiss'),
-      ),
-      duration: Duration(seconds: 3),
-    ).show();
+  
+  PageController _pageController;
 
-    /*Get.rawSnackbar(
-                titleText: Text('text'), messageText: Text(_counter.toString()));*/
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.pageIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -188,10 +182,42 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Column(
+      body: SizedBox.expand(
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() => widget.pageIndex = index);
+          },
+          children: <Widget>[
+            HomeView(),
+            HistoryView(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavyBar(
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [new ShortenerCard(), new HistoryList()],
+        selectedIndex: widget.pageIndex, 
+        showElevation: true,
+        onItemSelected: (index) => setState(() {
+              widget.pageIndex = index;
+              _pageController.animateToPage(index,
+                  duration: Duration(milliseconds: 300), curve: Curves.ease);
+        }),
+        items: [
+          BottomNavyBarItem(
+            activeColor: Colors.red,
+            textAlign: TextAlign.center,
+            title: Text('Home'),
+            icon: Icon(Icons.home)
+          ),
+          BottomNavyBarItem(
+            textAlign: TextAlign.center,
+            title: Text('History'),
+            icon: Icon(Icons.history_edu)
+          ),
+
+        ], 
+        
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
