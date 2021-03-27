@@ -254,7 +254,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
                             onPressed: formValid ? submit : null,
                             loading: isLoading),
                         new SizedBox(height: 10),
-                        new Text("Short URL: " + shortURL)
+                        //new Text("Short URL: " + shortURL)
                       ])))),
     );
   }

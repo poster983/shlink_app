@@ -9,7 +9,12 @@ class HistoryView extends StatelessWidget {
       /*mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,*/
       children: [
-        new Text("History", textAlign: TextAlign.center),
+        Container(
+          padding: EdgeInsets.only(top:15, bottom: 5),
+          child: Text("History", textAlign: TextAlign.center, style: TextStyle(
+            fontSize: 20
+          ),)
+        ),
         new HistoryList()
       ],
     );
