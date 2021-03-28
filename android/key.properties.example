@@ -1,0 +1,5 @@
+storePassword=**********
+keyPassword=************
+keyAlias=key0
+#use a syslink to use a store outside the project
+storeFile=./RELATIVEPATH.jks

@@ -233,7 +233,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
 
                             new SizedBox(width: 5),
                             new Flexible(
-                                flex: 3,
+                                flex: 2,
                                 child: new TextFormField(
                                     autocorrect: false,
                                     controller: _slugControll,
