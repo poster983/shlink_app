@@ -55,7 +55,7 @@ class ShortUrlCard extends StatelessWidget {
                 ],
               ),
               //Meta First Row
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Flexible(
@@ -101,14 +101,16 @@ class ShortUrlCard extends StatelessWidget {
                   ),
 
                 ],
-              ),
-              /*SizedBox(
+              ),*/
+
+              SizedBox(
                 
                 child: GridView.count(
                   shrinkWrap: true,
                   //primary: false,
                   physics: NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(0),
+                  childAspectRatio: 5, //(5 / 1), //width/height
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 0,
                   crossAxisCount: 4,
@@ -119,10 +121,12 @@ class ShortUrlCard extends StatelessWidget {
                     Text("Domain",textAlign: TextAlign.center),
                     
                     // 2nd Row 
-                    Text("Visits", textAlign: TextAlign.center,),
-                    Text("Date Created", textAlign: TextAlign.center,),
-                    Text("Created With", textAlign: TextAlign.center),
-                    Text("Domain",textAlign: TextAlign.center),
+                    (shortUrl.visitCount != null)
+                        ? Text(shortUrl.visitCount.toString(), textAlign: TextAlign.center,)
+                        : Text("No Info", textAlign: TextAlign.center,),
+                    Text(formatter.format(shortUrl.dateCreated), textAlign: TextAlign.center,),
+                    Text(shortUrl.serviceName, textAlign: TextAlign.center),
+                    Text(shortUrl.domain, textAlign: TextAlign.center),
 
                     /*Center(
                       child: Text("Visits"),
@@ -139,7 +143,7 @@ class ShortUrlCard extends StatelessWidget {
 
               
                 ])
-              )*/
+              )
             ])
             /*Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -89,7 +89,7 @@ class Shlink implements Service {
     print(host);
     try {
       List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
-
+      //_shlinkAPI.listVisits(shortCode)
       final historyList = urls.map((url) {
         return ShortUrl.fromShlinkAPI(url, serviceName: name);
       }).toList();
