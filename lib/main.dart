@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+//import 'package:maps/maps.dart';
 
 import 'package:get/get.dart';
 import 'package:shlink_app/AppTheme.dart';
@@ -14,6 +15,8 @@ import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/hive_types/uri_adapter.dart';
 import 'package:shlink_app/views/HistoryView.dart';
 import 'package:shlink_app/views/HomeView.dart';
+import 'package:shlink_app/views/MapTestView.dart';
+
 
 import 'package:shlink_app/widgets/add_server.dart';
 
@@ -76,8 +79,19 @@ void main() async {
     servicesBox.put(defaultService.name, defaultService.toJson());
     print("MAIN(): Added v.gd Service");
   }
-
+  //Update history list
   new Services().updateHistory();
+
+
+  //Define MapAdapter
+  /*MapAdapter.defaultInstance = MapAdapter.platformSpecific(
+    ios: AppleMapsNativeAdapter(),
+    //browser: AppleMapsJsAdapter(requestSigner: AppleMapsRequestSigner.withPrivateKey())
+    // Bing Maps iframe API does not necessarily require API credentials
+    // so we use it in the example.
+    otherwise: BingMapsIframeAdapter(),
+  );*/
+
 
   runApp(MyApp());
 }
@@ -95,6 +109,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => MyHomePage(title: 'Shortish', pageIndex: 0)),
         GetPage(name: '/history', page: () => MyHomePage(title: 'Shortish', pageIndex: 1)),
+        GetPage(name: '/map', page: () => MapTestView())
       ],
       /*home: MyHomePage(title: 'Shlink'),
       routes: <String, WidgetBuilder> {
@@ -191,6 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             HomeView(),
             HistoryView(),
+            
           ],
         ),
       ),
@@ -215,7 +231,12 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text('History'),
             icon: Icon(Icons.history_edu)
           ),
-
+          /*BottomNavyBarItem(
+            textAlign: TextAlign.center,
+            title: Text('Map Test'),
+            icon: Icon(Icons.map),
+            activeColor: Colors.green,
+          ),*/
         ], 
         
       ),

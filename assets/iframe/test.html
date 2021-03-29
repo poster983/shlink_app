@@ -1,0 +1,46 @@
+<html>  
+    <head>
+        <style>
+            body {
+                margin: 0;
+
+            }
+        </style>
+        <script src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js"></script>
+    </head>
+    <body>
+        <div id="map" style="margin: 0 auto; width: 100%;"></div>
+        <script type="text/javascript">
+        const mapkit = window.mapkit;
+            mapkit.init({
+            authorizationCallback: (done) => {
+
+                done("eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IldCOTJVRlhXWkMifQ.eyJpc3MiOiIyQkpRWFVTNEFWIiwiaWF0IjoxNjE3MDI4MzI4LCJleHAiOjE2MTcxNDg4MDB9.QnGg-KpO_touccVKjNrVYzp_VgQCsAzkY6bAjGo0f4TyIHe7uKHLE3G-HdDL_eLlR95D8QDGsFAfXRjntCBiOg")
+            }
+            });
+
+            const coordinate = new mapkit.Coordinate(39.871287, -75.674710);
+            const span = new mapkit.CoordinateSpan(1, 1);
+            const region = new mapkit.CoordinateRegion(coordinate, span);
+
+            const opt = {
+                "region": region,
+                "showsUserLocationControl": true,
+                "showsScale": mapkit.FeatureVisibility.Visible
+            }
+            const map = new mapkit.Map('map', opt);
+            const annotation = new mapkit.MarkerAnnotation(coordinate, {
+                "title": "Longwood Gardens",
+                "subtitle": "Botanical Garden"
+            });
+            map.addAnnotation(annotation);
+
+            window.onmessage = function(e){
+                if (e.data == 'hello') {
+                    console.log(e.data)
+                    alert('It works!');
+                }
+            };
+        </script>
+    </body>
+</html>

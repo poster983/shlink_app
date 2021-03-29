@@ -3,6 +3,13 @@ import 'package:shlink_app/widgets/history/history_list.dart';
 
 
 class HistoryView extends StatelessWidget {
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    //super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shlink_app/widgets/history/history_list.dart';
 
 import 'package:shlink_app/widgets/shortener_card.dart';
@@ -10,6 +11,11 @@ class HomeView extends StatelessWidget {
   HomeView() {
     
   }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    //super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +23,9 @@ class HomeView extends StatelessWidget {
       /*mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,*/
       children: [
+        TextButton(onPressed: () {
+          Get.toNamed("/map");
+        }, child: Text("Map Test")),
         new ShortenerCard(),
         Container(
           padding: EdgeInsets.only(top:15, bottom: 5),
