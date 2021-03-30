@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ShortUrlCard extends StatelessWidget {
   final ShortUrl shortUrl;
   final DateFormat formatter = DateFormat.yMd().add_jm(); //('yyyy-MM-dd h:m ');
+  final GlobalKey cardKey = new GlobalKey();
 
   ShortUrlCard(this.shortUrl);
 
@@ -16,7 +17,9 @@ class ShortUrlCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(Get.width);
     return Card(
+      key: cardKey,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15), // if you need this
           side: BorderSide(
@@ -28,7 +31,8 @@ class ShortUrlCard extends StatelessWidget {
         elevation: 2,
         child: Padding(
             padding: EdgeInsets.all(16),
-            child:  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(
                 // Top Bit
                 children: [
@@ -104,27 +108,42 @@ class ShortUrlCard extends StatelessWidget {
               ),*/
 
               SizedBox(
-                
-                child: GridView.count(
-                  shrinkWrap: true,
-                  //primary: false,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(0),
-                  childAspectRatio: 5, //(5 / 1), //width/height
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 0,
-                  crossAxisCount: 4,
-                  children: <Widget>[
-                    Text("Visits", textAlign: TextAlign.center,),
-                    Text("Date Created", textAlign: TextAlign.center,),
+                  child: GridView.count(
+                      shrinkWrap: true,
+                      //primary: false,
+                      physics: NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(0),
+                      childAspectRatio:
+                          (Get.width > 600) ? 9 : 4, //(5 / 1), //width/height
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 0,
+                      crossAxisCount: 4,
+                      children: <Widget>[
+                    Text(
+                      "Visits",
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      "Date Created",
+                      textAlign: TextAlign.center,
+                    ),
                     Text("Created With", textAlign: TextAlign.center),
-                    Text("Domain",textAlign: TextAlign.center),
-                    
-                    // 2nd Row 
+                    Text("Domain", textAlign: TextAlign.center),
+
+                    // 2nd Row
                     (shortUrl.visitCount != null)
-                        ? Text(shortUrl.visitCount.toString(), textAlign: TextAlign.center,)
-                        : Text("No Info", textAlign: TextAlign.center,),
-                    Text(formatter.format(shortUrl.dateCreated), textAlign: TextAlign.center,),
+                        ? Text(
+                            shortUrl.visitCount.toString(),
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            "No Info",
+                            textAlign: TextAlign.center,
+                          ),
+                    Text(
+                      formatter.format(shortUrl.dateCreated),
+                      textAlign: TextAlign.center,
+                    ),
                     Text(shortUrl.serviceName, textAlign: TextAlign.center),
                     Text(shortUrl.domain, textAlign: TextAlign.center),
 
@@ -140,10 +159,7 @@ class ShortUrlCard extends StatelessWidget {
                     Center(
                       child: Text("Domain"),
                     ),*/
-
-              
-                ])
-              )
+                  ]))
             ])
             /*Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -175,6 +191,6 @@ class ShortUrlCard extends StatelessWidget {
                 ),
               ],
             )*/
-    ));
+            ));
   }
 }

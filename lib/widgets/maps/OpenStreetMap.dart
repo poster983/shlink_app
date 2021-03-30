@@ -1,12 +1,17 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shlink_app/widgets/maps/OSM_Marker.dart';
 
 class OpenStreetMap extends StatelessWidget {
   MapController mapController;
   MapPosition mapPosition;
+  LatLng startingCoord;
   //LatLng mapPosition = new LatLng(0, 0);
   //WebBrowserController controller;
 
@@ -28,9 +33,13 @@ class OpenStreetMap extends StatelessWidget {
   /*String dataURL;
   final iframe = html.IFrameElement();*/
 
-  OpenStreetMap({this.mapController}) {
+  OpenStreetMap({this.mapController, this.startingCoord}) {
     if (mapController == null) {
       mapController = new MapController();
+    }
+
+    if (startingCoord == null) {
+      startingCoord = LatLng(0, 0);
     }
     //print(mapController.center);
     /*_loadHtmlFromAssets().then((url) {
@@ -67,22 +76,35 @@ class OpenStreetMap extends StatelessWidget {
     return iframe;
   }*/
 
+  double scrolling(double scrollPosition) {
+    return pow(-0.0138 * scrollPosition, 2) +
+        (0.2418 * scrollPosition) -
+        0.0056;
+    //return (exp(deg)-exp(-deg))/exp(deg)+exp(-deg);
+  }
+
   @override
   Widget build(BuildContext context) {
     print("HI");
-    return 
-      Listener(
-          onPointerSignal: (pointerSignal) {
-            if (pointerSignal is PointerScrollEvent) {
-              print(mapController.move.toString());
-              if (pointerSignal.scrollDelta.dy < 0) {
+    return Listener(
+        onPointerSignal: (pointerSignal) {
+          if (pointerSignal is PointerScrollEvent) {
+            /*print(log(pointerSignal.scrollDelta.dy.abs()));
+            print(log(mapPosition.zoom));*/
+
+            if (pointerSignal.scrollDelta.dy < 0) {
+              if (mapPosition.zoom <= 17) {
+                print(scrolling(mapPosition.zoom));
                 mapController.move(mapPosition.center, mapPosition.zoom + 1);
-              } else {
-                mapController.move(mapPosition.center, mapPosition.zoom - 1);
               }
+            } else {
+              print(log(mapPosition.zoom));
+              mapController.move(mapPosition.center,
+                  mapPosition.zoom - log(mapPosition.zoom) / 5);
             }
-          },
-          child: Stack(children: [
+          }
+        },
+        child: Stack(children: [
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
@@ -91,11 +113,15 @@ class OpenStreetMap extends StatelessWidget {
                 //position.
               },
               //controller: mapController,
-              center: LatLng(51.5, -0.09),
+              center: startingCoord,
               zoom: 13.0,
             ),
             layers: [
               TileLayerOptions(
+                  maxZoom: 17,
+                  maxNativeZoom: 17,
+                  minNativeZoom: 0,
+
                   tileProvider: const CachedTileProvider(),
                   urlTemplate:
                       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -103,29 +129,36 @@ class OpenStreetMap extends StatelessWidget {
               MarkerLayerOptions(
                 markers: [
                   Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: LatLng(51.5, -0.09),
+                    width: 60,
+                    height: 100,
+                    point: LatLng(29.719460, -95.388951),
                     builder: (ctx) => Container(
-                      child: FlutterLogo(),
+                      child: Center(
+                          child: OSMMarker(
+                            title: "5 Views",
+                        color: Colors.red,
+                        content: Icon(
+                          CupertinoIcons.map_pin,
+                          size: 20,
+                        ),
+                        size: 50,
+                      )),
                     ),
                   ),
                 ],
               ),
             ],
           ),
-        
-        Align(
-
-          child: Text("+", textAlign: TextAlign.center,
-           style: TextStyle(
-            fontSize: 30, 
-            color: Colors.black, 
-            
-          ),)
-        ),
-    ])
-    );
+          Align(
+              child: Text(
+            "+",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.black,
+            ),
+          )),
+        ]));
 
     /*SizedBox(
           width: 600,
@@ -176,10 +209,10 @@ class CachedTileProvider extends TileProvider {
   const CachedTileProvider();
   @override
   ImageProvider getImage(Coords<num> coords, TileLayerOptions options) {
-    return NetworkImage(getTileUrl(coords, options));
-    /*return CachedNetworkImageProvider(
+    //return NetworkImage(getTileUrl(coords, options));
+    return CachedNetworkImageProvider(
       getTileUrl(coords, options),
       //Now you can set options that determine how the image gets cached via whichever plugin you use.
-    );*/
+    );
   }
 }
