@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hive/hive.dart';
@@ -19,9 +22,7 @@ import 'package:shlink_app/views/MapTestView.dart';
 import 'package:shlink_app/views/SettingsView.dart';
 import 'package:shlink_app/views/settings/MapSettingsView.dart';
 
-
 import 'package:shlink_app/widgets/add_server.dart';
-
 
 import 'Services.dart';
 
@@ -35,10 +36,25 @@ void main() async {
   Hive.registerAdapter(UriAdapter());
   Hive.registerAdapter(ServiceTypeAdapter());
 
-  await Hive.openBox('preferences');
+  var preferences = await Hive.openBox('preferences');
   var servicesBox = await Hive.openBox('services');
   await Hive.openBox('add_server_autofill');
   await Hive.openBox<ShortUrl>('history');
+
+  //set default prefrence for maps
+  if(preferences.get("mapService") == null) {
+    if (!kIsWeb) {
+      if (Platform.isAndroid) {
+        preferences.put("mapService", "GoogleMaps");
+      }
+      if(Platform.isIOS) {
+        preferences.put("mapService", "AppleMaps");
+      }
+    } else {
+      preferences.put("mapService", "OpenStreetMap");
+    }
+  }
+  
 
   //add default services
   if (servicesBox.get("tinyurl.com") == null) {
@@ -84,7 +100,6 @@ void main() async {
   //Update history list
   new Services().updateHistory();
 
-
   //Define MapAdapter
   /*MapAdapter.defaultInstance = MapAdapter.platformSpecific(
     ios: AppleMapsNativeAdapter(),
@@ -93,7 +108,6 @@ void main() async {
     // so we use it in the example.
     otherwise: BingMapsIframeAdapter(),
   );*/
-
 
   runApp(MyApp());
 }
@@ -109,11 +123,15 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => MyHomePage(title: 'Shortish', pageIndex: 0)),
-        GetPage(name: '/history', page: () => MyHomePage(title: 'Shortish', pageIndex: 1)),
+        GetPage(
+            name: '/', page: () => MyHomePage(title: 'Shortish', pageIndex: 0)),
+        GetPage(
+            name: '/history',
+            page: () => MyHomePage(title: 'Shortish', pageIndex: 1)),
         GetPage(name: '/map', page: () => MapTestView()),
-
-        GetPage(name: '/settings', page: () => MyHomePage(title: 'Shortish', pageIndex: 2)),
+        GetPage(
+            name: '/settings',
+            page: () => MyHomePage(title: 'Shortish', pageIndex: 2)),
         GetPage(name: '/settings/map', page: () => MapSettingsView())
       ],
       /*home: MyHomePage(title: 'Shlink'),
@@ -125,7 +143,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  
   MyHomePage({Key key, this.title, this.pageIndex = 0}) : super(key: key);
   final AppController controller = Get.put(AppController());
 
@@ -148,7 +165,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final AppController controller = Get.find();
 
-  
   PageController _pageController;
 
   @override
@@ -163,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _pageController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -181,6 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
           new IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
+                Hive.box("preferences").deleteFromDisk();
                 Hive.box("services").deleteFromDisk();
                 Hive.box<ShortUrl>("history").deleteFromDisk();
                 showSnackBar(text: "Deleted all services");
@@ -210,42 +227,35 @@ class _MyHomePageState extends State<MyHomePage> {
           onPageChanged: (index) {
             setState(() => widget.pageIndex = index);
           },
-          children: <Widget>[
-            HomeView(),
-            HistoryView(),
-            SettingsView()
-          ],
+          children: <Widget>[HomeView(), HistoryView(), SettingsView()],
         ),
       ),
       bottomNavigationBar: BottomNavyBar(
         mainAxisAlignment: MainAxisAlignment.center,
-        selectedIndex: widget.pageIndex, 
+        selectedIndex: widget.pageIndex,
         showElevation: true,
         onItemSelected: (index) => setState(() {
-              widget.pageIndex = index;
-              _pageController.animateToPage(index,
-                  duration: Duration(milliseconds: 300), curve: Curves.ease);
+          widget.pageIndex = index;
+          _pageController.animateToPage(index,
+              duration: Duration(milliseconds: 300), curve: Curves.ease);
         }),
         items: [
           BottomNavyBarItem(
-            activeColor: Colors.red,
-            textAlign: TextAlign.center,
-            title: Text('Home'),
-            icon: Icon(Icons.home)
-          ),
+              activeColor: Colors.red,
+              textAlign: TextAlign.center,
+              title: Text('Home'),
+              icon: Icon(Icons.home)),
           BottomNavyBarItem(
-            textAlign: TextAlign.center,
-            title: Text('History'),
-            icon: Icon(Icons.history_edu)
-          ),
+              textAlign: TextAlign.center,
+              title: Text('History'),
+              icon: Icon(Icons.history_edu)),
           BottomNavyBarItem(
             textAlign: TextAlign.center,
             title: Text('Settings'),
             icon: Icon(Icons.settings),
             activeColor: Colors.green,
           ),
-        ], 
-        
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
