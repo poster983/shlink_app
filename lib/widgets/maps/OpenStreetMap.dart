@@ -12,6 +12,7 @@ class OpenStreetMap extends StatelessWidget {
   MapController mapController;
   MapPosition mapPosition;
   LatLng startingCoord;
+  List<Marker> poiList;
   //LatLng mapPosition = new LatLng(0, 0);
   //WebBrowserController controller;
 
@@ -33,13 +34,17 @@ class OpenStreetMap extends StatelessWidget {
   /*String dataURL;
   final iframe = html.IFrameElement();*/
 
-  OpenStreetMap({this.mapController, this.startingCoord}) {
-    if (mapController == null) {
+  OpenStreetMap({this.mapController, this.startingCoord, this.poiList}) {
+    /*if (mapController == null) {
       mapController = new MapController();
-    }
+    }*/
 
     if (startingCoord == null) {
       startingCoord = LatLng(0, 0);
+    }
+
+    if (poiList == null) {
+      poiList = [];
     }
     //print(mapController.center);
     /*_loadHtmlFromAssets().then((url) {
@@ -91,7 +96,7 @@ class OpenStreetMap extends StatelessWidget {
           if (pointerSignal is PointerScrollEvent) {
             /*print(log(pointerSignal.scrollDelta.dy.abs()));
             print(log(mapPosition.zoom));*/
-
+            //print(mapController);
             if (pointerSignal.scrollDelta.dy < 0) {
               if (mapPosition.zoom <= 17) {
                 print(scrolling(mapPosition.zoom));
@@ -106,7 +111,7 @@ class OpenStreetMap extends StatelessWidget {
         },
         child: Stack(children: [
           FlutterMap(
-            mapController: mapController,
+            mapController: mapController = MapController(),
             options: MapOptions(
               onPositionChanged: (position, hasGesture) {
                 mapPosition = position;
@@ -121,32 +126,11 @@ class OpenStreetMap extends StatelessWidget {
                   maxZoom: 17,
                   maxNativeZoom: 17,
                   minNativeZoom: 0,
-
                   tileProvider: const CachedTileProvider(),
                   urlTemplate:
                       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                   subdomains: ['a', 'b', 'c']),
-              MarkerLayerOptions(
-                markers: [
-                  Marker(
-                    width: 60,
-                    height: 100,
-                    point: LatLng(29.719460, -95.388951),
-                    builder: (ctx) => Container(
-                      child: Center(
-                          child: OSMMarker(
-                            title: "5 Views",
-                        color: Colors.red,
-                        content: Icon(
-                          CupertinoIcons.map_pin,
-                          size: 20,
-                        ),
-                        size: 50,
-                      )),
-                    ),
-                  ),
-                ],
-              ),
+              MarkerLayerOptions(markers: poiList),
             ],
           ),
           Align(

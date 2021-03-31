@@ -7,9 +7,12 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.red,
     appBarTheme: AppBarTheme(
+      titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+      actionsIconTheme: IconThemeData(color: Colors.grey),
+      iconTheme: IconThemeData(color: Colors.grey),
       color: Colors.white,
       brightness: Brightness.light,
-      textTheme: ThemeData.light().textTheme
+      textTheme: TextTheme(headline6: TextStyle(color: Colors.black, fontSize: 20)),
     ),
     //primaryColor: Colors.red,
     buttonTheme: ButtonThemeData(
@@ -21,7 +24,7 @@ class AppTheme {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     
   );
- 
+  
   static final ThemeData darkTheme = ThemeData(
     primarySwatch: Colors.red,
     //primarySwatch: Colors.grey,
@@ -34,4 +37,5 @@ class AppTheme {
     brightness: Brightness.dark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
+  
 }

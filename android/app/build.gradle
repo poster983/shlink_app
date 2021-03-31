@@ -1,6 +1,6 @@
-def keystorePropertiesFile = rootProject.file("key.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def secretsPropertiesFile = rootProject.file("secrets.properties")
+def secretsProperties = new Properties()
+secretsProperties.load(new FileInputStream(secretsPropertiesFile))
 
 
 def localProperties = new Properties()
@@ -43,10 +43,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias secretsProperties['keyAlias']
+            keyPassword secretsProperties['keyPassword']
+            storeFile file(secretsProperties['storeFile'])
+            storePassword secretsProperties['storePassword']
         }
     }
 
@@ -57,6 +57,9 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        manifestPlaceholders = [googleAPIKey: secretsProperties['googleAPIKey']]
+
     }
 
     buildTypes {

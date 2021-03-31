@@ -13,7 +13,7 @@ class MapNavBar extends StatelessWidget {
   Color getBackgroundColor() {
     if (!kIsWeb) {
       // is not web
-      if (Platform.isIOS) {
+      if (Platform.isIOS) { // ios views be broken
         return (Get.isDarkMode)
                       ? Colors.grey.shade900.withOpacity(0.9)
                       : Colors.grey.shade200.withOpacity(0.9);

@@ -15,11 +15,17 @@ class ShortUrlCard extends StatelessWidget {
   void _launchURL(url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
+  Future<void> executeAfterBuild(BuildContext context) async {
+    //cardKey.currentState.
+  }
+
   @override
   Widget build(BuildContext context) {
+    executeAfterBuild(context);
+    //WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild);
     print(Get.width);
     return Card(
-      key: cardKey,
+        key: cardKey,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15), // if you need this
           side: BorderSide(
@@ -106,48 +112,56 @@ class ShortUrlCard extends StatelessWidget {
 
                 ],
               ),*/
+              LayoutBuilder(builder: (context, constraints) {
+                double aspect = 0.8;
+                if (constraints.maxWidth > 260) {
+                  aspect = (constraints.maxWidth > 600) ? 10 : 2;
+                } else if (constraints.maxWidth > 260) {
+                  aspect = 1;
+                }
+                //print(constraints.maxWidth);
+                //print(aspect);
 
-              SizedBox(
-                  child: GridView.count(
-                      shrinkWrap: true,
-                      //primary: false,
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(0),
-                      childAspectRatio:
-                          (Get.width > 600) ? 9 : 4, //(5 / 1), //width/height
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 0,
-                      crossAxisCount: 4,
-                      children: <Widget>[
-                    Text(
-                      "Visits",
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      "Date Created",
-                      textAlign: TextAlign.center,
-                    ),
-                    Text("Created With", textAlign: TextAlign.center),
-                    Text("Domain", textAlign: TextAlign.center),
+                return SizedBox(
+                    child: GridView.count(
+                        shrinkWrap: true,
+                        //primary: false,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(0),
+                        childAspectRatio: aspect, //width/height
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 0,
+                        crossAxisCount: 4,
+                        children: <Widget>[
+                      Text(
+                        "Visits",
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "Date Created",
+                        textAlign: TextAlign.center,
+                      ),
+                      Text("Created With", textAlign: TextAlign.center),
+                      Text("Domain", textAlign: TextAlign.center),
 
-                    // 2nd Row
-                    (shortUrl.visitCount != null)
-                        ? Text(
-                            shortUrl.visitCount.toString(),
-                            textAlign: TextAlign.center,
-                          )
-                        : Text(
-                            "No Info",
-                            textAlign: TextAlign.center,
-                          ),
-                    Text(
-                      formatter.format(shortUrl.dateCreated),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(shortUrl.serviceName, textAlign: TextAlign.center),
-                    Text(shortUrl.domain, textAlign: TextAlign.center),
+                      // 2nd Row
+                      (shortUrl.visitCount != null)
+                          ? Text(
+                              shortUrl.visitCount.toString(),
+                              textAlign: TextAlign.center,
+                            )
+                          : Text(
+                              "No Info",
+                              textAlign: TextAlign.center,
+                            ),
+                      Text(
+                        formatter.format(shortUrl.dateCreated),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(shortUrl.serviceName, textAlign: TextAlign.center),
+                      Text(shortUrl.domain, textAlign: TextAlign.center),
 
-                    /*Center(
+                      /*Center(
                       child: Text("Visits"),
                     ),
                     Center(
@@ -159,7 +173,8 @@ class ShortUrlCard extends StatelessWidget {
                     Center(
                       child: Text("Domain"),
                     ),*/
-                  ]))
+                    ]));
+              }),
             ])
             /*Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

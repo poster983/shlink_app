@@ -16,6 +16,8 @@ import 'package:shlink_app/types/hive_types/uri_adapter.dart';
 import 'package:shlink_app/views/HistoryView.dart';
 import 'package:shlink_app/views/HomeView.dart';
 import 'package:shlink_app/views/MapTestView.dart';
+import 'package:shlink_app/views/SettingsView.dart';
+import 'package:shlink_app/views/settings/MapSettingsView.dart';
 
 
 import 'package:shlink_app/widgets/add_server.dart';
@@ -109,7 +111,10 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => MyHomePage(title: 'Shortish', pageIndex: 0)),
         GetPage(name: '/history', page: () => MyHomePage(title: 'Shortish', pageIndex: 1)),
-        GetPage(name: '/map', page: () => MapTestView())
+        GetPage(name: '/map', page: () => MapTestView()),
+
+        GetPage(name: '/settings', page: () => MyHomePage(title: 'Shortish', pageIndex: 2)),
+        GetPage(name: '/settings/map', page: () => MapSettingsView())
       ],
       /*home: MyHomePage(title: 'Shlink'),
       routes: <String, WidgetBuilder> {
@@ -149,6 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    print(AppTheme.darkTheme.appBarTheme.textTheme);
     _pageController = PageController(initialPage: widget.pageIndex);
   }
 
@@ -157,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _pageController.dispose();
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -170,6 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
       resizeToAvoidBottomInset: false,
       //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        //elevation: 0,
         actions: [
           new IconButton(
               icon: Icon(Icons.delete),
@@ -206,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             HomeView(),
             HistoryView(),
-            
+            SettingsView()
           ],
         ),
       ),
@@ -231,12 +238,12 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text('History'),
             icon: Icon(Icons.history_edu)
           ),
-          /*BottomNavyBarItem(
+          BottomNavyBarItem(
             textAlign: TextAlign.center,
-            title: Text('Map Test'),
-            icon: Icon(Icons.map),
+            title: Text('Settings'),
+            icon: Icon(Icons.settings),
             activeColor: Colors.green,
-          ),*/
+          ),
         ], 
         
       ),

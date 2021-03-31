@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+6
+version: 1.0.0+7
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -47,8 +47,12 @@ dependencies:
       url: https://github.com/passsy/flutter_map.git
       ref: latlong2
   apple_maps_flutter: ^1.0.0
+  google_maps_flutter: ^2.0.1
+  #platform_maps_flutter: ^1.0.1
   latlong2: ^0.8.0
   cached_network_image: ^3.0.0
+  
+  package_info_plus: ^1.0.0
 
   #web_browser: ^0.5.0
   #universal_html: ^2.0.7
@@ -90,8 +94,8 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
-  assets:
-    - assets/iframe/test.html
+  #assets:
+   # - assets/iframe/test.html
    # - assets/iframe/map.js
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
