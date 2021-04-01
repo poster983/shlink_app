@@ -5,10 +5,11 @@ import 'package:shlink_app/types/services/Shlink.dart';
 
 /// A Class to interface with the saved services
 class Services {
-  final serverBox = Hive.box("services");
+  
   Services();
 
-  List<Service> get list {
+  static List<Service> get list {
+    final serverBox = Hive.box("services");
     return serverBox.values.map((serv) {
       switch (serv["type"]) {
         case "Shlink":
@@ -23,7 +24,12 @@ class Services {
     }).toList();
   }
 
-  void updateHistory() {
+  static Service? find(String serviceName) {
+    return list.firstWhere((element) => element.name == serviceName,
+        orElse: null);
+  }
+
+  static void updateHistory() {
     list.forEach((element) {
       element.refreshHistory();
     });

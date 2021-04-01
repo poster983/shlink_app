@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shlink_app/types/ShortUrl.dart';
+import 'package:shlink_app/types/services/ServiceType.dart';
 import 'package:shlink_app/widgets/maps/DeviceMap.dart';
 import 'package:shlink_app/widgets/maps/MapNavBar.dart';
 import 'package:shlink_app/widgets/maps/MapPOI.dart';
@@ -63,7 +65,14 @@ class MapTestView extends StatelessWidget {
               right: 10,
             ),
             constraints: BoxConstraints(maxWidth: 410),
-            child: MapNavBar()),
+            child: MapNavBar(shortUrl: ShortUrl(
+                        longUrl: Uri.parse("https://josephhassell.com"),
+                        shortUrl: Uri.parse("https://smol.page/test"),
+                        slug: "test",
+                        visitCount: 69420,
+                        dateCreated: DateTime.now(),
+                        serviceName: "Test Service",
+                        serviceType: ServiceType.GenericREST))),
       ],
     ));
   }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shlink_app/Services.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
+import 'package:shlink_app/views/VisitsMapView.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ShortUrlCard extends StatelessWidget {
@@ -15,15 +17,15 @@ class ShortUrlCard extends StatelessWidget {
   void _launchURL(url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
-  Future<void> executeAfterBuild(BuildContext context) async {
+  /*Future<void> executeAfterBuild(BuildContext context) async {
     //cardKey.currentState.
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    executeAfterBuild(context);
+    //executeAfterBuild(context);
     //WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild);
-    print(Get.width);
+    //print(Get.width);
     return Card(
         key: cardKey,
         shape: RoundedRectangleBorder(
@@ -49,7 +51,14 @@ class ShortUrlCard extends StatelessWidget {
                   IconButton(
                       icon: Icon(Icons.copy),
                       onPressed: () => Clipboard.setData(
-                          ClipboardData(text: shortUrl.shortUrl.toString())))
+                          ClipboardData(text: shortUrl.shortUrl.toString()))),
+                  IconButton(
+                      icon: Icon(Icons.analytics),
+                      onPressed: () async {
+                        var visits = await Services.find(shortUrl.serviceName)!
+                            .visitStats(shortUrl);
+                        Get.to(() => VisitsMapView(shortUrl,visits));
+                      })
                 ],
               ),
               Row(
@@ -64,54 +73,8 @@ class ShortUrlCard extends StatelessWidget {
                       onPressed: () => _launchURL(shortUrl.longUrl.toString()))
                 ],
               ),
-              //Meta First Row
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: Text("Visits", textAlign: TextAlign.center,),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text("Date Created", textAlign: TextAlign.center,),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text("Created With", textAlign: TextAlign.center),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text("Domain",textAlign: TextAlign.center),
-                  ),
 
-                ],
-              ),
-              //2nd Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: (shortUrl.visitCount != null)
-                        ? Text(shortUrl.visitCount.toString(), textAlign: TextAlign.center,)
-                        : Text("No Info", textAlign: TextAlign.center,),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text(formatter.format(shortUrl.dateCreated), textAlign: TextAlign.center,),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text(shortUrl.serviceName, textAlign: TextAlign.center),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text(shortUrl.domain, textAlign: TextAlign.center),
-                  ),
-
-                ],
-              ),*/
+              //Info grid
               LayoutBuilder(builder: (context, constraints) {
                 double aspect = 0.8;
                 if (constraints.maxWidth > 260) {

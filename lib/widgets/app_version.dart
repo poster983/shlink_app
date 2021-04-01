@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -18,7 +19,7 @@ class AppVersion extends StatefulWidget {
 }
 
 class _AppVersionState extends State<AppVersion> {
-  late PackageInfo packageInfo;
+  PackageInfo? packageInfo;
   bool showAll = false;
   @override
   void initState() {
@@ -44,12 +45,12 @@ class _AppVersionState extends State<AppVersion> {
               children: [
                 Text("Shortish"),
                 (showAll)
-                    ? Text(packageInfo.version +
+                    ? Text(packageInfo!.version +
                         " (" +
-                        packageInfo.buildNumber +
+                        packageInfo!.buildNumber +
                         ")")
-                    : Text(packageInfo.version),
-                (showAll) ? Text(packageInfo.packageName) : Container(),
+                    : Text(packageInfo!.version),
+                (showAll) ? (!kIsWeb)?Text(packageInfo!.packageName):Text("Progressive Web App") : Container(),
               ],
             )
           : Container(),

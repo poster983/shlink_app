@@ -8,14 +8,20 @@
             "name": "Flutter",
             "program": "lib/main.dart",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--no-sound-null-safety"
+            ]
         },
         {
             "name": "Flutter - Profile",
             "program": "lib/main.dart",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--no-sound-null-safety"
+            ]
         },
     ]
 }

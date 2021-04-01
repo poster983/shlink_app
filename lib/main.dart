@@ -98,7 +98,7 @@ void main() async {
     print("MAIN(): Added v.gd Service");
   }
   //Update history list
-  new Services().updateHistory();
+  Services.updateHistory();
 
   //Define MapAdapter
   /*MapAdapter.defaultInstance = MapAdapter.platformSpecific(
@@ -216,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
           new IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                controller.services.updateHistory();
+                Services.updateHistory();
               })
         ],
         // Here we take the value from the MyHomePage object that was created by

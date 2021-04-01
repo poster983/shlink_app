@@ -6,26 +6,28 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
-import 'package:shlink_app/types/services/ServiceType.dart';
 import 'package:shlink_app/widgets/short_url_card.dart';
 
 class MapNavBar extends StatelessWidget {
+  ShortUrl shortUrl;
   Color getBackgroundColor() {
     if (!kIsWeb) {
       // is not web
-      if (Platform.isIOS) { // ios views be broken
+      if (Platform.isIOS) {
+        // ios views be broken
         return (Get.isDarkMode)
-                      ? Colors.grey.shade900.withOpacity(0.9)
-                      : Colors.grey.shade200.withOpacity(0.9);
+            ? Colors.grey.shade900.withOpacity(0.9)
+            : Colors.grey.shade200.withOpacity(0.9);
       }
     }
 
     return (Get.isDarkMode)
-                      ? Colors.grey.shade900.withOpacity(0.5)
-                      : Colors.grey.shade200.withOpacity(0.4);;
+        ? Colors.grey.shade900.withOpacity(0.5)
+        : Colors.grey.shade200.withOpacity(0.4);
+    ;
   }
 
-  MapNavBar();
+  MapNavBar({required this.shortUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +57,7 @@ class MapNavBar extends StatelessWidget {
                         },
                       ),
                     ),
-                    ShortUrlCard(ShortUrl(
-                        longUrl: Uri.parse("https://josephhassell.com"),
-                        shortUrl: Uri.parse("https://smol.page/test"),
-                        slug: "test",
-                        visitCount: 69420,
-                        dateCreated: DateTime.now(),
-                        serviceName: "Test Service",
-                        serviceType: ServiceType.GenericREST))
+                    ShortUrlCard(shortUrl)
                   ],
                 )))));
   }

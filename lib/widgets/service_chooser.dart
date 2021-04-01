@@ -16,19 +16,19 @@ class ServiceChooser extends StatefulWidget {
 
 class _ServiceChooserState extends State<ServiceChooser> {
   final AppController controller = Get.find();
-  Services services = new Services();
+  //Services services = new Services();
   late List<Service> serviceList;
   Service? dropdownValue;
   @override
   void initState() {
     super.initState();
-    serviceList = services.list;
+    serviceList = Services.list;
     //dropdownValue = services.list[0];
   }
 
   update() {
     setState(() {
-      serviceList = services.list;
+      serviceList = Services.list;
     });
   }
 

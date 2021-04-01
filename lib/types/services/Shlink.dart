@@ -4,9 +4,12 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/types/Domain.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
+import 'package:shlink_app/types/ShortUrlVisit.dart';
+import 'package:shlink_app/types/ShortUrlVisitLocation.dart';
 import 'package:shlink_app/types/api_response_types/ShlinkGetDomains.dart';
 import 'package:shlink_app/types/services/Service.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
@@ -57,8 +60,8 @@ class Shlink implements Service {
   late Color? color;
 
   @override
-  SupportedFeatures get features =>
-      new SupportedFeatures(slug: true, multipleDomains: true);
+  SupportedFeatures get features => new SupportedFeatures(
+      slug: true, multipleDomains: true, enhancedVisits: true);
 
   Shlink(
       {required this.host,
@@ -142,8 +145,32 @@ class Shlink implements Service {
   }
 
   @override
-  Future<ShortUrl> visitStats(Uri shortUrl) {
-    // TODO: implement visitStats
-    throw UnimplementedError();
+  Future<List<ShortUrlVisit>> visitStats(ShortUrl shortUrl) async {
+    //try {
+      List<ShlinkAPI.Visit> visits = await _shlinkAPI.listVisits(shortUrl.slug);
+      print(visits);
+      List<ShortUrlVisit> normalVisits = visits.map((e) {
+        ShortURLVisitLocation? visitLocation;
+        if (e.visitLocation != null) {
+          visitLocation = new ShortURLVisitLocation(
+            coordinates: LatLng(double.parse(e.visitLocation.latitude),
+                double.parse(e.visitLocation.longitude)),
+            city: e.visitLocation.cityName,
+            region: e.visitLocation.regionName,
+            country: e.visitLocation.countryName,
+            timezone: e.visitLocation.timezone
+          );
+        }
+        return ShortUrlVisit(
+          location: visitLocation, 
+          referer: e.referer,
+          userAgent: e.userAgent,
+          date: e.date
+        );
+      }).toList();
+      return normalVisits;
+    /*} catch (err) {
+      return Future.error(err);
+    }*/
   }
 }

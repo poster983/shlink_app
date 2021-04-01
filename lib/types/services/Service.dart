@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:shlink_app/types/Domain.dart';
+import 'package:shlink_app/types/ShortUrlVisit.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 
 import '../ShortUrl.dart';
@@ -55,7 +56,7 @@ class Service {
   /// Returns a liat of visits with their location stats
   /// [shortUrl] Uri - the whole link
 
-  Future<ShortUrl> visitStats(Uri shortUrl) async {
+  Future<List<ShortUrlVisit>> visitStats(ShortUrl shortUrl) async {
     throw UnimplementedError();
   }
 

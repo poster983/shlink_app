@@ -6,7 +6,6 @@ import 'package:shlink_app/types/services/Service.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 
 class AppController extends GetxController {
-  final services = new Services();
   final serviceList = [].obs;
   final selectedService = 0.obs;
   //final _newestShortLink = ShortUrl().obs;
@@ -15,7 +14,7 @@ class AppController extends GetxController {
   }
   void updateServices() {
     selectedService.value = 0;
-    serviceList(services.list);
+    serviceList(Services.list);
     //inspect(services.list);
     //serviceList. = services.list;
   }

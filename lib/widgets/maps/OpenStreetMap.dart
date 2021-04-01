@@ -119,7 +119,7 @@ class OpenStreetMap extends StatelessWidget {
               },
               //controller: mapController,
               center: startingCoord,
-              zoom: 13.0,
+              zoom: 2.0,
             ),
             layers: [
               TileLayerOptions(

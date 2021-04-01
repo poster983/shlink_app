@@ -8,6 +8,7 @@ import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
+import 'package:shlink_app/types/ShortUrlVisit.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/Domain.dart';
@@ -234,7 +235,7 @@ class GenericREST implements Service {
   }
 
   @override
-  Future<ShortUrl> visitStats(Uri shortUrl) {
+  Future<List<ShortUrlVisit>> visitStats(ShortUrl shortUrl) {
     // TODO: implement visitStats
     throw UnimplementedError();
   }
