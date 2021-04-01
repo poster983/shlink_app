@@ -6,10 +6,10 @@ import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
 
 class ShortenButton extends StatefulWidget {
-  ShortenButton({Key key, this.onPressed, this.loading = false})
+  ShortenButton({Key? key, this.onPressed, this.loading = false})
       : super(key: key);
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   bool loading;
   bool get enabled => onPressed != null;
 
@@ -20,9 +20,9 @@ class ShortenButton extends StatefulWidget {
 class _ShortenButtonState extends State<ShortenButton>
     with TickerProviderStateMixin {
   final AppController controller = Get.find();
-  Widget _currentWidget;
+  //late Widget _currentWidget;
   //AnimationController _controller;
-  AnimationController _pulseAnimationController;
+  late AnimationController _pulseAnimationController;
   //var _buttonRadiusAnimation;
   var _pulseAnimation;
 
@@ -62,7 +62,7 @@ class _ShortenButtonState extends State<ShortenButton>
     }
     return AnimatedBuilder(
         animation: _pulseAnimationController,
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
           return Container(
               child: new CupertinoButton.filled(
                 onPressed: widget.onPressed,
@@ -77,7 +77,7 @@ class _ShortenButtonState extends State<ShortenButton>
                   borderRadius: BorderRadius.circular(25),
                   boxShadow: [
                     BoxShadow(
-                      color: Get.theme.accentColor
+                      color: Get.theme!.accentColor
                           .withAlpha(widget.enabled ? 60 : 0),
                       blurRadius: 10.0,
                       spreadRadius: _pulseAnimation.value == null
