@@ -25,8 +25,11 @@ class Services {
   }
 
   static Service? find(String serviceName) {
-    return list.firstWhere((element) => element.name == serviceName,
-        orElse: null);
+    try {
+      return list.firstWhere((element) => element.name == serviceName);
+    } catch(e) {
+      return null;
+    }
   }
 
   static void updateHistory() {

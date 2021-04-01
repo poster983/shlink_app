@@ -23,7 +23,7 @@ class _MapSettingsViewState extends State<MapSettingsView> {
   late List<MapPOI> testPOI;
   @override
   void initState() {
-    mapServiceChoice = box.get("mapService", defaultValue: "Open Street Map");
+    mapServiceChoice = box.get("mapService", defaultValue: "OpenStreetMap");
 
     print(mapServiceChoice);
 
@@ -77,6 +77,7 @@ class _MapSettingsViewState extends State<MapSettingsView> {
             onChanged: (String? value) {
               setState(() {
                 mapServiceChoice = value!;
+                box.put("mapService", mapServiceChoice);
               });
             },
           ),
@@ -91,6 +92,7 @@ class _MapSettingsViewState extends State<MapSettingsView> {
             onChanged: (String? value) {
               setState(() {
                 mapServiceChoice = value!;
+                box.put("mapService", mapServiceChoice);
               });
             },
           ),
@@ -105,6 +107,7 @@ class _MapSettingsViewState extends State<MapSettingsView> {
         onChanged: (String? value) {
           setState(() {
             mapServiceChoice = value!;
+            box.put("mapService", mapServiceChoice);
           });
         },
       ),
@@ -120,38 +123,43 @@ class _MapSettingsViewState extends State<MapSettingsView> {
   Widget build(BuildContext context) {
     print(MapService.values);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Map settings"),
-        elevation: 0,
-        backgroundColor: Colors.white.withOpacity(0),
-        leading: BackButton(
-          onPressed: () {
-            if (Get.previousRoute == "") {
-              Get.offAllNamed("/settings");
-            } else {
-              Get.back();
-            }
-          },
+        appBar: AppBar(
+          title: Text("Map settings"),
+          elevation: 0,
+          backgroundColor: Colors.white.withOpacity(0),
+          leading: BackButton(
+            onPressed: () {
+              if (Get.previousRoute == "") {
+                Get.offAllNamed("/settings");
+              } else {
+                Get.back();
+              }
+            },
+          ),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(8),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-        ListView(shrinkWrap: true, children: generateListView()),
-        SizedBox(height: 10),
-        Expanded(
-          child: Container(
-              padding: EdgeInsets.all(15),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: DeviceMap(
-                    startingCoord: startingCoord,
-                    poiList: testPOI,
-                    mapService: MapService.values
-                        .firstWhere((e) => e.toString() == "MapService."+mapServiceChoice),
-                  ))),
-        )
-      ]),
-    ));
+        body: Container(
+          padding: EdgeInsets.all(8),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            ListView(shrinkWrap: true, children: generateListView()),
+            SizedBox(height: 10),
+            TextButton(
+                onPressed: () {
+                  Get.toNamed("/map");
+                },
+                child: Text("Fullscreen map preview")),
+            Expanded(
+              child: Container(
+                  padding: EdgeInsets.all(15),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: DeviceMap(
+                        startingCoord: startingCoord,
+                        poiList: testPOI,
+                        mapService: MapService.values.firstWhere((e) =>
+                            e.toString() == "MapService." + mapServiceChoice),
+                      ))),
+            )
+          ]),
+        ));
   }
 }

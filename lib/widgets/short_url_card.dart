@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 import 'package:shlink_app/Services.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
+import 'package:shlink_app/types/services/Service.dart';
 import 'package:shlink_app/views/VisitsMapView.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,9 +16,26 @@ class ShortUrlCard extends StatelessWidget {
   final ShortUrl shortUrl;
   final DateFormat formatter = DateFormat.yMd().add_jm(); //('yyyy-MM-dd h:m ');
   final GlobalKey cardKey = new GlobalKey();
-  final bool showAnalytics;
+  bool showAnalytics;
+  bool showShareButton = false;
+  late Service? service;
+  ShortUrlCard(this.shortUrl, {this.showAnalytics = true}) {
+    service = Services.find(shortUrl.serviceName);
+    if (service == null) {
+      showAnalytics = false;
+    } else {
+      if (!service!.features.locationAnalytics) {
+        showAnalytics = false;
+      }
+    }
 
-  ShortUrlCard(this.shortUrl, {this.showAnalytics = true });
+    if (!kIsWeb) {
+      if(Platform.isAndroid || Platform.isIOS) {
+        showShareButton = true;
+      }
+      
+    }
+  }
 
   void _launchURL(url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
@@ -45,34 +67,40 @@ class ShortUrlCard extends StatelessWidget {
               Row(
                 // Top Bit
                 children: [
-                  Flexible(child: 
-                    SelectableText(
+                  Flexible(
+                    child: SelectableText(
                       shortUrl.shortUrl.toString(),
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
-                  IconButton(
+                  (showShareButton)?IconButton(
+                      icon: Icon(Icons.share),
+                      onPressed: () => Share.share(shortUrl.shortUrl.toString()))
+                      :IconButton(
                       icon: Icon(Icons.copy),
                       onPressed: () => Clipboard.setData(
                           ClipboardData(text: shortUrl.shortUrl.toString()))),
-                  (showAnalytics)?IconButton(
-                      icon: Icon(Icons.analytics),
-                      onPressed: () async {
-                        var visits = await Services.find(shortUrl.serviceName)!
-                            .visitStats(shortUrl);
-                        Get.to(() => VisitsMapView(shortUrl, visits));
-                      }):Container()
+                  (showAnalytics)
+                      ? IconButton(
+                          icon: Icon(Icons.analytics),
+                          onPressed: () async {
+                            var visits =
+                                await Services.find(shortUrl.serviceName)!
+                                    .visitStats(shortUrl);
+                            Get.to(() => VisitsMapView(shortUrl, visits));
+                          })
+                      : Container()
                   /*Flexible(child: Row(children: [
                     
                   ],)
                   )*/
-                  
                 ],
               ),
               Row(
                 // Top Bit
                 children: [
-                  Flexible(child: SelectableText(
+                  Flexible(
+                      child: SelectableText(
                     shortUrl.longUrl.toString(),
                     style: Get.textTheme!.subtitle2,
                   )),

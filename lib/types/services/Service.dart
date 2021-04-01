@@ -18,7 +18,7 @@ class Service {
 
   final DateTime? dayAdded;
 
-  final SupportedFeatures? features;
+  final SupportedFeatures features;
 
   final ServiceType? type;
 
@@ -32,7 +32,7 @@ class Service {
       {this.host,
       required this.name,
       this.dayAdded,
-      this.features,
+      required this.features,
       this.apiKey,
       this.type,
       this.domains,

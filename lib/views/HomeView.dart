@@ -23,9 +23,7 @@ class HomeView extends StatelessWidget {
       /*mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,*/
       children: [
-        TextButton(onPressed: () {
-          Get.toNamed("/map");
-        }, child: Text("Map Test")),
+        
         new ShortenerCard(),
         Container(
           padding: EdgeInsets.only(top:15, bottom: 5),

@@ -9,7 +9,7 @@ import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/widgets/short_url_card.dart';
 
 class MapNavBar extends StatelessWidget {
-  ShortUrl shortUrl;
+  final ShortUrl shortUrl;
   Color getBackgroundColor() {
     if (!kIsWeb) {
       // is not web

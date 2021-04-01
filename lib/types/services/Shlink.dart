@@ -61,7 +61,7 @@ class Shlink implements Service {
 
   @override
   SupportedFeatures get features => new SupportedFeatures(
-      slug: true, multipleDomains: true, enhancedVisits: true);
+      slug: true, multipleDomains: true, clickAnalytics: true, locationAnalytics: true);
 
   Shlink(
       {required this.host,
