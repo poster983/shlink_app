@@ -148,7 +148,7 @@ class Shlink implements Service {
   Future<List<ShortUrlVisit>> visitStats(ShortUrl shortUrl) async {
     //try {
       List<ShlinkAPI.Visit> visits = await _shlinkAPI.listVisits(shortUrl.slug);
-      print(visits);
+      //print(visits);
       List<ShortUrlVisit> normalVisits = visits.map((e) {
         ShortURLVisitLocation? visitLocation;
         if (e.visitLocation != null) {

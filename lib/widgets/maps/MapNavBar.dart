@@ -57,7 +57,7 @@ class MapNavBar extends StatelessWidget {
                         },
                       ),
                     ),
-                    ShortUrlCard(shortUrl)
+                    ShortUrlCard(shortUrl, showAnalytics: false,)
                   ],
                 )))));
   }

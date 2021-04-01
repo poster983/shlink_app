@@ -182,7 +182,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -737,7 +737,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "76c26a6b6f5e400ea2e6b36313426f8e9205a677"
+      resolved-ref: "54c33f278dbaeed4bf7ea35b342dc06c194c5b2d"
       url: "https://github.com/poster983/dart_shlink.git"
     source: git
     version: "0.8.0"

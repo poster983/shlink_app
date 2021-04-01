@@ -11,8 +11,9 @@ class ShortUrlCard extends StatelessWidget {
   final ShortUrl shortUrl;
   final DateFormat formatter = DateFormat.yMd().add_jm(); //('yyyy-MM-dd h:m ');
   final GlobalKey cardKey = new GlobalKey();
+  final bool showAnalytics;
 
-  ShortUrlCard(this.shortUrl);
+  ShortUrlCard(this.shortUrl, {this.showAnalytics = true });
 
   void _launchURL(url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
@@ -44,30 +45,37 @@ class ShortUrlCard extends StatelessWidget {
               Row(
                 // Top Bit
                 children: [
-                  SelectableText(
-                    shortUrl.shortUrl.toString(),
-                    style: TextStyle(fontSize: 20),
+                  Flexible(child: 
+                    SelectableText(
+                      shortUrl.shortUrl.toString(),
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
                   IconButton(
                       icon: Icon(Icons.copy),
                       onPressed: () => Clipboard.setData(
                           ClipboardData(text: shortUrl.shortUrl.toString()))),
-                  IconButton(
+                  (showAnalytics)?IconButton(
                       icon: Icon(Icons.analytics),
                       onPressed: () async {
                         var visits = await Services.find(shortUrl.serviceName)!
                             .visitStats(shortUrl);
-                        Get.to(() => VisitsMapView(shortUrl,visits));
-                      })
+                        Get.to(() => VisitsMapView(shortUrl, visits));
+                      }):Container()
+                  /*Flexible(child: Row(children: [
+                    
+                  ],)
+                  )*/
+                  
                 ],
               ),
               Row(
                 // Top Bit
                 children: [
-                  SelectableText(
+                  Flexible(child: SelectableText(
                     shortUrl.longUrl.toString(),
                     style: Get.textTheme!.subtitle2,
-                  ),
+                  )),
                   IconButton(
                       icon: Icon(Icons.open_in_browser),
                       onPressed: () => _launchURL(shortUrl.longUrl.toString()))
