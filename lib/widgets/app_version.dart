@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppVersion extends StatefulWidget {
-  AppVersion({Key key}) : super(key: key);
+  AppVersion({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -18,7 +18,7 @@ class AppVersion extends StatefulWidget {
 }
 
 class _AppVersionState extends State<AppVersion> {
-  PackageInfo packageInfo;
+  late PackageInfo packageInfo;
   bool showAll = false;
   @override
   void initState() {

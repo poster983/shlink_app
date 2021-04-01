@@ -11,20 +11,20 @@ import 'package:shlink_app/widgets/maps/MapPOI.dart';
 import 'package:shlink_app/widgets/maps/OpenStreetMap.dart';
 
 class DeviceMap extends StatefulWidget {
-  DeviceMap({Key key, this.startingCoord, this.poiList, this.mapService})
+  DeviceMap({Key? key, this.startingCoord, this.poiList, this.mapService})
       : super(key: key);
 
-  LatLng startingCoord;
-  List<MapPOI> poiList;
-  MapService mapService;
+  LatLng? startingCoord;
+  List<MapPOI>? poiList;
+  MapService? mapService;
 
   @override
   _DeviceMapState createState() => _DeviceMapState();
 }
 
 class _DeviceMapState extends State<DeviceMap> {
-  a.AppleMapController appleController;
-  g.GoogleMapController googleController;
+  late a.AppleMapController appleController;
+  late g.GoogleMapController googleController;
   //pm.PlatformMapController platformMapController;
 
   @override
@@ -38,7 +38,7 @@ class _DeviceMapState extends State<DeviceMap> {
       widget.poiList = [];
     }
 
-    if (widget.mapService == null) {
+    if (widget.mapService == null || widget.mapService == MapService.DeviceDefault) {
       if (!kIsWeb) {
         if (Platform.isAndroid) {
           widget.mapService = MapService.GoogleMaps;
@@ -56,20 +56,20 @@ class _DeviceMapState extends State<DeviceMap> {
     //_slong = widget.startingCoord.longitudeInRad;
   }
 
-  Widget chooseMapService() {
+  Widget? chooseMapService() {
     if (widget.mapService == MapService.AppleMaps) {
       print("Loading Apple Maps");
       return a.AppleMap(
         /*circles: Set.from([
             Circle(circleId: CircleId("circletest"), center: )
           ]),*/
-        annotations: Set.from(widget.poiList.map((e) {
+        annotations: Set.from(widget.poiList!.map((e) {
           return e.toAppleMaps();
         })),
         onMapCreated: (_appleController) {
           appleController = _appleController;
           appleController.moveCamera(a.CameraUpdate.newLatLng(a.LatLng(
-              widget.startingCoord.latitude, widget.startingCoord.longitude)));
+              widget.startingCoord!.latitude, widget.startingCoord!.longitude)));
         },
         //onMapCreated: _onMapCreated,
         initialCameraPosition: const a.CameraPosition(
@@ -80,20 +80,20 @@ class _DeviceMapState extends State<DeviceMap> {
     if (widget.mapService == MapService.GoogleMaps) {
       print("Loading Google Maps");
       return g.GoogleMap(
-        markers: Set.from(widget.poiList.map((e) {
+        markers: Set.from(widget.poiList!.map((e) {
           return e.toGoogleMaps();
         })),
         onMapCreated: (controller) => googleController = controller,
         initialCameraPosition: g.CameraPosition(
             target: g.LatLng(
-                widget.startingCoord.latitude, widget.startingCoord.longitude)),
+                widget.startingCoord!.latitude, widget.startingCoord!.longitude)),
       );
     }
     if (widget.mapService == MapService.OpenStreetMap) {
       print("Loading OpenStreetMap");
       return OpenStreetMap(
           startingCoord: widget.startingCoord,
-          poiList: widget.poiList.map((e) {
+          poiList: widget.poiList!.map((e) {
             return e.toOSM();
           }).toList());
     }
@@ -101,8 +101,8 @@ class _DeviceMapState extends State<DeviceMap> {
 
   @override
   Widget build(BuildContext context) {
-    return chooseMapService();
+    return chooseMapService()!;
   }
 }
 
-enum MapService { GoogleMaps, AppleMaps, OpenStreetMap }
+enum MapService { GoogleMaps, AppleMaps, OpenStreetMap, DeviceDefault }

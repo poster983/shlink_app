@@ -11,11 +11,11 @@ Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
     host: Uri.parse(json['host'] as String),
     name: json['name'] as String,
     apiKey: json['apiKey'] as String,
-    color: JSONTypeConverters.colorFromJSON(json['color'] as int),
+    color: JSONTypeConverters.colorFromJSON(json['color'] as int?),
   )
     ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
     ..dayAdded = DateTime.parse(json['dayAdded'] as String)
-    ..historyCache = (json['historyCache'] as List)
+    ..historyCache = (json['historyCache'] as List<dynamic>)
         .map((e) => ShortUrl.fromJson(e as Map<String, dynamic>))
         .toList()
     ..disabled = json['disabled'] as bool;
@@ -32,25 +32,30 @@ Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
       'color': JSONTypeConverters.colorToJSON(instance.color),
     };
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$ServiceTypeEnumMap = {

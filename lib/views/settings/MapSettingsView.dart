@@ -9,18 +9,18 @@ import 'package:shlink_app/widgets/maps/DeviceMap.dart';
 import 'package:shlink_app/widgets/maps/MapPOI.dart';
 
 class MapSettingsView extends StatefulWidget {
-  MapSettingsView({Key key}) : super(key: key);
+  MapSettingsView({Key? key}) : super(key: key);
 
   @override
   _MapSettingsViewState createState() => _MapSettingsViewState();
 }
 
 class _MapSettingsViewState extends State<MapSettingsView> {
-  String mapServiceChoice;
+  late String mapServiceChoice;
   final box = Hive.box("preferences");
 
   LatLng startingCoord = LatLng(29.719460, -95.388951);
-  List<MapPOI> testPOI;
+  late List<MapPOI> testPOI;
   @override
   void initState() {
     mapServiceChoice = box.get("mapService", defaultValue: "Open Street Map");
@@ -74,9 +74,9 @@ class _MapSettingsViewState extends State<MapSettingsView> {
             title: const Text('Google Maps'),
             value: "GoogleMaps",
             groupValue: mapServiceChoice,
-            onChanged: (String value) {
+            onChanged: (String? value) {
               setState(() {
-                mapServiceChoice = value;
+                mapServiceChoice = value!;
               });
             },
           ),
@@ -88,9 +88,9 @@ class _MapSettingsViewState extends State<MapSettingsView> {
             title: const Text('Apple Maps'),
             value: "AppleMaps",
             groupValue: mapServiceChoice,
-            onChanged: (String value) {
+            onChanged: (String? value) {
               setState(() {
-                mapServiceChoice = value;
+                mapServiceChoice = value!;
               });
             },
           ),
@@ -102,9 +102,9 @@ class _MapSettingsViewState extends State<MapSettingsView> {
         title: const Text('Open Street Map'),
         value: "OpenStreetMap",
         groupValue: mapServiceChoice,
-        onChanged: (String value) {
+        onChanged: (String? value) {
           setState(() {
-            mapServiceChoice = value;
+            mapServiceChoice = value!;
           });
         },
       ),

@@ -8,7 +8,7 @@ import 'package:shlink_app/types/services/Service.dart';
 import '../Services.dart';
 
 class ServiceChooser extends StatefulWidget {
-  ServiceChooser({Key key}) : super(key: key);
+  ServiceChooser({Key? key}) : super(key: key);
 
   @override
   _ServiceChooserState createState() => _ServiceChooserState();
@@ -17,8 +17,8 @@ class ServiceChooser extends StatefulWidget {
 class _ServiceChooserState extends State<ServiceChooser> {
   final AppController controller = Get.find();
   Services services = new Services();
-  List<Service> serviceList;
-  Service dropdownValue;
+  late List<Service> serviceList;
+  Service? dropdownValue;
   @override
   void initState() {
     super.initState();
@@ -42,19 +42,19 @@ class _ServiceChooserState extends State<ServiceChooser> {
           icon: Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,
-          style: TextStyle(color: Get.theme.textTheme.button.color),
+          style: TextStyle(color: Get.theme!.textTheme.button!.color),
           /*underline: Container(
             height: 2,
             color: Get.theme.accentColor,
           ),*/
-          onChanged: (Service newValue) {
+          onChanged: (Service? newValue) {
             setState(() {
               controller.selectedService.value = controller.serviceList
                   .indexWhere((element) => newValue == element);
             });
           },
           items: controller.serviceList
-              .map<DropdownMenuItem<Service>>((Service value) {
+              .map<DropdownMenuItem<Service>>((value) {
             if (dropdownValue == null) {
               dropdownValue =
                   controller.serviceList[controller.selectedService.value];

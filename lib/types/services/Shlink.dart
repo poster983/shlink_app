@@ -36,41 +36,41 @@ class Shlink implements Service {
   }
 
   @JsonKey(ignore: true)
-  set domains(list) => {_domainsCache = list};
+  set domains(list) => {_domainsCache = list!};
 
   @JsonKey(ignore: false)
-  List<Domain> _domainsCache;
+  late List<Domain> _domainsCache;
 
   String name;
 
-  DateTime dayAdded;
+  late DateTime dayAdded;
 
-  List<ShortUrl> historyCache;
+  List<ShortUrl> historyCache = [];
 
-  ShlinkAPI.Shlink _shlinkAPI;
+  late ShlinkAPI.Shlink _shlinkAPI;
 
-  bool disabled;
+  bool disabled = false;
 
   @JsonKey(
       fromJson: JSONTypeConverters.colorFromJSON,
       toJson: JSONTypeConverters.colorToJSON)
-  Color color;
+  late Color? color;
 
   @override
   SupportedFeatures get features =>
       new SupportedFeatures(slug: true, multipleDomains: true);
 
   Shlink(
-      {@required this.host,
-      @required this.name,
-      @required this.apiKey,
+      {required this.host,
+      required this.name,
+      required this.apiKey,
       this.color}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
     dayAdded = new DateTime.now();
     if (color == null) {
       color = randomColor();
     }
-    historyCache = [];
+    //historyCache = [];
     //temp
     //domain = Uri.parse(this.host.host);
     _getDomains()
@@ -120,7 +120,7 @@ class Shlink implements Service {
 
   /// Shorten:  Will shorten a link using the Shlink service
   @override
-  Future<ShortUrl> shorten(Uri link, {String slug}) async {
+  Future<ShortUrl> shorten(Uri link, {String? slug}) async {
     try {
       ShlinkAPI.ShortUrl short = await _shlinkAPI.create(
           new ShlinkAPI.CreateShortURL(link.toString(), customSlug: slug));
@@ -139,5 +139,11 @@ class Shlink implements Service {
     } catch (err) {
       throw err;
     }
+  }
+
+  @override
+  Future<ShortUrl> visitStats(Uri shortUrl) {
+    // TODO: implement visitStats
+    throw UnimplementedError();
   }
 }

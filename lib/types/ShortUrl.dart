@@ -18,9 +18,9 @@ class ShortUrl {
   @HiveField(3)
   final DateTime dateCreated;
   @HiveField(4)
-  final int visitCount;
+  final int? visitCount;
   @HiveField(5)
-  final List<String> tags;
+  final List<String>? tags;
   @HiveField(6)
   final ServiceType serviceType;
   @HiveField(7)
@@ -31,16 +31,16 @@ class ShortUrl {
   }
 
   ShortUrl(
-      {this.longUrl,
-      this.shortUrl,
-      this.slug,
-      this.dateCreated,
+      {required this.longUrl,
+      required this.shortUrl,
+      required this.slug,
+      required this.dateCreated,
       this.visitCount,
       this.tags,
-      this.serviceType,
-      this.serviceName});
+      required this.serviceType,
+      required this.serviceName});
   factory ShortUrl.fromShlinkAPI(ShlinkAPI.ShortUrl short,
-      {@required String serviceName}) {
+      {required String serviceName}) {
     return ShortUrl(
         longUrl: Uri.parse(short.longUrl),
         shortUrl: Uri.parse(short.shortUrl),

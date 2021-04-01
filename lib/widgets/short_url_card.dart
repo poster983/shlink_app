@@ -57,7 +57,7 @@ class ShortUrlCard extends StatelessWidget {
                 children: [
                   SelectableText(
                     shortUrl.longUrl.toString(),
-                    style: Get.textTheme.subtitle2,
+                    style: Get.textTheme!.subtitle2,
                   ),
                   IconButton(
                       icon: Icon(Icons.open_in_browser),

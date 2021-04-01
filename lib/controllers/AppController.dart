@@ -7,7 +7,7 @@ import 'package:shlink_app/types/ShortUrl.dart';
 
 class AppController extends GetxController {
   final services = new Services();
-  final serviceList = List<Service>().obs;
+  final serviceList = [].obs;
   final selectedService = 0.obs;
   //final _newestShortLink = ShortUrl().obs;
   AppController() {

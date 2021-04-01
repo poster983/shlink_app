@@ -1,9 +1,9 @@
 import 'package:shlink_app/types/Domain.dart';
 
 class ShlinkGetDomains {
-  _Domains domains;
+  late _Domains? domains;
 
-  ShlinkGetDomains({this.domains});
+  ShlinkGetDomains({required this.domains});
 
   ShlinkGetDomains.fromJson(Map<String, dynamic> json) {
     domains =
@@ -13,15 +13,15 @@ class ShlinkGetDomains {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.domains != null) {
-      data['domains'] = this.domains.toJson();
+      data['domains'] = this.domains!.toJson();
     }
     return data;
   }
 
   List<Domain> toDomainList() {
-    List<Domain> domainList = List<Domain>();
+    List<Domain> domainList = [];
 
-    domains.data.forEach((element) {
+    domains!.data.forEach((element) {
       domainList.add(new Domain(domain: element.domain, isDefault: element.isDefault));
     });
 
@@ -30,13 +30,13 @@ class ShlinkGetDomains {
 }
 
 class _Domains {
-  List<_Data> data;
+  late List<_Data> data;
 
-  _Domains({this.data});
+  _Domains({required this.data});
 
   _Domains.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = new List<_Data>();
+      data = [];
       json['data'].forEach((v) {
         data.add(new _Data.fromJson(v));
       });
@@ -53,10 +53,10 @@ class _Domains {
 }
 
 class _Data {
-  String domain;
-  bool isDefault;
+  late String domain;
+  late bool isDefault;
 
-  _Data({this.domain, this.isDefault});
+  _Data({required this.domain, required this.isDefault});
 
   _Data.fromJson(Map<String, dynamic> json) {
     domain = json['domain'];

@@ -9,10 +9,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shlink_app/widgets/maps/OSM_Marker.dart';
 
 class OpenStreetMap extends StatelessWidget {
-  MapController mapController;
-  MapPosition mapPosition;
-  LatLng startingCoord;
-  List<Marker> poiList;
+  MapController? mapController;
+  late MapPosition mapPosition;
+  LatLng? startingCoord;
+  List<Marker>? poiList;
   //LatLng mapPosition = new LatLng(0, 0);
   //WebBrowserController controller;
 
@@ -100,11 +100,11 @@ class OpenStreetMap extends StatelessWidget {
             if (pointerSignal.scrollDelta.dy < 0) {
               if (mapPosition.zoom <= 17) {
                 print(scrolling(mapPosition.zoom));
-                mapController.move(mapPosition.center, mapPosition.zoom + 1);
+                mapController!.move(mapPosition.center, mapPosition.zoom + 1);
               }
             } else {
               print(log(mapPosition.zoom));
-              mapController.move(mapPosition.center,
+              mapController!.move(mapPosition.center,
                   mapPosition.zoom - log(mapPosition.zoom) / 5);
             }
           }

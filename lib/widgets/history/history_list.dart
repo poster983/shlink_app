@@ -7,10 +7,10 @@ import 'package:shlink_app/widgets/short_url_card.dart';
 
 // ignore: must_be_immutable
 class HistoryList extends StatefulWidget {
-  HistoryList({Key key, this.controller, this.length}) : super(key: key);
+  HistoryList({Key? key, this.controller, this.length}) : super(key: key);
 
-  HistoryListController controller;
-  int length;
+  HistoryListController? controller;
+  int? length;
 
   @override
   _HistoryListState createState() => _HistoryListState();
@@ -26,12 +26,12 @@ class _HistoryListState extends State<HistoryList> {
     return true;
   };
 
-  int length;
+  late int? length;
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    widget.controller.dispose();
+    widget.controller?.dispose();
     super.dispose();
   }
 
@@ -42,12 +42,12 @@ class _HistoryListState extends State<HistoryList> {
     if (widget.controller == null) {
       widget.controller = new HistoryListController();
     }
-    widget.controller.sort = (int Function(ShortUrl, ShortUrl) _sortFunction) {
+    widget.controller!.sort = (int Function(ShortUrl, ShortUrl) _sortFunction) {
       setState(() {
         sortFunction = _sortFunction;
       });
     };
-    widget.controller.filter = (bool Function(ShortUrl) _filterFunction) {
+    widget.controller!.filter = (bool Function(ShortUrl) _filterFunction) {
       setState(() {
         filterFunction = _filterFunction;
       });
@@ -64,13 +64,13 @@ class _HistoryListState extends State<HistoryList> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: Hive.box<ShortUrl>('history').listenable(),
-      builder: (context, box, widget) {
+      builder: (context, Box<ShortUrl> box, widget) {
         //Do filtering inside the updated builder
         List<ShortUrl> filteredHistory = box.values.toList();
         filteredHistory.sort(sortFunction);
         filteredHistory = filteredHistory.where(filterFunction).toList();
         if (length != null) {
-          if (filteredHistory.length > length) {
+          if (filteredHistory.length > length!) {
             filteredHistory = filteredHistory.sublist(0, length);
           }
         }
@@ -101,9 +101,9 @@ class _HistoryListState extends State<HistoryList> {
 }
 
 class HistoryListController {
-  void Function(bool Function(ShortUrl)) filter;
-  void Function(int Function(ShortUrl, ShortUrl)) sort;
-  void Function(int) length;
+  late void Function(bool Function(ShortUrl))? filter;
+  late void Function(int Function(ShortUrl, ShortUrl))? sort;
+  late void Function(int)? length;
 
   //HistoryListController({this.filter, this.sort, this.length});
 

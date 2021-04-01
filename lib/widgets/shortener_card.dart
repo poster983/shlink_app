@@ -10,7 +10,7 @@ import 'package:shlink_app/widgets/shorten_button.dart';
 
 /// A Card for shortning URLS
 class ShortenerCard extends StatefulWidget {
-  ShortenerCard({Key key}) : super(key: key);
+  ShortenerCard({Key? key}) : super(key: key);
 
   @override
   _ShortenerCardState createState() => _ShortenerCardState();
@@ -32,17 +32,17 @@ class _ShortenerCardState extends State<ShortenerCard> {
   /// Gets the clipboard data from the
   /// [onlyValid] if set to true it will only paste if the URL is valid
   ///
-  void pasteClipboardURL({bool onlyValid}) {
+  void pasteClipboardURL({bool? onlyValid}) {
     Clipboard.getData('text/plain').then((clipboard) {
       if (clipboard != null) {
         var res = validateURL(clipboard.text);
         if (onlyValid != null && onlyValid) {
           if (res == null) {
-            _longURLControll.text = clipboard.text;
+            _longURLControll.text = clipboard.text!;
             setState(() {});
           }
         } else {
-          _longURLControll.text = clipboard.text;
+          _longURLControll.text = clipboard.text!;
           setState(() {});
         }
       }
@@ -51,7 +51,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
     });
   }
 
-  String validateURL(value) {
+  String? validateURL(value) {
     if (!value.isEmpty) {
       var url = Uri.parse(value);
       var host = (url.host.isEmpty)
@@ -96,7 +96,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
   }
 
   void submit() {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       if (controller.serviceList.elementAt(controller.selectedService.value) !=
           null) {
         showSnackBar(text: "Shortening");

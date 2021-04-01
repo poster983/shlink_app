@@ -8,7 +8,7 @@ import 'package:shlink_app/types/services/Shlink.dart';
 import "../common.dart";
 
 class AddServerSheet extends StatefulWidget {
-  AddServerSheet({Key key}) : super(key: key);
+  AddServerSheet({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -35,7 +35,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
     super.dispose();
   }
 
-  String stringValidator(value) {
+  String? stringValidator(value) {
     if (value.isEmpty) {
       return 'Please enter some text';
     }
@@ -43,7 +43,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
     return null;
   }
 
-  String urlValidator(value) {
+  String? urlValidator(value) {
     if (!value.isEmpty) {
       var url = Uri.parse(value);
       if (!url.hasScheme) {
@@ -62,7 +62,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
   }
 
   void submitForm(context) {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       showSnackBar(text: "Processing Data");
       //get form data
       String name = autofill.get("name");
@@ -216,11 +216,11 @@ class _AddServerSheetState extends State<AddServerSheet> {
 ///
 ///
 void showAddServerDialog() {
-  if (Get.context.isLargeTablet) {
+  if (Get.context!.isLargeTablet) {
     Get.dialog(new Dialog(child: AddServerSheet()));
   } else {
     showModalBottomSheet<void>(
-        context: Get.context,
+        context: Get.context!,
         isScrollControlled: true,
         backgroundColor: Color.fromARGB(0, 0, 0, 0),
         builder: (BuildContext context) {
@@ -228,7 +228,7 @@ void showAddServerDialog() {
             child: AddServerSheet(),
             margin: EdgeInsets.all(20),
             decoration: BoxDecoration(
-                color: Get.theme.cardColor,
+                color: Get.theme!.cardColor,
                 borderRadius: BorderRadius.circular(30)),
           );
         });

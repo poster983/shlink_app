@@ -21,6 +21,7 @@ import 'package:shlink_app/views/HomeView.dart';
 import 'package:shlink_app/views/MapTestView.dart';
 import 'package:shlink_app/views/SettingsView.dart';
 import 'package:shlink_app/views/settings/MapSettingsView.dart';
+import 'package:shlink_app/views/settings/ShortishCloudSettings.dart';
 
 import 'package:shlink_app/widgets/add_server.dart';
 
@@ -42,19 +43,18 @@ void main() async {
   await Hive.openBox<ShortUrl>('history');
 
   //set default prefrence for maps
-  if(preferences.get("mapService") == null) {
+  if (preferences.get("mapService") == null) {
     if (!kIsWeb) {
       if (Platform.isAndroid) {
         preferences.put("mapService", "GoogleMaps");
       }
-      if(Platform.isIOS) {
+      if (Platform.isIOS) {
         preferences.put("mapService", "AppleMaps");
       }
     } else {
       preferences.put("mapService", "OpenStreetMap");
     }
   }
-  
 
   //add default services
   if (servicesBox.get("tinyurl.com") == null) {
@@ -132,7 +132,8 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/settings',
             page: () => MyHomePage(title: 'Shortish', pageIndex: 2)),
-        GetPage(name: '/settings/map', page: () => MapSettingsView())
+        GetPage(name: '/settings/map', page: () => MapSettingsView()),
+        GetPage(name: '/settings/cloud', page: () => ShortishCloudView())
       ],
       /*home: MyHomePage(title: 'Shlink'),
       routes: <String, WidgetBuilder> {
@@ -143,7 +144,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, this.pageIndex = 0}) : super(key: key);
+  MyHomePage({Key? key, required this.title, this.pageIndex = 0})
+      : super(key: key);
   final AppController controller = Get.put(AppController());
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -165,7 +167,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final AppController controller = Get.find();
 
-  PageController _pageController;
+  PageController? _pageController;
 
   @override
   void initState() {
@@ -176,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController?.dispose();
     super.dispose();
   }
 
@@ -236,7 +238,7 @@ class _MyHomePageState extends State<MyHomePage> {
         showElevation: true,
         onItemSelected: (index) => setState(() {
           widget.pageIndex = index;
-          _pageController.animateToPage(index,
+          _pageController?.animateToPage(index,
               duration: Duration(milliseconds: 300), curve: Curves.ease);
         }),
         items: [

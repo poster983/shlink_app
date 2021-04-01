@@ -7,36 +7,36 @@ import '../ShortUrl.dart';
 import 'ServiceType.dart';
 
 class Service {
-  final String apiKey;
+  final String? apiKey;
 
-  final Uri host;
+  final Uri? host;
 
-  final List<Domain> domains;
+  final List<Domain>? domains;
 
   final String name;
 
-  final DateTime dayAdded;
+  final DateTime? dayAdded;
 
-  final SupportedFeatures features;
+  final SupportedFeatures? features;
 
-  final ServiceType type;
+  final ServiceType? type;
 
-  final List<ShortUrl> historyCache;
+  final List<ShortUrl>? historyCache;
 
   final bool disabled;
 
-  final Color color;
+  final Color? color;
 
   Service(
       {this.host,
-      this.name,
+      required this.name,
       this.dayAdded,
       this.features,
       this.apiKey,
       this.type,
       this.domains,
       this.historyCache,
-      this.disabled,
+      this.disabled = false,
       this.color});
 
   Future<List<ShortUrl>> history() async {
@@ -48,16 +48,24 @@ class Service {
   }
 
   /// Shorten:  Will shorten a link using the Shlink service
-  Future<ShortUrl> shorten(Uri link, {String slug}) async {
+  Future<ShortUrl> shorten(Uri link, {String? slug}) async {
     throw UnimplementedError();
   }
+
+  /// Returns a liat of visits with their location stats
+  /// [shortUrl] Uri - the whole link
+
+  Future<ShortUrl> visitStats(Uri shortUrl) async {
+    throw UnimplementedError();
+  }
+
 
   //bool operator ==()
 }
 
 
 class UnsupportedFeatureError extends Error {
-  final String message;
+  final String? message;
   UnsupportedFeatureError([this.message]);
   String toString() {
     var message = this.message;

@@ -10,12 +10,12 @@ import 'package:uuid/uuid.dart';
 
 class MapPOI {
   LatLng location;
-  Color color;
-  Widget innerWidget;
-  String title;
-  String subtitle;
+  Color? color;
+  Widget? innerWidget;
+  String? title;
+  String? subtitle;
 
-  MapPOI({@required this.location, this.color, this.innerWidget, this.title, this.subtitle}) {
+  MapPOI({required this.location, this.color, this.innerWidget, this.title, this.subtitle}) {
     if (color == null) {
       color = Colors.red;
     }
@@ -38,8 +38,8 @@ class MapPOI {
             child: OSMMarker(
           title: title,
           subtitle: subtitle,
-          color: color,
-          content: this.innerWidget,
+          color: color!,
+          content: this.innerWidget!,
           size: 50,
         )),
       ),
@@ -60,7 +60,7 @@ class MapPOI {
   g.Marker toGoogleMaps() {
     return g.Marker(
       markerId: g.MarkerId(Uuid().v4()),
-      icon: g.BitmapDescriptor.defaultMarkerWithHue(HSVColor.fromColor(color).hue),
+      icon: g.BitmapDescriptor.defaultMarkerWithHue(HSVColor.fromColor(color!).hue),
       position: g.LatLng(location.latitude, location.longitude),
       infoWindow: g.InfoWindow(title: title, snippet: subtitle)
     );

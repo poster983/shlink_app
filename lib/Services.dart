@@ -3,22 +3,22 @@ import 'package:shlink_app/types/services/Service.dart';
 import 'package:hive/hive.dart';
 import 'package:shlink_app/types/services/Shlink.dart';
 
-
 /// A Class to interface with the saved services
-class Services  {
+class Services {
   final serverBox = Hive.box("services");
   Services();
 
   List<Service> get list {
     return serverBox.values.map((serv) {
-
-      switch(serv["type"]) {
-        case "Shlink": 
-          return new Shlink.fromJson(serv.cast<String,dynamic>());
+      switch (serv["type"]) {
+        case "Shlink":
+          return new Shlink.fromJson(serv.cast<String, dynamic>());
           break;
         case "GenericREST":
-          return new GenericREST.fromJson(serv.cast<String,dynamic>());
+          return new GenericREST.fromJson(serv.cast<String, dynamic>());
           break;
+        default:
+          throw Exception("UNKNOWN SERVICE TYPE");
       }
     }).toList();
   }

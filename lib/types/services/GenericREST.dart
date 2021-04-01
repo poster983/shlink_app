@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shlink_app/common.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
@@ -26,43 +27,43 @@ class GenericREST implements Service {
 
   String name;
 
-  DateTime dayAdded;
+  late DateTime dayAdded;
 
   Uri host;
 
   @JsonKey(nullable: true)
-  String customSlugParameter;
+  String? customSlugParameter;
 
   //leave blank for plain text
   @JsonKey(nullable: true)
-  String shortenedURLParameter; //in the response
+  String? shortenedURLParameter; //in the response
 
   String longURLParameter;
 
   SupportedFeatures get features =>
       new SupportedFeatures(slug: (customSlugParameter != null) ? true : false);
 
-  List<ShortUrl> historyCache;
+  late List<ShortUrl> historyCache;
 
   @JsonKey(nullable: true)
-  Map<String, String> headers;
+  Map<String, String>? headers;
 
   @JsonKey(nullable: true)
-  Map<String, String> reqBody;
+  Map<String, String>? reqBody;
 
   @JsonKey(nullable: true)
-  Map<String, String> urlParameters;
+  Map<String, String>? urlParameters;
 
   HTTPMethod httpMethod;
 
   ContentType contentType;
 
-  bool disabled;
+  bool disabled = false;
 
   @JsonKey(
       fromJson: JSONTypeConverters.colorFromJSON,
       toJson: JSONTypeConverters.colorToJSON)
-  Color color;
+  late Color? color;
 
   /*int __color;
 
@@ -73,9 +74,9 @@ class GenericREST implements Service {
   void __setColor(Color c) => color = c;*/
 
   GenericREST(
-      {@required this.host,
-      @required this.name,
-      @required this.longURLParameter,
+      {required this.host,
+      required this.name,
+      required this.longURLParameter,
       this.color,
       this.headers,
       this.customSlugParameter,
@@ -85,9 +86,13 @@ class GenericREST implements Service {
       this.shortenedURLParameter,
       this.contentType = ContentType.JSON}) {
     dayAdded = new DateTime.now();
-    historyCache = List<ShortUrl>();
+    historyCache = [];
     if (urlParameters == null) {
       urlParameters = Map<String, String>();
+    }
+
+    if (color == null) {
+      color = randomColor();
     }
     //__setColor(color);
   }
@@ -110,7 +115,7 @@ class GenericREST implements Service {
   }
 
   @override
-  Future<ShortUrl> shorten(Uri link, {String slug}) async {
+  Future<ShortUrl> shorten(Uri link, {String? slug}) async {
     if (slug != null && slug.isNotEmpty && features.slug == false) {
       throw UnsupportedFeatureError("Slug not supported with this service");
     }
@@ -118,7 +123,7 @@ class GenericREST implements Service {
     //crewate internal query map
     Map<String, String> queryMap;
     if (urlParameters != null) {
-      queryMap = new Map<String, String>.from(urlParameters);
+      queryMap = new Map<String, String>.from(urlParameters!);
     } else {
       queryMap = new Map<String, String>();
     }
@@ -126,14 +131,14 @@ class GenericREST implements Service {
     //Create internal body map
     Map<String, String> bodyMap;
     if (reqBody != null) {
-      bodyMap = new Map<String, String>.from(reqBody);
+      bodyMap = new Map<String, String>.from(reqBody!);
     } else {
       bodyMap = new Map<String, String>();
     }
 
     if (slug != null && slug.isNotEmpty) {
-      queryMap[customSlugParameter] = slug;
-      bodyMap[customSlugParameter] = slug;
+      queryMap[customSlugParameter!] = slug;
+      bodyMap[customSlugParameter!] = slug;
     }
 
     if (httpMethod == HTTPMethod.GET) {
@@ -158,7 +163,7 @@ class GenericREST implements Service {
         //create headers map
         Map<String, String> headersMap;
         if (headers != null) {
-          headersMap = new Map<String, String>.from(headers);
+          headersMap = new Map<String, String>.from(headers!);
         } else {
           headersMap = new Map<String, String>();
         }
@@ -226,6 +231,12 @@ class GenericREST implements Service {
             "Shortened URL not found.  Check your Shortened URL Parameter for this service");
       }
     }
+  }
+
+  @override
+  Future<ShortUrl> visitStats(Uri shortUrl) {
+    // TODO: implement visitStats
+    throw UnimplementedError();
   }
 
   factory GenericREST.fromJson(Map<String, dynamic> json) =>

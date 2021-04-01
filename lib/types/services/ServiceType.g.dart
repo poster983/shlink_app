@@ -20,7 +20,7 @@ class ServiceTypeAdapter extends TypeAdapter<ServiceType> {
       case 2:
         return ServiceType.GenericREST;
       default:
-        return null;
+        return ServiceType.Shlink;
     }
   }
 

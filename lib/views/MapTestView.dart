@@ -4,11 +4,10 @@ import 'package:latlong2/latlong.dart';
 import 'package:shlink_app/widgets/maps/DeviceMap.dart';
 import 'package:shlink_app/widgets/maps/MapNavBar.dart';
 import 'package:shlink_app/widgets/maps/MapPOI.dart';
-import 'package:shlink_app/widgets/maps/OSM_Marker.dart';
 
 class MapTestView extends StatelessWidget {
   LatLng startingCoord = LatLng(29.719460, -95.388951);
-  List<MapPOI> testPOI;
+  late List<MapPOI> testPOI;
   final box = Hive.box("preferences");
 
   MapTestView() {
@@ -55,7 +54,7 @@ class MapTestView extends StatelessWidget {
               (e) =>
                   e.toString() ==
                   "MapService." + box.get("mapService", defaultValue: null),
-              orElse: () => null),
+              orElse: () => MapService.DeviceDefault),
         ),
         Container(
             padding: EdgeInsets.only(

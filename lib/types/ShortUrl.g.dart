@@ -21,8 +21,8 @@ class ShortUrlAdapter extends TypeAdapter<ShortUrl> {
       shortUrl: fields[1] as Uri,
       slug: fields[2] as String,
       dateCreated: fields[3] as DateTime,
-      visitCount: fields[4] as int,
-      tags: (fields[5] as List)?.cast<String>(),
+      visitCount: fields[4] as int?,
+      tags: (fields[5] as List?)?.cast<String>(),
       serviceType: fields[6] as ServiceType,
       serviceName: fields[7] as String,
     );
@@ -71,8 +71,8 @@ ShortUrl _$ShortUrlFromJson(Map<String, dynamic> json) {
     shortUrl: Uri.parse(json['shortUrl'] as String),
     slug: json['slug'] as String,
     dateCreated: DateTime.parse(json['dateCreated'] as String),
-    visitCount: json['visitCount'] as int,
-    tags: (json['tags'] as List).map((e) => e as String).toList(),
+    visitCount: json['visitCount'] as int?,
+    tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
     serviceType: _$enumDecode(_$ServiceTypeEnumMap, json['serviceType']),
     serviceName: json['serviceName'] as String,
   );
@@ -89,25 +89,30 @@ Map<String, dynamic> _$ShortUrlToJson(ShortUrl instance) => <String, dynamic>{
       'serviceName': instance.serviceName,
     };
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$ServiceTypeEnumMap = {

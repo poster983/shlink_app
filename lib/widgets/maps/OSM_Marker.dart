@@ -6,14 +6,14 @@ class OSMMarker extends StatelessWidget {
   final Color color;
   final Widget content;
   final double size;
-  final String title;
-  final String subtitle;
+  final String? title;
+  final String? subtitle;
   final Color textColor;
 
   OSMMarker(
       {this.color = Colors.red,
-      this.content,
-      this.size,
+      required this.content,
+      required this.size,
       this.title,
       this.subtitle,
       this.textColor = Colors.black}) {}
@@ -67,7 +67,7 @@ class OSMMarker extends StatelessWidget {
                                     children: [
                                       (title != null)
                                           ? Text(
-                                              title,
+                                              title!,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: textColor,
@@ -77,7 +77,7 @@ class OSMMarker extends StatelessWidget {
                                           : Container(),
                                       (subtitle != null)
                                           ? Text(
-                                              subtitle,
+                                              subtitle!,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: textColor,
