@@ -61,7 +61,10 @@ class Shlink implements Service {
 
   @override
   SupportedFeatures get features => new SupportedFeatures(
-      slug: true, multipleDomains: true, clickAnalytics: true, locationAnalytics: true);
+      slug: true,
+      multipleDomains: true,
+      clickAnalytics: true,
+      locationAnalytics: true);
 
   Shlink(
       {required this.host,
@@ -127,7 +130,10 @@ class Shlink implements Service {
     try {
       ShlinkAPI.ShortUrl short = await _shlinkAPI.create(
           new ShlinkAPI.CreateShortURL(link.toString(), customSlug: slug));
-      return ShortUrl.fromShlinkAPI(short, serviceName: name);
+      ShortUrl newShort = ShortUrl.fromShlinkAPI(short, serviceName: name);
+      var historyBox = Hive.box<ShortUrl>("history");
+      historyBox.put(newShort.shortUrl.toString(), newShort);
+      return newShort;
     } catch (err) {
       return Future.error(err);
     }
@@ -147,28 +153,26 @@ class Shlink implements Service {
   @override
   Future<List<ShortUrlVisit>> visitStats(ShortUrl shortUrl) async {
     //try {
-      List<ShlinkAPI.Visit> visits = await _shlinkAPI.listVisits(shortUrl.slug);
-      //print(visits);
-      List<ShortUrlVisit> normalVisits = visits.map((e) {
-        ShortURLVisitLocation? visitLocation;
-        if (e.visitLocation != null) {
-          visitLocation = new ShortURLVisitLocation(
+    List<ShlinkAPI.Visit> visits = await _shlinkAPI.listVisits(shortUrl.slug);
+    //print(visits);
+    List<ShortUrlVisit> normalVisits = visits.map((e) {
+      ShortURLVisitLocation? visitLocation;
+      if (e.visitLocation != null) {
+        visitLocation = new ShortURLVisitLocation(
             coordinates: LatLng(double.parse(e.visitLocation.latitude),
                 double.parse(e.visitLocation.longitude)),
             city: e.visitLocation.cityName,
             region: e.visitLocation.regionName,
             country: e.visitLocation.countryName,
-            timezone: e.visitLocation.timezone
-          );
-        }
-        return ShortUrlVisit(
-          location: visitLocation, 
+            timezone: e.visitLocation.timezone);
+      }
+      return ShortUrlVisit(
+          location: visitLocation,
           referer: e.referer,
           userAgent: e.userAgent,
-          date: e.date
-        );
-      }).toList();
-      return normalVisits;
+          date: e.date);
+    }).toList();
+    return normalVisits;
     /*} catch (err) {
       return Future.error(err);
     }*/

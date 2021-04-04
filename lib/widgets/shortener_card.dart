@@ -114,11 +114,12 @@ class _ShortenerCardState extends State<ShortenerCard> {
           });
           print(value.shortUrl);
           shortURL = value.shortUrl.toString();
-          try {
+          _longURLControll.clear();
+          /*try {
             Clipboard.setData(ClipboardData(text: shortURL));
           } catch (e) {
             print(e);
-          }
+          }*/
 
           //Share.share(shortURL);
         }).catchError((err) {

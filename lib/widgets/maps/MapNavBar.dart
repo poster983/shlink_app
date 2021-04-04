@@ -5,15 +5,19 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/widgets/short_url_card.dart';
 
 class MapNavBar extends StatelessWidget {
   final ShortUrl shortUrl;
+  final box = Hive.box("preferences");
+
   Color getBackgroundColor() {
+    String? mapService = box.get("mapService", defaultValue: null);
     if (!kIsWeb) {
       // is not web
-      if (Platform.isIOS) {
+      if (Platform.isIOS && mapService != "OpenStreetMap") {
         // ios views be broken
         return (Get.isDarkMode)
             ? Colors.grey.shade900.withOpacity(0.9)
@@ -57,7 +61,10 @@ class MapNavBar extends StatelessWidget {
                         },
                       ),
                     ),
-                    ShortUrlCard(shortUrl, showAnalytics: false,)
+                    ShortUrlCard(
+                      shortUrl,
+                      showAnalytics: false,
+                    )
                   ],
                 )))));
   }

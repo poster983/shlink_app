@@ -114,7 +114,7 @@ class _MapSettingsViewState extends State<MapSettingsView> {
     );
 
     list.add(
-        Text("Maps are only supported by Shlink and Kutt.it at the moment"));
+        Text("Maps are only supported by Shlink at the moment"));
 
     return list;
   }
