@@ -21,9 +21,9 @@ class ShortishCloud {
   }
 
   static Future<void> newUser() async {
-    final AppController controller = Get.find();
-    final box = Hive.box("preferences");
-    final serverBox = Hive.box("services");
+    //final AppController controller = Get.find();
+    /*final box = Hive.box("preferences");
+    final serverBox = Hive.box("services");*/
     String? key;
     try {
       key = await getAPIKey();
@@ -44,7 +44,7 @@ class ShortishCloud {
     Shlink service;
     try {
       service = Shlink(
-          host: Uri.parse("https://shrti.sh"),
+          host: Uri.parse(DotEnv.env["SHORTISH_CLOUD_SHLINK_URL"] ?? ""),
           name: "Shortish Cloud",
           apiKey: apiKey,
           isShortishCloud: true,

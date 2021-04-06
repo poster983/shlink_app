@@ -9,6 +9,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 //import 'package:maps/maps.dart';
 
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
@@ -43,7 +44,6 @@ void main() async {
   await Hive.openBox('add_server_autofill');
   await Hive.openBox<ShortUrl>('history');
   await DotEnv.load(fileName: ".env");
-
 
   //set default prefrence for maps
   if (preferences.get("mapService") == null) {
@@ -175,10 +175,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    print(AppTheme.darkTheme.appBarTheme.textTheme);
-    _pageController = PageController(initialPage: widget.pageIndex);
-
     
+    _pageController = PageController(initialPage: widget.pageIndex);
+    SharedPreferences.getInstance().then((prefs) {
+      print("API KEY from shared storage");
+      print(prefs.getString("shortish_cloud_apikey"));
+    });
   }
 
   @override

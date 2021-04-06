@@ -16,7 +16,10 @@ jobs:
           channel: 'beta'
       - run: flutter config --enable-web
       - run: flutter pub get
-      - run: echo "SHORTISH_CLOUD_REGISTER_URL=${{secrets.shortish_cloud_register_url}}" > .env
+      - run: |
+          touch .env
+          echo "SHORTISH_CLOUD_REGISTER_URL=${{secrets.shortish_cloud_register_url}}" >> .env
+          echo "SHORTISH_CLOUD_SHLINK_URL=${{secrets.shortish_cloud_shlink_url}}" >> .env
       - run: flutter build web --release --no-sound-null-safety
       - run: |
           cd build/web
