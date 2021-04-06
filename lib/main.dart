@@ -21,7 +21,8 @@ import 'package:shlink_app/views/HomeView.dart';
 import 'package:shlink_app/views/MapTestView.dart';
 import 'package:shlink_app/views/SettingsView.dart';
 import 'package:shlink_app/views/settings/MapSettingsView.dart';
-import 'package:shlink_app/views/settings/ShortishCloudSettings.dart';
+import 'package:shlink_app/views/settings/ShortishCloud/ShortishCloudSettingsView.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 import 'package:shlink_app/widgets/add_server.dart';
 
@@ -41,6 +42,8 @@ void main() async {
   var servicesBox = await Hive.openBox('services');
   await Hive.openBox('add_server_autofill');
   await Hive.openBox<ShortUrl>('history');
+  await DotEnv.load(fileName: ".env");
+
 
   //set default prefrence for maps
   if (preferences.get("mapService") == null) {

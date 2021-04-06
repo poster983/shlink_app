@@ -25,9 +25,7 @@ class SettingsView extends StatelessWidget {
             child: SvgPicture.network(
         "https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=joeyneedssleep&button_colour=FF5F5F&font_colour=ffffff&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00",
         semanticsLabel: 'Buy me a coffee',
-        placeholderBuilder: (BuildContext context) => Container(
-            padding: const EdgeInsets.all(40.0),
-            child: const CircularProgressIndicator()),
+        placeholderBuilder: (BuildContext context) => Container(color: Colors.grey),
       ))
         )
       );

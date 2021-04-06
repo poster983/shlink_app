@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+10
+version: 1.0.0+11
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -36,6 +36,8 @@ dependencies:
   uuid: ^3.0.0
   #share_plus: ^2.0.0
   share: ^2.0.1
+
+  flutter_dotenv: ^3.1.0
 
   receive_sharing_intent: ^1.4.2
   bottom_navy_bar: ^5.6.0
@@ -58,6 +60,9 @@ dependencies:
 
   flutter_svg: 0.21.0-nullsafety.0
   shared_preferences: ^2.0.5
+
+  qr_flutter: ^4.0.0
+  qr_code_scanner: ^0.4.0
   
   #shlink: ^0.7.0
   shlink: 
@@ -91,8 +96,24 @@ flutter_icons:
 # The following section is specific to Flutter.
 flutter:
   assets:
-   # - assets/iframe/test.html
-    - assets/app_icon/leg_android.png
+    - .env
+    - assets/app_icon/rounded.png
+
+  fonts: 
+    - family: Ubuntu #for Logo and Titles
+      fonts:
+        - asset: assets/fonts/Ubuntu-Bold.ttf
+          weight: 700
+    - family: WorkSans #For general Text
+      fonts:
+        - asset: assets/fonts/WorkSans-Regular.ttf
+        - asset: assets/fonts/WorkSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/WorkSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/WorkSans-BoldItalic.ttf
+          weight: 700
+          style: italic
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

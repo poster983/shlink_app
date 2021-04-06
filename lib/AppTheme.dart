@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
- 
+
 class AppTheme {
   //
   AppTheme._();
- 
+
+  static final Color shortishColor = Color.fromRGBO(251, 54, 64, 1);
+
   static final ThemeData lightTheme = ThemeData(
+    fontFamily: "WorkSans",
     primarySwatch: Colors.red,
     appBarTheme: AppBarTheme(
       titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
@@ -12,7 +15,8 @@ class AppTheme {
       iconTheme: IconThemeData(color: Colors.grey),
       color: Colors.white,
       brightness: Brightness.light,
-      textTheme: TextTheme(headline6: TextStyle(color: Colors.black, fontSize: 20)),
+      textTheme:
+          TextTheme(headline6: TextStyle(color: Colors.black, fontSize: 20)),
     ),
     //primaryColor: Colors.red,
     buttonTheme: ButtonThemeData(
@@ -22,20 +26,19 @@ class AppTheme {
     brightness: Brightness.light,
     accentColor: Color(0xFFE03A3C),
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    
   );
-  
+
   static final ThemeData darkTheme = ThemeData(
+    fontFamily: "WorkSans",
     primarySwatch: Colors.red,
     //primarySwatch: Colors.grey,
     buttonTheme: ButtonThemeData(
       buttonColor: Color(0xFFE03A3C),
       textTheme: ButtonTextTheme.primary,
     ),
-    
+
     accentColor: Color(0xFFE03A3C),
     brightness: Brightness.dark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
-  
 }

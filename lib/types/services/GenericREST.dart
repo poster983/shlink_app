@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink_app/common.dart';
+import 'package:shlink_app/types/Health.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
 import 'package:shlink_app/types/ShortUrlVisit.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
@@ -90,6 +91,10 @@ class GenericREST implements Service {
     historyCache = [];
     if (urlParameters == null) {
       urlParameters = Map<String, String>();
+    }
+
+    if (name == "Shortish Cloud") {
+      throw Exception("Only the Shortish Cloud service can be named Shortish Cloud");
     }
 
     if (color == null) {
@@ -237,6 +242,11 @@ class GenericREST implements Service {
   @override
   Future<List<ShortUrlVisit>> visitStats(ShortUrl shortUrl) {
     // TODO: implement visitStats
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Health> health() async {
     throw UnimplementedError();
   }
 

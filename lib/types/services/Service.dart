@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:shlink_app/types/Domain.dart';
+import 'package:shlink_app/types/Health.dart';
 import 'package:shlink_app/types/ShortUrlVisit.dart';
 import 'package:shlink_app/types/SupportedFeatures.dart';
 
@@ -57,6 +58,12 @@ class Service {
   /// [shortUrl] Uri - the whole link
 
   Future<List<ShortUrlVisit>> visitStats(ShortUrl shortUrl) async {
+    throw UnimplementedError();
+  }
+
+  /// Returns the health of the server.
+  /// Checks if authenticated
+  Future<Health> health() async {
     throw UnimplementedError();
   }
 

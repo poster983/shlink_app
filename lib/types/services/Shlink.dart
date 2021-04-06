@@ -7,7 +7,9 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/types/Domain.dart';
+import 'package:shlink_app/types/Health.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
+import 'package:shlink_app/types/ServiceException.dart';
 import 'package:shlink_app/types/ShortUrlVisit.dart';
 import 'package:shlink_app/types/ShortUrlVisitLocation.dart';
 import 'package:shlink_app/types/api_response_types/ShlinkGetDomains.dart';
@@ -25,6 +27,8 @@ class Shlink implements Service {
   @visibleForTesting
   ServiceType get type => ServiceType.Shlink;
   set type(t) => {}; // This is stupid.  Why is this required Json Serializable?
+
+  bool isShortishCloud;
 
   String apiKey;
 
@@ -70,18 +74,26 @@ class Shlink implements Service {
       {required this.host,
       required this.name,
       required this.apiKey,
+      this.isShortishCloud = false,
       this.color}) {
     _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
     dayAdded = new DateTime.now();
     if (color == null) {
       color = randomColor();
     }
+
+    //name cannot be shortish cloud unless it is shortish cloud
+    if (name == "Shortish Cloud" && isShortishCloud == false) {
+      throw Exception(
+          "Only the Shortish Cloud service can be named Shortish Cloud");
+    }
     //historyCache = [];
     //temp
     //domain = Uri.parse(this.host.host);
-    _getDomains()
-        .then((value) => {_domainsCache = value})
-        .catchError((err) => {throw err});
+    _getDomains().then((value) => {_domainsCache = value}).catchError((err) {
+      print(err);
+      _domainsCache = [];
+    });
     //_domainsCache = await _getDomains();
     //__setColor(color);
   }
@@ -101,8 +113,12 @@ class Shlink implements Service {
       }).toList();
       //historyCache = historyList;
       return historyList;
-    } catch (err) {
-      return Future.error(err);
+    } catch (e) {
+      if (e.runtimeType == ShlinkAPI.ShlinkException) {
+        throw ServiceException.fromShlinkException(
+            e as ShlinkAPI.ShlinkException);
+      }
+      throw e;
     }
   }
 
@@ -119,8 +135,12 @@ class Shlink implements Service {
       });
 
       return true;
-    } catch (err) {
-      return Future.error(err);
+    } catch (e) {
+      if (e.runtimeType == ShlinkAPI.ShlinkException) {
+        throw ServiceException.fromShlinkException(
+            e as ShlinkAPI.ShlinkException);
+      }
+      throw e;
     }
   }
 
@@ -144,9 +164,18 @@ class Shlink implements Service {
     try {
       final res = await http.get(Uri.https(host.authority, 'rest/v2/domains'),
           headers: {"X-Api-Key": apiKey});
+      if (res.statusCode != 200) {
+        Map<String, dynamic> errRes = jsonDecode(res.body);
+        return Future.error(ServiceException(
+            httpStatus: res.statusCode,
+            httpBody: res.body,
+            title: errRes["title"],
+            type: errRes["type"],
+            detail: errRes["detail"]));
+      }
       return ShlinkGetDomains.fromJson(jsonDecode(res.body)).toDomainList();
     } catch (err) {
-      throw err;
+      return Future.error(err);
     }
   }
 
@@ -176,5 +205,21 @@ class Shlink implements Service {
     /*} catch (err) {
       return Future.error(err);
     }*/
+  }
+
+  @override
+  Future<Health> health() async {
+    try {
+      ShlinkAPI.Health rawhealth = await _shlinkAPI.checkHealth();
+      //int status = (rawhealth.status=="pass")?200:
+      return Health(
+          statusCode: 200, version: rawhealth.version);
+    } catch (e) {
+      if (e.runtimeType == ShlinkAPI.ShlinkException) {
+        throw ServiceException.fromShlinkException(
+            e as ShlinkAPI.ShlinkException);
+      }
+      throw e;
+    }
   }
 }

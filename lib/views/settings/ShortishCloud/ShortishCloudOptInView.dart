@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:http/http.dart' as http;
 import 'package:shlink_app/common.dart';
+import 'package:shlink_app/types/ServiceException.dart';
+import 'package:shlink_app/types/services/ShortishCloud.dart';
+import 'package:shlink_app/views/settings/ShortishCloud/ShortishCloudImportView.dart';
 
 class ShortishCloudOptInView extends StatefulWidget {
   ShortishCloudOptInView({Key? key}) : super(key: key);
@@ -18,6 +17,7 @@ class ShortishCloudOptInView extends StatefulWidget {
 
 class _ShortishCloudOptInViewState extends State<ShortishCloudOptInView> {
   final box = Hive.box("preferences");
+  bool loading = false;
 
   @override
   void initState() {
@@ -25,25 +25,6 @@ class _ShortishCloudOptInViewState extends State<ShortishCloudOptInView> {
       Get.offAllNamed("/");
     }
     //box.get("shortish_cloud_state", defaultValue: false);
-  }
-
-  Future<String> getAPIKey() async {
-    http.Response res = await http.get(Uri.parse("TODO PUT URL IN CONFIGS"));
-    return res.body;
-  }
-
-  void newUser() async {
-    try {
-      String key = await getAPIKey();
-      box.put("shortish_cloud_enabled", true);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("shortish_cloud_apikey", key);
-
-      //TO DO ADD AS A SERVICE
-    } catch (e) {
-      print(e);
-      showSnackBar(text: "Uhoh, please try again later");
-    }
   }
 
   @override
@@ -78,11 +59,11 @@ class _ShortishCloudOptInViewState extends State<ShortishCloudOptInView> {
                     height: 30,
                   ),
                   SelectableText(
-                      '''By opting in to the Shortish Cloud(https://shrti.sh) service, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.
+                      '''By opting in to the Shortish Cloud(https://shrti.sh) service, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website and app are protected by applicable copyright and trademark law.
 
 In no event shall the developer of Shortish or Shortish Cloud(https://shrti.sh) or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Shortish or Shortish Cloud(https://shrti.sh), even if the developer or an authorized representative of the developer has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.
 
-The materials appearing on Shortish or Shortish Cloud(https://shrti.sh) website could include technical, typographical, or photographic errors. Shortish or Shortish Cloud(https://shrti.sh) does not warrant that any of the materials on its website are accurate, complete or current. Shortish or Shortish Cloud(https://shrti.sh) may make changes to the materials contained on its website at any time without notice. However Shortish or Shortish Cloud(https://shrti.sh) does not make any commitment to update the materials.
+The materials appearing on Shortish or Shortish Cloud(https://shrti.sh) website or app  could include technical, typographical, or photographic errors. Shortish or Shortish Cloud(https://shrti.sh) does not warrant that any of the materials on its website or app are accurate, complete or current. Shortish or Shortish Cloud(https://shrti.sh) may make changes to the materials contained on its website or app at any time without notice. However Shortish or Shortish Cloud(https://shrti.sh) does not make any commitment to update the materials.
 
 Shortish or Shortish Cloud(https://shrti.sh) has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Shortish or Shortish Cloud(https://shrti.sh) of the site. Use of any such linked website is at the user's own risk.
 
@@ -90,7 +71,7 @@ Because Shortish and Shortish Cloud(https://shrti.sh) are provided free of charg
 
 Users may not try and generate multiple API keys. Those who attempt this may find that they are no longer able to access Shortish Cloud(https://shruti.sh) Users have the ability to Export their API key to transfer it to another device. The API key will also be automatically backed up when using the mobile app, however users are still expected to download and store a copy of their API key in the event it is not backed up. We are unable to recover ANY lost API key.
 
-Shortish or Shortish Cloud(https://shrti.sh) may revise these terms of service for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these terms of service.
+Shortish or Shortish Cloud(https://shrti.sh) may revise these terms of service for its website or app  at any time without notice. By using this website or app  you are agreeing to be bound by the then current version of these terms of service.
 
 Tl;DR
 We are not responsible for any links our users create and are not responsible for any service disruptions. Shortish Cloud may be shut down some day and in that case your links will cease to function.  You are expected to keep a backup of your API key safe as it cannot be recovered.  Do not make multiple Shortish Cloud accounts(API keys) on multiple devices. Instead select \"Existing User\"'''),
@@ -105,18 +86,36 @@ We are not responsible for any links our users create and are not responsible fo
                     height: 20,
                   ),
                   CupertinoButton.filled(
-                      child: Text("New User"),
-                      onPressed: () {
+                      child: Text((loading) ? "Loading" : "New User"),
+                      onPressed: () async {
                         //Get.to(() => ShortishCloudOptInView());
                         ////HIVE BOX terms of servise agreed to date
+                        setState(() {
+                          loading = true;
+                        });
+                        try {
+                          await ShortishCloud.newUser();
+                          Get.offAllNamed("/");
+                        } catch (e) {
+                          if (e.runtimeType == ServiceException) {
+                            var err = e as ServiceException;
+                            showSnackBar(text: err.title);
+                          } else {
+                            showSnackBar(text: e.toString());
+                          }
+                        }
+                        setState(() {
+                          loading = false;
+                        });
+                        
                       }),
                   SizedBox(
                     height: 20,
                   ),
                   CupertinoButton.filled(
-                      child: Text("Existing User"),
+                      child: Text((loading) ? "Loading" : "Existing User"),
                       onPressed: () {
-                        //Get.to(() => ShortishCloudOptInView());
+                        Get.to(() => ShortishCloudImportView());
                       })
                 ],
               ))
