@@ -48,4 +48,5 @@
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="${googleAPIKey}"/>
     </application>
+    <uses-permission android:name="android.permission.CAMERA" />
 </manifest>
