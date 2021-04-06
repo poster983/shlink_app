@@ -75,8 +75,8 @@ class _ShortishCloudImportViewState extends State<ShortishCloudImportView> {
           showQRReader = !_apiKeyfocusNode.hasPrimaryFocus;
         });
       });
-
-      _apiKeyControll.addListener(() {
+    }
+    _apiKeyControll.addListener(() {
         if (uuidRegex.hasMatch(_apiKeyControll.text)) {
           setState(() {
             apiKey = _apiKeyControll.text;
@@ -87,7 +87,6 @@ class _ShortishCloudImportViewState extends State<ShortishCloudImportView> {
           });
         }
       });
-    }
 
     //box.get("shortish_cloud_state", defaultValue: false);
   }
@@ -110,7 +109,7 @@ class _ShortishCloudImportViewState extends State<ShortishCloudImportView> {
           ),
         ),
         body: Container(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(15),
             width: Get.width,
             child: Column(
               children: [
@@ -119,7 +118,7 @@ class _ShortishCloudImportViewState extends State<ShortishCloudImportView> {
                 Expanded(
                   flex: 1,
                   child: Text(
-                    "TODO: INSTRUCTIONS",
+                    "If you already have a device with Shortish Cloud enabled, go to Settings > Shortish Cloud and then select \"Show API Key\"",
                   ),
                 ),
                 (showQRReader)
@@ -158,14 +157,14 @@ class _ShortishCloudImportViewState extends State<ShortishCloudImportView> {
                             controller: _apiKeyControll,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: 'or paste API key here'),
+                                hintText: (kIsWeb)?"Paste API key here":'or paste API key here'),
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           CupertinoButton.filled(
                               child: Text((loading) ? "Loading" : "Import"),
-                              onPressed: (apiKey != null)
+                              onPressed: (apiKey != null || loading == true)
                                   ? () async {
                                       setState(() {
                                         loading = true;

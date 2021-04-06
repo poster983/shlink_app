@@ -177,6 +177,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     print(AppTheme.darkTheme.appBarTheme.textTheme);
     _pageController = PageController(initialPage: widget.pageIndex);
+
+    
   }
 
   @override
