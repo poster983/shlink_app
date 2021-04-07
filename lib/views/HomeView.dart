@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shlink_app/widgets/history/history_list.dart';
 
 import 'package:shlink_app/widgets/shortener_card.dart';
+import 'package:shlink_app/widgets/shortish_text_logo.dart';
 
 class HomeView extends StatelessWidget {
   final HistoryListController historyListController =
@@ -23,20 +24,34 @@ class HomeView extends StatelessWidget {
       /*mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,*/
       children: [
-        
-        new ShortenerCard(),
         Container(
-          padding: EdgeInsets.only(top:15, bottom: 5),
+          padding: EdgeInsets.only(top: 25, bottom: 25, left: 50, right: 50),
+          alignment: Alignment.topLeft,
+          child: ShortishTextLogo(style: TextStyle(fontSize: 50),),
+        ),
+        
+        Container(
+          padding: EdgeInsets.only(left:25, right: 25),
+          child: new ShortenerCard(),
+        ),
+        Container(
+          padding: EdgeInsets.only(top:15, bottom: 5, left:25, right: 25),
           child: Text("Recents", textAlign: TextAlign.center, style: TextStyle(
             fontSize: 20
           ),)
         ),
         
-        
-        new HistoryList(
+        Flexible(
+          child: Container(
+          constraints: BoxConstraints(maxWidth: 800),
+          child: new HistoryList(
             controller: historyListController,
             length: 3,
           ),
+        )
+        )
+        
+        
         
       ],
     );

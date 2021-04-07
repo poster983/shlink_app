@@ -107,16 +107,31 @@ We are not responsible for any links our users create and are not responsible fo
                         setState(() {
                           loading = false;
                         });
-                        
                       }),
                   SizedBox(
                     height: 20,
                   ),
                   CupertinoButton.filled(
-                      child: Text((loading) ? "Loading" : "Existing User"),
-                      onPressed: () {
-                        Get.to(() => ShortishCloudImportView());
-                      })
+                    child:
+                        Text((loading) ? "Loading" : "Existing User"),
+                    onPressed: () {
+                      Get.to(() => ShortishCloudImportView());
+                    })
+                  /*FutureBuilder(
+                    future: impv.loadLibrary(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return CupertinoButton.filled(
+                            child:
+                                Text((loading) ? "Loading" : "Existing User"),
+                            onPressed: () {
+                              Get.to(() => impv.ShortishCloudImportView());
+                            });
+                      } else {
+                        return CupertinoButton.filled(child:Text('Loading...'), onPressed: null,);
+                      }
+                    },
+                  )*/
                 ],
               ))
         ]));

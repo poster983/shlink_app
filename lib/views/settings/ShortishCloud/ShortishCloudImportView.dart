@@ -77,16 +77,16 @@ class _ShortishCloudImportViewState extends State<ShortishCloudImportView> {
       });
     }
     _apiKeyControll.addListener(() {
-        if (uuidRegex.hasMatch(_apiKeyControll.text)) {
-          setState(() {
-            apiKey = _apiKeyControll.text;
-          });
-        } else {
-          setState(() {
-            apiKey = null;
-          });
-        }
-      });
+      if (uuidRegex.hasMatch(_apiKeyControll.text)) {
+        setState(() {
+          apiKey = _apiKeyControll.text;
+        });
+      } else {
+        setState(() {
+          apiKey = null;
+        });
+      }
+    });
 
     //box.get("shortish_cloud_state", defaultValue: false);
   }
@@ -157,7 +157,9 @@ class _ShortishCloudImportViewState extends State<ShortishCloudImportView> {
                             controller: _apiKeyControll,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: (kIsWeb)?"Paste API key here":'or paste API key here'),
+                                hintText: (kIsWeb)
+                                    ? "Paste API key here"
+                                    : 'or paste API key here'),
                           ),
                           SizedBox(
                             height: 10,

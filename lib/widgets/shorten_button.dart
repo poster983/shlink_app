@@ -63,32 +63,45 @@ class _ShortenButtonState extends State<ShortenButton>
     return AnimatedBuilder(
         animation: _pulseAnimationController,
         builder: (BuildContext context, Widget? child) {
-          return Container(
-              child: new CupertinoButton.filled(
-                onPressed: widget.onPressed,
-                child: Obx(() => new Text((widget.loading)
-                    ? "Loading"
-                    : (controller.serviceList.length == 0)
-                        ? "Shorten"
-                        : "Shorten with ${controller.serviceList.elementAt(controller.selectedService.value).name}")), //controller.serviceList[controller.selectedService.value].name
-                //borderRadius: BorderRadius.all(Radius.circular(_buttonRadiusAnimation.value)),
-              ),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Get.theme!.accentColor
-                          .withAlpha(widget.enabled ? 60 : 0),
-                      blurRadius: 10.0,
-                      spreadRadius: _pulseAnimation.value == null
-                          ? 6.0
-                          : _pulseAnimation.value,
-                      offset: Offset(
-                        0.0,
-                        3.0,
+          return Obx(() {
+            Color currColor = ((controller.serviceList.length == 0)
+                ? Get.theme!.accentColor
+                : controller
+                    .serviceList[controller.selectedService.value].color);
+            
+            return Container(
+                child: new CupertinoButton(
+                  color: currColor,
+                  onPressed: widget.onPressed,
+                  child: new Text(
+                      (widget.loading)
+                          ? "Loading"
+                          : (controller.serviceList.length == 0)
+                              ? "Shorten"
+                              : "Shorten with ${controller.serviceList.elementAt(controller.selectedService.value).name}",
+                      style: TextStyle(
+                          color: (currColor.computeLuminance() > 0.5)
+                              ? Colors.black
+                              : Colors
+                                  .white)), //controller.serviceList[controller.selectedService.value].name
+                  //borderRadius: BorderRadius.all(Radius.circular(_buttonRadiusAnimation.value)),
+                ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: currColor.withAlpha(widget.enabled ? 60 : 0),
+                        blurRadius: 10.0,
+                        spreadRadius: _pulseAnimation.value == null
+                            ? 6.0
+                            : _pulseAnimation.value,
+                        offset: Offset(
+                          0.0,
+                          3.0,
+                        ),
                       ),
-                    ),
-                  ]));
+                    ]));
+          });
         });
   }
 

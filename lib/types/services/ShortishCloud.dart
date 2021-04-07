@@ -48,7 +48,7 @@ class ShortishCloud {
           name: "Shortish Cloud",
           apiKey: apiKey,
           isShortishCloud: true,
-          color: AppTheme.shortishColor);
+          color: AppColors.shortish);
     } catch (e) {
       throw e;
     }

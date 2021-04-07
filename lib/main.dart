@@ -65,7 +65,7 @@ void main() async {
       host: Uri.parse("https://tinyurl.com/api-create.php"),
       name: "tinyurl.com",
       longURLParameter: "url",
-      color: new Color.fromRGBO(0, 0, 153, 1),
+      color: AppColors.blue,
       httpMethod: HTTPMethod.GET,
     );
     servicesBox.put(tinyurl.name, tinyurl.toJson());
@@ -80,7 +80,7 @@ void main() async {
       urlParameters: {"format": "json"},
       customSlugParameter: "shorturl",
       shortenedURLParameter: "shorturl",
-      color: new Color.fromRGBO(183, 9, 0, 1),
+      color: AppColors.red,
       httpMethod: HTTPMethod.GET,
     );
     servicesBox.put(defaultService.name, defaultService.toJson());
@@ -94,7 +94,7 @@ void main() async {
       longURLParameter: "url",
       customSlugParameter: "shorturl",
       shortenedURLParameter: "shorturl",
-      color: new Color.fromRGBO(3, 145, 9, 1),
+      color: AppColors.green,
       httpMethod: HTTPMethod.GET,
     );
     servicesBox.put(defaultService.name, defaultService.toJson());
@@ -103,14 +103,7 @@ void main() async {
   //Update history list
   Services.updateHistory();
 
-  //Define MapAdapter
-  /*MapAdapter.defaultInstance = MapAdapter.platformSpecific(
-    ios: AppleMapsNativeAdapter(),
-    //browser: AppleMapsJsAdapter(requestSigner: AppleMapsRequestSigner.withPrivateKey())
-    // Bing Maps iframe API does not necessarily require API credentials
-    // so we use it in the example.
-    otherwise: BingMapsIframeAdapter(),
-  );*/
+
 
   runApp(MyApp());
 }

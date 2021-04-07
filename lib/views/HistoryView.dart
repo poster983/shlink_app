@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shlink_app/widgets/history/history_list.dart';
+import 'package:shlink_app/widgets/shortish_text_logo.dart';
 
 
 class HistoryView extends StatelessWidget {
@@ -17,10 +18,9 @@ class HistoryView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,*/
       children: [
         Container(
-          padding: EdgeInsets.only(top:15, bottom: 5),
-          child: Text("History", textAlign: TextAlign.center, style: TextStyle(
-            fontSize: 20
-          ),)
+          padding: EdgeInsets.only(top: 25, bottom: 25, left: 50, right: 50),
+          alignment: Alignment.topLeft,
+          child: ShortishTextLogo(style: TextStyle(fontSize: 50), after: " /history",),
         ),
         new HistoryList()
       ],

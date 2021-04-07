@@ -4,7 +4,7 @@ class AppTheme {
   //
   AppTheme._();
 
-  static final Color shortishColor = Color.fromRGBO(251, 54, 64, 1);
+  
 
   static final ThemeData lightTheme = ThemeData(
     fontFamily: "WorkSans",
@@ -41,4 +41,16 @@ class AppTheme {
     brightness: Brightness.dark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
+}
+
+class AppColors {
+  static Color black = Color.fromRGBO(23, 24, 35, 1);
+  static Color orange = Color.fromRGBO(251, 138, 40, 1);
+  static Color red = Color.fromRGBO(255, 83, 91, 1);
+  static Color green = Color.fromRGBO(59, 186, 146, 1);
+  static Color lightBlue = Color.fromRGBO(93, 196, 243, 1);
+  static Color blue = Color.fromRGBO(71, 99, 235, 1);
+  static Color purple = Color.fromRGBO(112, 112, 255, 1);
+
+  static final Color shortish = Color.fromRGBO(251, 54, 64, 1);
 }
