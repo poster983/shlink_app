@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/widgets/app_version.dart';
+import 'package:shlink_app/widgets/shortish_text_logo.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends StatelessWidget {
@@ -71,13 +73,32 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
+      
       Container(
+          padding: EdgeInsets.only(top: 35),
           constraints: BoxConstraints(maxWidth: 1000),
           //width: 1,
           child: ListView(
             //mainAxisSize: MainAxisSize.min,
             shrinkWrap: true,
             children: [
+              Container(
+                padding: EdgeInsets.only(left: 50, right: 50),
+                child: ShortishTextLogo(
+                  after: " /settings",
+                  style: TextStyle(fontSize: (Get.width > 400)?50:25,),
+                ),
+              ),
+              
+              new IconButton(
+                icon: Icon(Icons.brightness_medium),
+                onPressed: () {
+                  if (Get.isDarkMode) {
+                    Get.changeTheme(AppTheme.lightTheme);
+                  } else {
+                    Get.changeTheme(AppTheme.darkTheme);
+                  }
+                }),
               _settingLink(
                   title: "Shortish Cloud",
                   icon: Icons.cloud_circle_outlined,

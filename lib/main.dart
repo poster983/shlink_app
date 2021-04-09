@@ -193,36 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       //resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        //elevation: 0,
-        actions: [
-          new IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                Hive.box("preferences").deleteFromDisk();
-                Hive.box("services").deleteFromDisk();
-                Hive.box<ShortUrl>("history").deleteFromDisk();
-                showSnackBar(text: "Deleted all services");
-              }),
-          new IconButton(
-              icon: Icon(Icons.brightness_medium),
-              onPressed: () {
-                if (Get.isDarkMode) {
-                  Get.changeTheme(AppTheme.lightTheme);
-                } else {
-                  Get.changeTheme(AppTheme.darkTheme);
-                }
-              }),
-          new IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                Services.updateHistory();
-              })
-        ],
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,

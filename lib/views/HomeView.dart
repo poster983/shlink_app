@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shlink_app/Services.dart';
 import 'package:shlink_app/widgets/history/history_list.dart';
 
 import 'package:shlink_app/widgets/shortener_card.dart';
@@ -29,25 +30,45 @@ class HomeView extends StatelessWidget {
       children: [
         Container(
           constraints: BoxConstraints(maxWidth: maxWidth),
-          padding: EdgeInsets.only(top: 25, bottom: 25, left: 50, right: 50),
+          padding: EdgeInsets.only(top: 35, bottom: 25, left: 50, right: 50),
           alignment: Alignment.topLeft,
           child: ShortishTextLogo(
-            style: TextStyle(fontSize: 50),
+            style: TextStyle(fontSize: (Get.width > 400)?50:40),
           ),
         ),
-        Container(
+        Container( //CARD
           constraints: BoxConstraints(maxWidth: maxWidth),
           padding: EdgeInsets.only(left: 25, right: 25),
           child: new ShortenerCard(),
         ),
-        Container(
-            padding: EdgeInsets.only(top: 15, bottom: 5, left: 25, right: 25),
-            child: Text(
-              "Recents",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            )),
-        Flexible(
+        Container( // RECENTS
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          padding: EdgeInsets.only(top: 15, bottom: 5, left: 25, right: 25),
+          child: Stack(
+            //mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                    child: Text(
+                  "Recents",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                )),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: new IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () {
+                      Services.updateHistory();
+                    }),
+              )
+            ],
+          ),
+        ),
+        Flexible( // HISTORY LIST
             child: Container(
           //maxWidth: 800,
           constraints: BoxConstraints(maxWidth: maxWidth),

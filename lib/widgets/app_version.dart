@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shlink_app/common.dart';
+import 'package:shlink_app/types/ShortUrl.dart';
 
 class AppVersion extends StatefulWidget {
   AppVersion({Key? key}) : super(key: key);
@@ -51,6 +54,15 @@ class _AppVersionState extends State<AppVersion> {
                         ")")
                     : Text(packageInfo!.version),
                 (showAll) ? (!kIsWeb)?Text(packageInfo!.packageName):Text("Progressive Web App") : Container(),
+                (showAll) ? new IconButton(
+                  icon: Icon(Icons.delete),
+                  tooltip: "WILL DELETE ALL HISTORY, SERVICES, SETTINGS AND YOUR SHORTISH CLOUD INSTANCE",
+                  onPressed: () {
+                    Hive.box("preferences").deleteFromDisk();
+                    Hive.box("services").deleteFromDisk();
+                    Hive.box<ShortUrl>("history").deleteFromDisk();
+                    showSnackBar(text: "Deleted all services");
+                  }) : Container(),
               ],
             )
           : Container(),
