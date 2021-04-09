@@ -5,6 +5,7 @@ import 'package:shlink_app/widgets/shortish_text_logo.dart';
 
 class HistoryView extends StatelessWidget {
 
+  double maxWidth = 1000;
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -18,11 +19,15 @@ class HistoryView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,*/
       children: [
         Container(
+          constraints: BoxConstraints(maxWidth: maxWidth),
           padding: EdgeInsets.only(top: 25, bottom: 25, left: 50, right: 50),
           alignment: Alignment.topLeft,
           child: ShortishTextLogo(style: TextStyle(fontSize: 50), after: " /history",),
         ),
-        new HistoryList()
+        Container(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: new HistoryList()
+        )
       ],
     );
   }

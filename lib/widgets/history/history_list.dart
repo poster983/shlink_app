@@ -78,11 +78,10 @@ class _HistoryListState extends State<HistoryList> {
         print(filteredHistory.length);
 
         // LIST
-        return Flexible(
-            child: ListView.builder(
+        return ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.all(8),
+                //padding: const EdgeInsets.all(8),
                 itemCount: filteredHistory.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ShortUrlCard(filteredHistory[index]);
@@ -94,7 +93,7 @@ class _HistoryListState extends State<HistoryList> {
                     Text('${filteredHistory[index].shortUrl}'),
                     Text('${filteredHistory[index].longUrl}'),
                   ])));*/
-                }));
+                });
       },
     );
   }

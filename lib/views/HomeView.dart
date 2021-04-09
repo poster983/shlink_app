@@ -9,9 +9,9 @@ class HomeView extends StatelessWidget {
   final HistoryListController historyListController =
       new HistoryListController();
 
-  HomeView() {
-    
-  }
+  double maxWidth = 1000;
+
+  HomeView() {}
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -20,39 +20,43 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /* return SingleChildScrollView(
+
+      child: */
     return Column(
-      /*mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,*/
+      //mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
+          constraints: BoxConstraints(maxWidth: maxWidth),
           padding: EdgeInsets.only(top: 25, bottom: 25, left: 50, right: 50),
           alignment: Alignment.topLeft,
-          child: ShortishTextLogo(style: TextStyle(fontSize: 50),),
+          child: ShortishTextLogo(
+            style: TextStyle(fontSize: 50),
+          ),
         ),
-        
         Container(
-          padding: EdgeInsets.only(left:25, right: 25),
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          padding: EdgeInsets.only(left: 25, right: 25),
           child: new ShortenerCard(),
         ),
         Container(
-          padding: EdgeInsets.only(top:15, bottom: 5, left:25, right: 25),
-          child: Text("Recents", textAlign: TextAlign.center, style: TextStyle(
-            fontSize: 20
-          ),)
-        ),
-        
+            padding: EdgeInsets.only(top: 15, bottom: 5, left: 25, right: 25),
+            child: Text(
+              "Recents",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            )),
         Flexible(
-          child: Container(
-          constraints: BoxConstraints(maxWidth: 800),
+            child: Container(
+          //maxWidth: 800,
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          padding: EdgeInsets.only(left: 25, right: 25),
           child: new HistoryList(
             controller: historyListController,
             length: 3,
           ),
-        )
-        )
-        
-        
-        
+        ))
       ],
     );
   }
