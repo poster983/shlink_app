@@ -63,22 +63,17 @@ class _HistoryListState extends State<HistoryList> {
     //dropdownValue = services.list[0];
   }
 
-  Future<void> profile() async {
-    print("Build Done: ${stopwatch.elapsed}");
-    stopwatch.stop();
-    stopwatch.reset();
-    return;
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    stopwatch.start();
-    Future.delayed(Duration.zero, () => profile());
+
+
 
     return ValueListenableBuilder(
       valueListenable: Hive.box<ShortUrl>('history').listenable(),
       builder: (context, Box<ShortUrl> box, widget) {
-        print("Got History: ${stopwatch.elapsed}");
+        //print("Got History: ${stopwatch.elapsed}");
         //Do filtering inside the updated builder
         List<ShortUrl> filteredHistory = box.values.toList();
         filteredHistory = filteredHistory.where(filterFunction).toList();
@@ -88,8 +83,8 @@ class _HistoryListState extends State<HistoryList> {
             filteredHistory = filteredHistory.sublist(0, length);
           }
         }
-        print("Filtered: ${stopwatch.elapsed}");
-        print("Card Count:  ${filteredHistory.length}");
+        //print("Filtered: ${stopwatch.elapsed}");
+        //print("Card Count:  ${filteredHistory.length}");
 
         // LIST
         return ListView.builder(

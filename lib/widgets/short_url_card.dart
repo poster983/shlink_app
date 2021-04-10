@@ -126,7 +126,7 @@ class ShortUrlCard extends StatelessWidget {
                   Flexible(
                       child: SelectableText(
                     shortUrl.longUrl.toString(),
-                    style: Get.textTheme!.subtitle2,
+                    style: Get.textTheme!.subtitle1,
                   )),
                   IconButton(
                       icon: Icon(Icons.open_in_browser),
@@ -135,26 +135,40 @@ class ShortUrlCard extends StatelessWidget {
               ),
 
               //AMAKA's ROW
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                          "Created: ${formatter.format(shortUrl.dateCreated)}"),
-                  Text("Clicks: ${(shortUrl.visitCount != null)?shortUrl.visitCount.toString():"No Info"}"),
-                  CupertinoButton(child: Text("See More",), onPressed: () {})
-                  
-                ],
-              ),*/
 
               //Info grid
               LayoutBuilder(builder: (context, constraints) {
-                double aspect = 0.8;
-                if (constraints.maxWidth > 260) {
-                  aspect = (constraints.maxWidth > 600) ? 10 : 2;
-                } else if (constraints.maxWidth > 260) {
-                  aspect = 1;
-                }
                 //print(constraints.maxWidth);
+                //print(aspect);
+
+                if (constraints.maxWidth > 600) {
+                  // USE smaller design for bigger devices
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Created: ${formatter.format(shortUrl.dateCreated)}",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                          "Clicks: ${(shortUrl.visitCount != null) ? shortUrl.visitCount.toString() : "No Info"}",
+                          style: TextStyle(fontSize: 14)),
+                      CupertinoButton(
+                          child:
+                              Text("See More", style: TextStyle(fontSize: 14)),
+                          onPressed: () {})
+                    ],
+                  );
+                }
+
+                /// DESIGN FOR SMAlL DEVICES
+                double aspect = 2;
+                print(constraints.maxWidth);
+                if (constraints.maxWidth >= 380) {
+                  aspect = 5;
+                } else if (constraints.maxWidth > 300) {
+                  aspect = 3;
+                }
                 //print(aspect);
 
                 return SizedBox(
@@ -166,18 +180,18 @@ class ShortUrlCard extends StatelessWidget {
                         childAspectRatio: aspect, //width/height
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 0,
-                        crossAxisCount: 4,
+                        crossAxisCount: 3,
                         children: <Widget>[
                       Text(
                         "Visits",
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        "Date Created",
+                        "Created",
                         textAlign: TextAlign.center,
                       ),
                       Text("Created With", textAlign: TextAlign.center),
-                      Text("Domain", textAlign: TextAlign.center),
+                      //Text("Domain", textAlign: TextAlign.center),
 
                       // 2nd Row
                       (shortUrl.visitCount != null)
@@ -194,7 +208,7 @@ class ShortUrlCard extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       Text(shortUrl.serviceName, textAlign: TextAlign.center),
-                      Text(shortUrl.domain, textAlign: TextAlign.center),
+                      //Text(shortUrl.domain, textAlign: TextAlign.center),
 
                       /*Center(
                       child: Text("Visits"),

@@ -94,7 +94,8 @@ class _ShortishCloudViewState extends State<ShortishCloudView> {
                     ]);
                   }
                   //Shortish cloud is disabled. User needs to sign up
-                  return Column(
+                  return SingleChildScrollView(
+                    child: Column(
                     children: [
                       SizedBox(height: 30),
                       Container(
@@ -141,7 +142,7 @@ class _ShortishCloudViewState extends State<ShortishCloudView> {
                             Get.to(() => ShortishCloudOptInView());
                           })
                     ],
-                  );
+                  ));
                 })));
   }
 }

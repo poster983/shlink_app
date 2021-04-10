@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/Services.dart';
 import 'package:shlink_app/widgets/history/history_list.dart';
 import 'package:shlink_app/widgets/shortish_text_logo.dart';
@@ -20,13 +21,17 @@ class HistoryView extends StatelessWidget {
       children: [
         Container(
             constraints: BoxConstraints(maxWidth: maxWidth),
-            padding: EdgeInsets.only(top: 35+ MediaQuery.of(context).padding.top, bottom: 25, left: 50, right: 50),
+            padding: EdgeInsets.only(
+                top: 35 + MediaQuery.of(context).padding.top,
+                bottom: 25,
+                left: AppTheme.padding,
+                right: AppTheme.padding),
             child: Stack(
               children: [
                 Align(
                   alignment: Alignment.topLeft,
                   child: ShortishTextLogo(
-                    style: TextStyle(fontSize: (Get.width > 400)?50:25),
+                    style: TextStyle(fontSize: (Get.width > 400) ? 50 : 25),
                     after: " /history",
                   ),
                 ),
@@ -40,12 +45,12 @@ class HistoryView extends StatelessWidget {
                 )
               ],
             )),
-         Flexible( // HISTORY LIST
+        Flexible(
+            // HISTORY LIST
             child: Container(
-            constraints: BoxConstraints(maxWidth: maxWidth),
-            padding: EdgeInsets.only(left: 25, right: 25),
-            child: new HistoryList())
-         )
+                constraints: BoxConstraints(maxWidth: maxWidth),
+                padding: EdgeInsets.only(left: AppTheme.padding, right: AppTheme.padding),
+                child: new HistoryList()))
       ],
     );
   }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppTheme {
   //
   AppTheme._();
+
+  static double get padding { return (Get.width > 500) ? 60 : 20;}
 
   static final ThemeData lightTheme = ThemeData(
     fontFamily: "WorkSans",
