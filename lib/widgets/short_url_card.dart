@@ -155,7 +155,7 @@ class ShortUrlCard extends StatelessWidget {
                           style: TextStyle(fontSize: 14)),
                       CupertinoButton(
                           child:
-                              Text("See More", style: TextStyle(fontSize: 14)),
+                              Text("See More", style: TextStyle(fontSize: 14, color: service?.color ?? Colors.red)),
                           onPressed: () {})
                     ],
                   );
