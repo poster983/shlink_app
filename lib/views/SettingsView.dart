@@ -96,7 +96,7 @@ class SettingsView extends StatelessWidget {
                   if (Get.isDarkMode) {
                     Get.changeTheme(AppTheme.lightTheme);
                   } else {
-                    Get.changeTheme(AppTheme.darkTheme);
+                    Get.changeTheme(AppTheme.blackTheme);
                   }
                 }),
               _settingLink(

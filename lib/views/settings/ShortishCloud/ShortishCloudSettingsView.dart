@@ -28,7 +28,9 @@ class _ShortishCloudViewState extends State<ShortishCloudView> {
     String key = box.get("shortish_cloud_apikey", defaultValue: "");
     
     return Dialog(
+        backgroundColor: Colors.white,
         child: Container(
+          
           padding: EdgeInsets.all(15),
           child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -43,7 +45,7 @@ class _ShortishCloudViewState extends State<ShortishCloudView> {
       ),
       Flexible(
         flex: 3,
-        child: SelectableText(key, style: TextStyle(fontSize: 20),)
+        child: SelectableText(key, style: TextStyle(fontSize: 20, color: Colors.black),)
       )
     ])));
   }

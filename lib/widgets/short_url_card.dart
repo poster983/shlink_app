@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,12 +16,21 @@ import 'package:url_launcher/url_launcher.dart';
 class ShortUrlCard extends StatelessWidget {
   final ShortUrl shortUrl;
   final DateFormat formatter = DateFormat.yMd().add_jm(); //('yyyy-MM-dd h:m ');
-  final GlobalKey cardKey = new GlobalKey();
+  //final GlobalKey cardKey = new GlobalKey();
   bool showAnalytics;
   bool showShareButton = false;
+  bool showTime = false;
   late Service? service;
+
+  //Stopwatch stopwatch = new Stopwatch();
+
   ShortUrlCard(this.shortUrl, {this.showAnalytics = true}) {
+    /*WidgetsBinding.instance!.addPostFrameCallback((_) {
+      profile();
+    });
+    stopwatch.start();*/
     service = Services.find(shortUrl.serviceName);
+    //print("Found Service: ${stopwatch.elapsed}");
     if (service == null) {
       showAnalytics = false;
     } else {
@@ -30,10 +40,9 @@ class ShortUrlCard extends StatelessWidget {
     }
 
     if (!kIsWeb) {
-      if(Platform.isAndroid || Platform.isIOS) {
+      if (Platform.isAndroid || Platform.isIOS) {
         showShareButton = true;
       }
-      
     }
   }
 
@@ -44,23 +53,33 @@ class ShortUrlCard extends StatelessWidget {
     //cardKey.currentState.
   }*/
 
+  /*Future<void> profile() async {
+    print("Card Build Done (${shortUrl.shortUrl.toString()}): ${stopwatch.elapsed}");
+    stopwatch.stop();
+    stopwatch.reset();
+    return;
+  }*/
+
   @override
   Widget build(BuildContext context) {
     //executeAfterBuild(context);
     //WidgetsBinding.instance.addPostFrameCallback((_) => afterBuild);
     //print(Get.width);
-    return Card(
-        key: cardKey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15), // if you need this
-          side: BorderSide(
-            color: Colors.grey.withOpacity(0.2),
-            width: 1,
-          ),
-        ),
-        //clipBehavior:
-        elevation: 2,
-        child: Padding(
+    //Future.delayed(Duration.zero, () => profile());
+    return Container(
+        // border color
+        margin: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+            color: service?.color ?? Colors.red,
+            borderRadius: BorderRadius.circular(4)),
+        child: Container(
+            // Asymetrical border width
+            margin: const EdgeInsetsDirectional.only(
+                start: 3, end: 3, top: 3, bottom: 6), //margin is stroke
+            decoration: BoxDecoration(
+                color: Get.theme?.cardColor,
+                borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(2), bottom: Radius.circular(2))),
             padding: EdgeInsets.all(16),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -70,23 +89,28 @@ class ShortUrlCard extends StatelessWidget {
                   Flexible(
                     child: SelectableText(
                       shortUrl.shortUrl.toString(),
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "Ubuntu",
+                        fontWeight: FontWeight.bold,
+                        color: service?.color ?? Colors.red,
+                      ),
                     ),
                   ),
-                  (showShareButton)?IconButton(
-                      icon: Icon(Icons.share),
-                      onPressed: () => Share.share(shortUrl.shortUrl.toString()))
-                      :IconButton(
-                      icon: Icon(Icons.copy),
-                      onPressed: () => Clipboard.setData(
-                          ClipboardData(text: shortUrl.shortUrl.toString()))),
+                  (showShareButton)
+                      ? IconButton(
+                          icon: Icon(Icons.share),
+                          onPressed: () =>
+                              Share.share(shortUrl.shortUrl.toString()))
+                      : IconButton(
+                          icon: Icon(Icons.copy),
+                          onPressed: () => Clipboard.setData(ClipboardData(
+                              text: shortUrl.shortUrl.toString()))),
                   (showAnalytics)
                       ? IconButton(
                           icon: Icon(Icons.analytics),
                           onPressed: () async {
-                            var visits =
-                                await Services.find(shortUrl.serviceName)!
-                                    .visitStats(shortUrl);
+                            var visits = await service!.visitStats(shortUrl);
                             Get.to(() => VisitsMapView(shortUrl, visits));
                           })
                       : Container()
@@ -109,6 +133,18 @@ class ShortUrlCard extends StatelessWidget {
                       onPressed: () => _launchURL(shortUrl.longUrl.toString()))
                 ],
               ),
+
+              //AMAKA's ROW
+              /*Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                          "Created: ${formatter.format(shortUrl.dateCreated)}"),
+                  Text("Clicks: ${(shortUrl.visitCount != null)?shortUrl.visitCount.toString():"No Info"}"),
+                  CupertinoButton(child: Text("See More",), onPressed: () {})
+                  
+                ],
+              ),*/
 
               //Info grid
               LayoutBuilder(builder: (context, constraints) {

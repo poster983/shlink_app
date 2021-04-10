@@ -20,7 +20,7 @@ class HistoryView extends StatelessWidget {
       children: [
         Container(
             constraints: BoxConstraints(maxWidth: maxWidth),
-            padding: EdgeInsets.only(top: 35, bottom: 25, left: 50, right: 50),
+            padding: EdgeInsets.only(top: 35+ MediaQuery.of(context).padding.top, bottom: 25, left: 50, right: 50),
             child: Stack(
               children: [
                 Align(
@@ -40,10 +40,12 @@ class HistoryView extends StatelessWidget {
                 )
               ],
             )),
-        Container(
+         Flexible( // HISTORY LIST
+            child: Container(
             constraints: BoxConstraints(maxWidth: maxWidth),
             padding: EdgeInsets.only(left: 25, right: 25),
             child: new HistoryList())
+         )
       ],
     );
   }

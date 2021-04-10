@@ -4,8 +4,6 @@ class AppTheme {
   //
   AppTheme._();
 
-  
-
   static final ThemeData lightTheme = ThemeData(
     fontFamily: "WorkSans",
     primarySwatch: Colors.red,
@@ -38,8 +36,18 @@ class AppTheme {
     ),
 
     accentColor: Color(0xFFE03A3C),
+    //backgroundColor: Colors.black,
     brightness: Brightness.dark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+  );
+
+  static final ThemeData blackTheme = darkTheme.copyWith(
+    canvasColor: Color.fromRGBO(0, 0, 0, 1),
+    backgroundColor: Color.fromRGBO(0, 0, 0, 1),
+    scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
+    cardColor: Color.fromRGBO(21, 21, 21, 1),
+    dialogBackgroundColor: Color.fromRGBO(21, 21, 21, 1),
+    
   );
 }
 

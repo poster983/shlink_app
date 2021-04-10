@@ -30,7 +30,7 @@ class HomeView extends StatelessWidget {
       children: [
         Container(
           constraints: BoxConstraints(maxWidth: maxWidth),
-          padding: EdgeInsets.only(top: 35, bottom: 25, left: 50, right: 50),
+          padding: EdgeInsets.only(top: 35 + MediaQuery.of(context).padding.top, bottom: 25, left: 50, right: 50),
           alignment: Alignment.topLeft,
           child: ShortishTextLogo(
             style: TextStyle(fontSize: (Get.width > 400)?50:40),

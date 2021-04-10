@@ -11,25 +11,36 @@ class Services {
   static List<Service> get list {
     final serverBox = Hive.box("services");
     return serverBox.values.map((serv) {
-      switch (serv["type"]) {
+      return _serviceFromJson(serv) as Service;
+    }).toList();
+  }
+
+  static _serviceFromJson(serviceString) {
+    switch (serviceString["type"]) {
         case "Shlink":
-          return new Shlink.fromJson(serv.cast<String, dynamic>());
+          return new Shlink.fromJson(serviceString.cast<String, dynamic>());
           break;
         case "GenericREST":
-          return new GenericREST.fromJson(serv.cast<String, dynamic>());
+          return new GenericREST.fromJson(serviceString.cast<String, dynamic>());
           break;
         default:
           throw Exception("UNKNOWN SERVICE TYPE");
       }
-    }).toList();
   }
 
   static Service? find(String serviceName) {
-    try {
-      return list.firstWhere((element) => element.name == serviceName);
+    final serverBox = Hive.box("services");
+    try{
+      return _serviceFromJson(serverBox.get(serviceName, defaultValue: null));
     } catch(e) {
       return null;
     }
+    
+    /*try {
+      return list.firstWhere((element) => element.name == serviceName);
+    } catch(e) {
+      return null;
+    }*/
   }
 
   static void updateHistory() {

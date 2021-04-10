@@ -28,6 +28,8 @@ class _HistoryListState extends State<HistoryList> {
 
   late int? length;
 
+  Stopwatch stopwatch = new Stopwatch();
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -38,6 +40,7 @@ class _HistoryListState extends State<HistoryList> {
   @override
   void initState() {
     super.initState();
+
     length = widget.length;
     if (widget.controller == null) {
       widget.controller = new HistoryListController();
@@ -60,32 +63,43 @@ class _HistoryListState extends State<HistoryList> {
     //dropdownValue = services.list[0];
   }
 
+  Future<void> profile() async {
+    print("Build Done: ${stopwatch.elapsed}");
+    stopwatch.stop();
+    stopwatch.reset();
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
+    stopwatch.start();
+    Future.delayed(Duration.zero, () => profile());
+
     return ValueListenableBuilder(
       valueListenable: Hive.box<ShortUrl>('history').listenable(),
       builder: (context, Box<ShortUrl> box, widget) {
+        print("Got History: ${stopwatch.elapsed}");
         //Do filtering inside the updated builder
         List<ShortUrl> filteredHistory = box.values.toList();
-        filteredHistory.sort(sortFunction);
         filteredHistory = filteredHistory.where(filterFunction).toList();
+        filteredHistory.sort(sortFunction);
         if (length != null) {
           if (filteredHistory.length > length!) {
             filteredHistory = filteredHistory.sublist(0, length);
           }
         }
-
-        print(filteredHistory.length);
+        print("Filtered: ${stopwatch.elapsed}");
+        print("Card Count:  ${filteredHistory.length}");
 
         // LIST
         return ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                //padding: const EdgeInsets.all(8),
-                itemCount: filteredHistory.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ShortUrlCard(filteredHistory[index]);
-                  /*return Container(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            //padding: const EdgeInsets.all(8),
+            itemCount: filteredHistory.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ShortUrlCard(filteredHistory[index]);
+              /*return Container(
                       //height: 50,
 
                       child: Center(
@@ -93,7 +107,7 @@ class _HistoryListState extends State<HistoryList> {
                     Text('${filteredHistory[index].shortUrl}'),
                     Text('${filteredHistory[index].longUrl}'),
                   ])));*/
-                });
+            });
       },
     );
   }

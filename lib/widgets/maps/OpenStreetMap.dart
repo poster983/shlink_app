@@ -12,7 +12,7 @@ class OpenStreetMap extends StatelessWidget {
   MapController? mapController;
   late MapPosition mapPosition;
   LatLng? startingCoord;
-  List<Marker>? poiList;
+  late List<Marker>? poiList;
   //LatLng mapPosition = new LatLng(0, 0);
   //WebBrowserController controller;
 
@@ -90,7 +90,6 @@ class OpenStreetMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("HI");
     return Listener(
         onPointerSignal: (pointerSignal) {
           if (pointerSignal is PointerScrollEvent) {
@@ -118,7 +117,7 @@ class OpenStreetMap extends StatelessWidget {
                 //position.
               },
               //controller: mapController,
-              center: startingCoord,
+              center: startingCoord!,
               zoom: 2.0,
             ),
             layers: [
@@ -130,7 +129,7 @@ class OpenStreetMap extends StatelessWidget {
                   urlTemplate:
                       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                   subdomains: ['a', 'b', 'c']),
-              MarkerLayerOptions(markers: poiList),
+              MarkerLayerOptions(markers: poiList!),
             ],
           ),
           Align(

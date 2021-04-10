@@ -72,6 +72,8 @@ void main() async {
     print("MAIN(): Added tinyurl.com Service");
   }
 
+  
+
   if (servicesBox.get("is.gd") == null) {
     GenericREST defaultService = new GenericREST(
       host: Uri.parse("https://is.gd/create.php"),
@@ -116,7 +118,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Shortish',
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      darkTheme: AppTheme.blackTheme,
       initialRoute: '/',
       getPages: [
         GetPage(

@@ -90,10 +90,17 @@ class Shlink implements Service {
     //historyCache = [];
     //temp
     //domain = Uri.parse(this.host.host);
-    _getDomains().then((value) => {_domainsCache = value}).catchError((err) {
-      print(err);
+    /*try {
+      print("GETTING DOMAINS");
+      _getDomains().then((value) => {_domainsCache = value}).catchError((err) {
+        print(err);
+        _domainsCache = [];
+      });
+    } catch (e) {
+      print(e);
       _domainsCache = [];
-    });
+    }*/
+
     //_domainsCache = await _getDomains();
     //__setColor(color);
   }
@@ -148,8 +155,16 @@ class Shlink implements Service {
   @override
   Future<ShortUrl> shorten(Uri link, {String? slug}) async {
     try {
-      ShlinkAPI.ShortUrl short = await _shlinkAPI.create(
-          new ShlinkAPI.CreateShortURL(link.toString(), customSlug: slug));
+      ShlinkAPI.ShortUrl short;
+      if (slug == null) {
+        // TODO: UPDATE Shlink PACKAGE with null saftey
+        short = await _shlinkAPI
+            .create(new ShlinkAPI.CreateShortURL(link.toString()));
+      } else {
+        short = await _shlinkAPI.create(
+            new ShlinkAPI.CreateShortURL(link.toString(), customSlug: slug));
+      }
+
       ShortUrl newShort = ShortUrl.fromShlinkAPI(short, serviceName: name);
       var historyBox = Hive.box<ShortUrl>("history");
       historyBox.put(newShort.shortUrl.toString(), newShort);
@@ -212,8 +227,7 @@ class Shlink implements Service {
     try {
       ShlinkAPI.Health rawhealth = await _shlinkAPI.checkHealth();
       //int status = (rawhealth.status=="pass")?200:
-      return Health(
-          statusCode: 200, version: rawhealth.version);
+      return Health(statusCode: 200, version: rawhealth.version);
     } catch (e) {
       if (e.runtimeType == ShlinkAPI.ShlinkException) {
         throw ServiceException.fromShlinkException(
