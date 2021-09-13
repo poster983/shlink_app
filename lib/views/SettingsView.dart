@@ -83,7 +83,7 @@ class SettingsView extends StatelessWidget {
             shrinkWrap: true,
             children: [
               Container(
-                padding: EdgeInsets.only(left: 60, right: 60),
+                padding: EdgeInsets.only(left: AppTheme.padding, right: AppTheme.padding),
                 child: ShortishTextLogo(
                   after: " /settings",
                   style: TextStyle(fontSize: (Get.width > 400)?50:25,),

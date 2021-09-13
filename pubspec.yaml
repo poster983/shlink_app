@@ -114,6 +114,13 @@ flutter:
         - asset: assets/fonts/WorkSans-BoldItalic.ttf
           weight: 700
           style: italic
+
+    - family: SFProDisplay 
+      fonts:
+        - asset: assets/fonts/SF-Pro-Display-Regular.otf
+    - family: SFProRounded 
+      fonts:
+        - asset: assets/fonts/SF-Pro-Rounded-Regular.otf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

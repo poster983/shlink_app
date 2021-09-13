@@ -19,7 +19,7 @@ class HistoryView extends StatelessWidget {
       /*mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,*/
       children: [
-        Container(
+        Container(  // MARK:  TITLE BAR 
             constraints: BoxConstraints(maxWidth: maxWidth),
             padding: EdgeInsets.only(
                 top: 35 + MediaQuery.of(context).padding.top,
@@ -28,7 +28,7 @@ class HistoryView extends StatelessWidget {
                 right: AppTheme.padding),
             child: Stack(
               children: [
-                Align(
+                Align( // MARK: SHORTISH LOGO
                   alignment: Alignment.topLeft,
                   child: ShortishTextLogo(
                     style: TextStyle(fontSize: (Get.width > 400) ? 50 : 25),

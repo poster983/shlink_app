@@ -5,10 +5,10 @@ class AppTheme {
   //
   AppTheme._();
 
-  static double get padding { return (Get.width > 500) ? 60 : 20;}
+  static double get padding { return (Get.width > 600) ? 60 : 20;}
 
   static final ThemeData lightTheme = ThemeData(
-    fontFamily: "WorkSans",
+    fontFamily: "SFProDisplay", //(Platform.isIOS)?:"WorkSans",
     primarySwatch: Colors.red,
     appBarTheme: AppBarTheme(
       titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
@@ -30,7 +30,7 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData(
-    fontFamily: "WorkSans",
+    fontFamily: "SFProDisplay", //"WorkSans",
     primarySwatch: Colors.red,
     //primarySwatch: Colors.grey,
     buttonTheme: ButtonThemeData(
