@@ -16,7 +16,7 @@ class ShortishCloud {
   ShortishCloud() {}
 
   static Future<String> getAPIKey() async {
-    http.Response res = await http.get(Uri.parse(DotEnv.env["SHORTISH_CLOUD_REGISTER_URL"] ?? ""));
+    http.Response res = await http.get(Uri.parse(DotEnv.dotenv.env["SHORTISH_CLOUD_REGISTER_URL"] ?? ""));
     return res.body;
   }
 
@@ -44,7 +44,7 @@ class ShortishCloud {
     Shlink service;
     try {
       service = Shlink(
-          host: Uri.parse(DotEnv.env["SHORTISH_CLOUD_SHLINK_URL"] ?? ""),
+          host: Uri.parse(DotEnv.dotenv.env["SHORTISH_CLOUD_SHLINK_URL"] ?? ""),
           name: "Shortish Cloud",
           apiKey: apiKey,
           isShortishCloud: true,

@@ -142,7 +142,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
                               initialValue: (autofill.get("host") != null)
                                   ? autofill.get("host")
                                   : "https://",
-                              autovalidate: true),
+                              ),
                           new SizedBox(height: 15),
                           new TextFormField(
                             validator: stringValidator,
@@ -162,7 +162,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               //Cancel Buttom
-                              new OutlineButton(
+                              new OutlinedButton(
                                 onPressed: () {
                                   //whipe autofill
                                   autofill
@@ -173,7 +173,7 @@ class _AddServerSheetState extends State<AddServerSheet> {
                               ),
                               new SizedBox(width: 20),
                               // SUBMIT BUTTON
-                              new RaisedButton(
+                              new ElevatedButton(
                                 onPressed: () => submitForm(context),
                                 child: Text('Add'),
                               ),

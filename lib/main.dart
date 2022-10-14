@@ -43,7 +43,7 @@ void main() async {
   var servicesBox = await Hive.openBox('services');
   await Hive.openBox('add_server_autofill');
   await Hive.openBox<ShortUrl>('history');
-  await DotEnv.load(fileName: ".env");
+  await DotEnv.dotenv.load(fileName: ".env");
 
   //set default prefrence for maps
   if (preferences.get("mapService") == null) {

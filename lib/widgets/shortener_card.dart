@@ -215,7 +215,7 @@ class _ShortenerCardState extends State<ShortenerCard> {
                           keyboardType: TextInputType.url,
                           autocorrect: false,
                           controller: _longURLControll,
-                          autovalidate: true,
+                          // autovalidate: true,
                           focusNode: _longURLFocus,
                           //onFieldSubmitted: (v) { setState((){});}
                         ),
