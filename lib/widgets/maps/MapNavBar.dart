@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
-import 'package:shlink_app/widgets/short_url_card.dart';
+import 'package:shlink_app/widgets/ShortUrls/short_url_card.dart';
 
 class MapNavBar extends StatelessWidget {
   final ShortUrl shortUrl;

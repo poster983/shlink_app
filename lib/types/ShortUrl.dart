@@ -25,6 +25,8 @@ class ShortUrl {
   final ServiceType serviceType;
   @HiveField(7)
   final String serviceName;
+  @HiveField(8)
+  String? faviconUrl;
 
   String get domain {
     return shortUrl.host;
@@ -37,6 +39,7 @@ class ShortUrl {
       required this.dateCreated,
       this.visitCount,
       this.tags,
+      // this,favicon
       required this.serviceType,
       required this.serviceName});
   factory ShortUrl.fromShlinkAPI(ShlinkAPI.ShortUrl short,

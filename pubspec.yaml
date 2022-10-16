@@ -69,6 +69,9 @@ dependencies:
     git:
       url: https://github.com/poster983/dart_shlink.git
   cupertino_icons: ^1.0.2
+  auto_size_text: ^3.0.0
+  pull_down_button: ^0.3.1
+  favicon: ^1.1.0
 
 dev_dependencies:
   flutter_test:

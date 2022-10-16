@@ -68,34 +68,34 @@ class HomeView extends StatelessWidget {
           padding: EdgeInsets.only(left: AppTheme.padding, right: AppTheme.padding),
           child: new ShortenerCard(),
         ),
-        Container(
-          // RECENTS
-          constraints: BoxConstraints(maxWidth: maxWidth),
-          padding: EdgeInsets.only(top: 15, bottom: 5, left: AppTheme.padding, right: AppTheme.padding),
-          child: Stack(
-            //mainAxisAlignment: MainAxisAlignment.center,
+        // Container(
+        //   // RECENTS
+        //   constraints: BoxConstraints(maxWidth: maxWidth),
+        //   padding: EdgeInsets.only(top: 15, bottom: 5, left: AppTheme.padding, right: AppTheme.padding),
+        //   child: Stack(
+        //     //mainAxisAlignment: MainAxisAlignment.center,
 
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                    child: Text(
-                  "Recents",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                )),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: new IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: () {
-                      Services.updateHistory();
-                    }),
-              )
-            ],
-          ),
-        ),
+        //     children: [
+        //       Align(
+        //         alignment: Alignment.center,
+        //         child: Container(
+        //             child: Text(
+        //           "Recents",
+        //           textAlign: TextAlign.center,
+        //           style: TextStyle(fontSize: 20),
+        //         )),
+        //       ),
+        //       Align(
+        //         alignment: Alignment.topRight,
+        //         child: new IconButton(
+        //             icon: Icon(Icons.refresh),
+        //             onPressed: () {
+        //               Services.updateHistory();
+        //             }),
+        //       )
+        //     ],
+        //   ),
+        // ),
         Flexible(
             // HISTORY LIST
             child: Container(

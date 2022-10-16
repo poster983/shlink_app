@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
-import 'package:shlink_app/widgets/short_url_card.dart';
+import 'package:shlink_app/widgets/ShortUrls/short_url_card.dart';
+import 'package:shlink_app/widgets/ShortUrls/short_url_card_condensed.dart';
+import 'package:shlink_app/widgets/ShortUrls/short_url_card_condensed_labels.dart';
 
 // ignore: must_be_immutable
 class HistoryList extends StatefulWidget {
@@ -87,22 +89,40 @@ class _HistoryListState extends State<HistoryList> {
         //print("Card Count:  ${filteredHistory.length}");
 
         // LIST
-        return ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            //padding: const EdgeInsets.all(8),
-            itemCount: filteredHistory.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ShortUrlCard(filteredHistory[index]);
-              /*return Container(
-                      //height: 50,
+        return Stack(
 
-                      child: Center(
-                          child: Column(children: [
-                    Text('${filteredHistory[index].shortUrl}'),
-                    Text('${filteredHistory[index].longUrl}'),
-                  ])));*/
-            });
+            // mainAxisSize: MainAxisSize.min,
+            children: [
+              
+
+              ListView.builder(
+                padding: EdgeInsets.only(top: 39),
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                //padding: const EdgeInsets.all(8)
+                // itemExtent: 40,
+                // cacheExtent: 
+                // clipBehavior: Clip.none,
+                itemCount: filteredHistory.length,
+                itemBuilder: (BuildContext context, int index) {
+                  //return ShortUrlCard(filteredHistory[index]);
+                  return ShortUrlCardCondensed(filteredHistory[index]);
+                  /*return Container(
+                          //height: 50,
+
+                          child: Center(
+                              child: Column(children: [
+                        Text('${filteredHistory[index].shortUrl}'),
+                        Text('${filteredHistory[index].longUrl}'),
+                      ])));*/
+                }),
+
+                const ShortUrlCardCondensedLabels(),
+            ],
+
+        );
+        
+        
       },
     );
   }
