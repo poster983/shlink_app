@@ -6,27 +6,23 @@ import 'package:shlink/shlink.dart' as ShlinkAPI;
 import 'package:shlink_app/types/services/ServiceType.dart';
 part 'ShortUrl.g.dart';
 
-@HiveType(typeId: 0)
-@JsonSerializable(nullable: false)
+
+@JsonSerializable()
 class ShortUrl {
-  @HiveField(0)
+
   final Uri longUrl;
-  @HiveField(1)
+
   final Uri shortUrl;
-  @HiveField(2)
+
   final String slug;
-  @HiveField(3)
+
   final DateTime dateCreated;
-  @HiveField(4)
+
   final int? visitCount;
-  @HiveField(5)
   final List<String>? tags;
-  @HiveField(6)
   final ServiceType serviceType;
-  @HiveField(7)
   final String serviceName;
-  @HiveField(8)
-  String? faviconUrl;
+
 
   String get domain {
     return shortUrl.host;
@@ -58,4 +54,18 @@ class ShortUrl {
   factory ShortUrl.fromJson(Map<String, dynamic> json) =>
       _$ShortUrlFromJson(json);
   Map<String, dynamic> toJson() => _$ShortUrlToJson(this);
+
+
+  //MARK: DB
+
+  ShortUrl.fromDB({
+    required this.longUrl,
+    required this.shortUrl,
+    required this.slug,
+    required this.dateCreated,
+    this.visitCount,
+    this.tags,
+    required this.serviceType,
+    required this.serviceName,
+  });
 }

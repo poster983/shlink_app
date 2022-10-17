@@ -7,18 +7,28 @@ part 'ShortUrlVisit.g.dart';
 
 class ShortUrlVisit {
   //@JsonKey()
-  String? referer;
+  String? referrer;
   DateTime? date;
   String? userAgent;
   ShortURLVisitLocation? location;
 
-  ShortUrlVisit({this.referer, this.date, this.userAgent, this.location}) {
+  ShortUrlVisit({this.referrer, this.date, this.userAgent, this.location}) {
 
   }
 
   factory ShortUrlVisit.fromJson(Map<String, dynamic> json) =>
       _$ShortUrlVisitFromJson(json);
   Map<String, dynamic> toJson() => _$ShortUrlVisitToJson(this);
+
+
+
+  //MARK: DB
+  ShortUrlVisit.fromDB({
+    required this.referrer,
+    required this.date,
+    required this.userAgent,
+    required this.location,
+  });
 
   //get ClickDeviceType device
 }

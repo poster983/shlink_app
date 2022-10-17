@@ -35,9 +35,9 @@ void main() async {
   //init Hive DB
   await Hive.initFlutter();
 
-  Hive.registerAdapter(ShortUrlAdapter());
-  Hive.registerAdapter(UriAdapter());
-  Hive.registerAdapter(ServiceTypeAdapter());
+  // Hive.registerAdapter(ShortUrlAdapter());
+  // Hive.registerAdapter(UriAdapter());
+  // Hive.registerAdapter(ServiceTypeAdapter());
 
   var preferences = await Hive.openBox('preferences');
   var servicesBox = await Hive.openBox('services');

@@ -1,15 +1,13 @@
-import 'package:hive/hive.dart';
 
-part 'ServiceType.g.dart';
 
-@HiveType(typeId : 2)
+// @HiveType(typeId : 2)
 enum ServiceType { 
-  @HiveField(0)
+  // @HiveField(0)
   Shlink,
 
-  @HiveField(1)
+  // @HiveField(1)
   Kuttit,
 
-  @HiveField(2)
+  // @HiveField(2)
   GenericREST
 }

@@ -7,16 +7,15 @@ part of 'ShortUrlVisitLocation.dart';
 // **************************************************************************
 
 ShortURLVisitLocation _$ShortURLVisitLocationFromJson(
-    Map<String, dynamic> json) {
-  return ShortURLVisitLocation(
-    coordinates:
-        JSONTypeConverters.latLngFromJSON(json['coordinates'] as String),
-    city: json['city'] as String?,
-    region: json['region'] as String?,
-    country: json['country'] as String?,
-    timezone: json['timezone'] as String?,
-  );
-}
+        Map<String, dynamic> json) =>
+    ShortURLVisitLocation(
+      coordinates:
+          JSONTypeConverters.latLngFromJSON(json['coordinates'] as String),
+      city: json['city'] as String?,
+      region: json['region'] as String?,
+      country: json['country'] as String?,
+      timezone: json['timezone'] as String?,
+    );
 
 Map<String, dynamic> _$ShortURLVisitLocationToJson(
         ShortURLVisitLocation instance) =>

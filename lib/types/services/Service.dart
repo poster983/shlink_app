@@ -68,6 +68,23 @@ class Service {
   }
 
 
+  //MARK: DB 
+  //
+  Service.fromDB({
+    this.apiKey, 
+    this.host, 
+    this.domains, 
+    required this.name, 
+    this.dayAdded, 
+    required this.features, 
+    this.type, 
+    this.historyCache, 
+    required this.disabled, 
+    this.color
+    }) {
+    // throw UnimplementedError();
+  }
+
   //bool operator ==()
 }
 

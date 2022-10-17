@@ -6,24 +6,22 @@ part of 'Shlink.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Shlink _$ShlinkFromJson(Map<String, dynamic> json) {
-  return Shlink(
-    host: Uri.parse(json['host'] as String),
-    name: json['name'] as String,
-    apiKey: json['apiKey'] as String,
-    isShortishCloud: json['isShortishCloud'] as bool,
-    color: JSONTypeConverters.colorFromJSON(json['color'] as int?),
-  )
-    ..type = _$enumDecode(_$ServiceTypeEnumMap, json['type'])
-    ..dayAdded = DateTime.parse(json['dayAdded'] as String)
-    ..historyCache = (json['historyCache'] as List<dynamic>)
-        .map((e) => ShortUrl.fromJson(e as Map<String, dynamic>))
-        .toList()
-    ..disabled = json['disabled'] as bool;
-}
+Shlink _$ShlinkFromJson(Map<String, dynamic> json) => Shlink(
+      host: Uri.parse(json['host'] as String),
+      name: json['name'] as String,
+      apiKey: json['apiKey'] as String,
+      isShortishCloud: json['isShortishCloud'] as bool? ?? false,
+      color: JSONTypeConverters.colorFromJSON(json['color'] as int?),
+    )
+      ..type = $enumDecode(_$ServiceTypeEnumMap, json['type'])
+      ..dayAdded = DateTime.parse(json['dayAdded'] as String)
+      ..historyCache = (json['historyCache'] as List<dynamic>)
+          .map((e) => ShortUrl.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..disabled = json['disabled'] as bool;
 
 Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
-      'type': _$ServiceTypeEnumMap[instance.type],
+      'type': _$ServiceTypeEnumMap[instance.type]!,
       'isShortishCloud': instance.isShortishCloud,
       'apiKey': instance.apiKey,
       'host': instance.host.toString(),
@@ -33,32 +31,6 @@ Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
       'disabled': instance.disabled,
       'color': JSONTypeConverters.colorToJSON(instance.color),
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$ServiceTypeEnumMap = {
   ServiceType.Shlink: 'Shlink',
