@@ -212,7 +212,7 @@ class Shlink implements Service {
       }
       return ShortUrlVisit(
           location: visitLocation,
-          referer: e.referer,
+          referrer: e.referer,
           userAgent: e.userAgent,
           date: e.date);
     }).toList();
@@ -236,4 +236,9 @@ class Shlink implements Service {
       throw e;
     }
   }
+
+
+
+
+
 }
