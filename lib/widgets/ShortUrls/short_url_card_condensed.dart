@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+import 'package:shlink_app/Log.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/types/ShortUrlVisit.dart';
 import 'package:shlink_app/views/VisitsMapView.dart';
+import 'package:shlink_app/widgets/ShortUrls/short_url_stats.dart';
 import 'package:shlink_app/widgets/ShortUrls/statistics/visit_device_type_chart.dart';
 import 'package:shlink_app/widgets/ShortUrls/favicon_viewer.dart';
 import 'package:shlink_app/widgets/charts/NeumorphicBarChart.dart';
@@ -201,14 +203,27 @@ class _ShortUrlCardCondensedState extends State < ShortUrlCardCondensed > {
     if (longDomain.startsWith("www.")) {
       longDomain = longDomain.substring(4);
     }
+    // if(!isOpen) {
+    //   Log.i("Built before open");
+    // }
+    Widget? stats;
+    if(isOpen && stats ==null) {
+      stats = SizedBox(
+        // height: 500,
+        child: ShortUrlStats(
+          shortUrl: widget.shortUrl, controller: ShortUrlStatsController()
+      ));
+    }
+      
     return Container(
       padding: EdgeInsets.all(15),
       child: Column(children: [
         
 
-        Row( 
+        Flexible(child:Row( 
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
           children: [
           //Long URL
           Flexible(child: AutoSizeText(widget.shortUrl.longUrl.toString(), maxLines: 4, textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500), ),),
@@ -238,31 +253,33 @@ class _ShortUrlCardCondensedState extends State < ShortUrlCardCondensed > {
           //Short URL
           Flexible(child: AutoSizeText(widget.shortUrl.shortUrl.toString(), maxLines: 1, textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500), ),)
 
-        ]),
+        ]),),
         
         
+        //Stats
+        stats==null?Container():Flexible(child: stats),
 
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
             
-            //Left Side
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        //     //Left Side
+        //     Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
                 
 
-            ],),
+        //     ],),
 
-            //Right Side (Stats)
+        //     //Right Side (Stats)
 
-            Column(children: [
+        //     Column(children: [
                 
-            ],),
+        //     ],),
 
 
-          ], ),
+        //   ], ),
         //Long URL
         //Center(child: AutoSizeText(widget.shortUrl.longUrl.toString(), maxLines: 1, textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),),
 

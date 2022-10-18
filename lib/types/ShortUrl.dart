@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink/shlink.dart' as ShlinkAPI;
+import 'package:shlink_app/Log.dart';
 import 'package:shlink_app/Services.dart';
 import 'package:shlink_app/database/DriftCommon.dart';
 import 'package:shlink_app/database/DriftGetter.dart';
@@ -49,7 +50,19 @@ class ShortUrl {
   String? notes;
 
   //Joined and Linked Data
-  List<ShortUrlVisit> visits = [];
+  @JsonKey(ignore: true)
+  List<ShortUrlVisit>? _visitsCache;
+
+  ///Loads and cashes the visits for this short url
+  ///
+  ///If you with to update the visits, call [loadVisits] again
+  Future<List<ShortUrlVisit>> get visits async {
+    if(_visitsCache == null) {
+      await loadVisits();
+    }
+    return _visitsCache!;
+  }
+  // List<ShortUrlVisit> visits = [];
 
   late String serviceId;
   // Service? service;
@@ -123,9 +136,20 @@ class ShortUrl {
 
 
   //MARK: Load Links
-  /// Loads all the visits for this link
+  /// Loads all the visits for this link.
+  /// Can be accessed via [visits]
   Future<void> loadVisits() async {
-    throw UnimplementedError();
+    var service = this.service;
+    if(service == null) {
+      throw Exception("Service not found");
+    }
+    if(!service.features.clickAnalytics && !service.features.locationAnalytics) {
+      _visitsCache = [];
+      Log.w("Service does not support click analytics or location analytics.  Returning empty list");
+      return;
+    }
+
+    _visitsCache = await service.visitStats(this);
   }
 
   

@@ -42,9 +42,10 @@ class _DeviceMapState extends State<DeviceMap> {
       if (!kIsWeb) {
         if (Platform.isAndroid) {
           widget.mapService = MapService.GoogleMaps;
-        }
-        if (Platform.isIOS) {
+        } else if (Platform.isIOS) {
           widget.mapService = MapService.AppleMaps;
+        } else {
+          widget.mapService = MapService.OpenStreetMap;
         }
       } else {
         widget.mapService = MapService.OpenStreetMap;

@@ -85,11 +85,11 @@ class VisitsMapView extends StatelessWidget {
         DeviceMap(
           startingCoord: (coordList.length == 0)?LatLng(0,0):computeCentroid(coordList),
           poiList: poiList,
-          mapService: MapService.values.firstWhere(
+          mapService: MapService.DeviceDefault /*MapService.values.firstWhere(
               (e) =>
                   e.toString() ==
                   "MapService." + box.get("mapService", defaultValue: null),
-              orElse: () => MapService.DeviceDefault),
+              orElse: () => MapService.DeviceDefault),*/
         ),
         Container(
             padding: EdgeInsets.only(

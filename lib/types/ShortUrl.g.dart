@@ -16,9 +16,7 @@ ShortUrl _$ShortUrlFromJson(Map<String, dynamic> json) => ShortUrl(
       serviceId: json['serviceId'] as String?,
       title: json['title'] as String?,
       notes: json['notes'] as String?,
-    )..visits = (json['visits'] as List<dynamic>)
-        .map((e) => ShortUrlVisit.fromJson(e as Map<String, dynamic>))
-        .toList();
+    );
 
 Map<String, dynamic> _$ShortUrlToJson(ShortUrl instance) => <String, dynamic>{
       'id': instance.id,
@@ -29,6 +27,5 @@ Map<String, dynamic> _$ShortUrlToJson(ShortUrl instance) => <String, dynamic>{
       'dateCreated': instance.dateCreated.toIso8601String(),
       'visitCount': instance.visitCount,
       'notes': instance.notes,
-      'visits': instance.visits,
       'serviceId': instance.serviceId,
     };
