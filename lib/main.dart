@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shlink_app/AppTheme.dart';
 import 'package:shlink_app/common.dart';
 import 'package:shlink_app/controllers/AppController.dart';
+import 'package:shlink_app/database/DriftGetter.dart';
 import 'package:shlink_app/types/services/GenericREST.dart';
 import 'package:shlink_app/types/services/ServiceType.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
@@ -34,6 +36,7 @@ import 'Services.dart';
 void main() async {
   //init Hive DB
   await Hive.initFlutter();
+  await initDrift();
 
   // Hive.registerAdapter(ShortUrlAdapter());
   // Hive.registerAdapter(UriAdapter());
@@ -133,6 +136,13 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/settings/map', page: () => MapSettingsView()),
         GetPage(name: '/settings/cloud', page: () => ShortishCloudView())
       ],
+
+      builder: (context, child) {
+        
+        return NeumorphicTheme(
+          child: Container(child: child!, color: NeumorphicColors.background),
+        );
+      },
       /*home: MyHomePage(title: 'Shlink'),
       routes: <String, WidgetBuilder> {
         //'/addserver': (BuildContext context) => AddServerPage(),
@@ -193,6 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: NeumorphicColors.background,
       resizeToAvoidBottomInset: false,
       //resizeToAvoidBottomPadding: false,
       

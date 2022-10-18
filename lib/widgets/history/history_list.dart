@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shlink_app/database/DriftGetter.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
 import 'package:shlink_app/widgets/ShortUrls/short_url_card.dart';
 import 'package:shlink_app/widgets/ShortUrls/short_url_card_condensed.dart';
@@ -9,10 +13,11 @@ import 'package:shlink_app/widgets/ShortUrls/short_url_card_condensed_labels.dar
 
 // ignore: must_be_immutable
 class HistoryList extends StatefulWidget {
-  HistoryList({Key? key, this.controller, this.length}) : super(key: key);
+  HistoryList({Key? key, this.controller, this.length, this.watch = true}) : super(key: key);
 
   HistoryListController? controller;
   int? length;
+  bool watch;
 
   @override
   _HistoryListState createState() => _HistoryListState();
@@ -32,16 +37,33 @@ class _HistoryListState extends State<HistoryList> {
 
   Stopwatch stopwatch = new Stopwatch();
 
+  StreamSubscription<List<ShortUrl>>? _changeSubscription;
+
+
+  List<ShortUrl> shortUrls = [];
+
+  var db = getDrift();
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     widget.controller?.dispose();
+    _changeSubscription?.cancel();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    if(widget.watch) {
+      _changeSubscription = db.select(db.dBShortUrl).watch().listen((event) {
+        print("List Change Event");
+        updateLists();
+      });
+    } else {
+      updateLists();
+    }
+    
 
     length = widget.length;
     if (widget.controller == null) {
@@ -65,6 +87,16 @@ class _HistoryListState extends State<HistoryList> {
     //dropdownValue = services.list[0];
   }
 
+  
+
+  updateLists() async {
+    
+    shortUrls =  await db.select(db.dBShortUrl).get();
+
+    setState(() {
+      
+    });
+  }
 
 
   @override
@@ -72,41 +104,43 @@ class _HistoryListState extends State<HistoryList> {
 
 
 
-    return ValueListenableBuilder(
-      valueListenable: Hive.box<ShortUrl>('history').listenable(),
-      builder: (context, Box<ShortUrl> box, widget) {
-        //print("Got History: ${stopwatch.elapsed}");
-        //Do filtering inside the updated builder
-        List<ShortUrl> filteredHistory = box.values.toList();
-        filteredHistory = filteredHistory.where(filterFunction).toList();
-        filteredHistory.sort(sortFunction);
-        if (length != null) {
-          if (filteredHistory.length > length!) {
-            filteredHistory = filteredHistory.sublist(0, length);
-          }
-        }
+    // return ValueListenableBuilder(
+    //   valueListenable: Hive.box<ShortUrl>('history').listenable(),
+    //   builder: (context, Box<ShortUrl> box, widget) {
+    //     //print("Got History: ${stopwatch.elapsed}");
+    //     //Do filtering inside the updated builder
+    //     List<ShortUrl> filteredHistory = box.values.toList();
+    //     filteredHistory = filteredHistory.where(filterFunction).toList();
+    //     filteredHistory.sort(sortFunction);
+    //     if (length != null) {
+    //       if (filteredHistory.length > length!) {
+    //         filteredHistory = filteredHistory.sublist(0, length);
+    //       }
+    //     }
         //print("Filtered: ${stopwatch.elapsed}");
         //print("Card Count:  ${filteredHistory.length}");
 
         // LIST
-        return Stack(
+        return Neumorphic(
+        
+        child: Stack(
 
             // mainAxisSize: MainAxisSize.min,
             children: [
               
 
               ListView.builder(
-                padding: EdgeInsets.only(top: 39),
+                padding: EdgeInsets.only(top: 40),
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 //padding: const EdgeInsets.all(8)
                 // itemExtent: 40,
                 // cacheExtent: 
                 // clipBehavior: Clip.none,
-                itemCount: filteredHistory.length,
+                itemCount: shortUrls.length,
                 itemBuilder: (BuildContext context, int index) {
                   //return ShortUrlCard(filteredHistory[index]);
-                  return ShortUrlCardCondensed(filteredHistory[index]);
+                  return ShortUrlCardCondensed(shortUrls[index]);
                   /*return Container(
                           //height: 50,
 
@@ -120,11 +154,11 @@ class _HistoryListState extends State<HistoryList> {
                 const ShortUrlCardCondensedLabels(),
             ],
 
-        );
+        ));
         
         
-      },
-    );
+      
+    // );
   }
 }
 

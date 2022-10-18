@@ -10,7 +10,7 @@ GenericREST _$GenericRESTFromJson(Map json) => GenericREST(
       host: Uri.parse(json['host'] as String),
       name: json['name'] as String,
       longURLParameter: json['longURLParameter'] as String,
-      color: JSONTypeConverters.colorFromJSON(json['color'] as int?),
+      color: JSONTypeConverters.colorFromJSON(json['color'] as int),
       headers: (json['headers'] as Map?)?.map(
         (k, e) => MapEntry(k as String, e as String),
       ),
@@ -30,22 +30,18 @@ GenericREST _$GenericRESTFromJson(Map json) => GenericREST(
               ContentType.JSON,
     )
       ..type = $enumDecode(_$ServiceTypeEnumMap, json['type'])
-      ..dayAdded = DateTime.parse(json['dayAdded'] as String)
-      ..historyCache = (json['historyCache'] as List<dynamic>)
-          .map((e) => ShortUrl.fromJson(Map<String, dynamic>.from(e as Map)))
-          .toList()
+      ..dateAdded = DateTime.parse(json['dateAdded'] as String)
       ..disabled = json['disabled'] as bool;
 
 Map<String, dynamic> _$GenericRESTToJson(GenericREST instance) =>
     <String, dynamic>{
       'type': _$ServiceTypeEnumMap[instance.type]!,
       'name': instance.name,
-      'dayAdded': instance.dayAdded.toIso8601String(),
+      'dateAdded': instance.dateAdded.toIso8601String(),
       'host': instance.host.toString(),
       'customSlugParameter': instance.customSlugParameter,
       'shortenedURLParameter': instance.shortenedURLParameter,
       'longURLParameter': instance.longURLParameter,
-      'historyCache': instance.historyCache,
       'headers': instance.headers,
       'reqBody': instance.reqBody,
       'urlParameters': instance.urlParameters,

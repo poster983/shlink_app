@@ -11,13 +11,10 @@ Shlink _$ShlinkFromJson(Map<String, dynamic> json) => Shlink(
       name: json['name'] as String,
       apiKey: json['apiKey'] as String,
       isShortishCloud: json['isShortishCloud'] as bool? ?? false,
-      color: JSONTypeConverters.colorFromJSON(json['color'] as int?),
+      color: JSONTypeConverters.colorFromJSON(json['color'] as int),
     )
       ..type = $enumDecode(_$ServiceTypeEnumMap, json['type'])
-      ..dayAdded = DateTime.parse(json['dayAdded'] as String)
-      ..historyCache = (json['historyCache'] as List<dynamic>)
-          .map((e) => ShortUrl.fromJson(e as Map<String, dynamic>))
-          .toList()
+      ..dateAdded = DateTime.parse(json['dateAdded'] as String)
       ..disabled = json['disabled'] as bool;
 
 Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
@@ -26,8 +23,7 @@ Map<String, dynamic> _$ShlinkToJson(Shlink instance) => <String, dynamic>{
       'apiKey': instance.apiKey,
       'host': instance.host.toString(),
       'name': instance.name,
-      'dayAdded': instance.dayAdded.toIso8601String(),
-      'historyCache': instance.historyCache,
+      'dateAdded': instance.dateAdded.toIso8601String(),
       'disabled': instance.disabled,
       'color': JSONTypeConverters.colorToJSON(instance.color),
     };

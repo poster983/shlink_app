@@ -1,6 +1,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class ShortUrlCardCondensedLabels extends StatelessWidget {
   const ShortUrlCardCondensedLabels({super.key});
@@ -8,14 +9,15 @@ class ShortUrlCardCondensedLabels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: CupertinoColors.systemGroupedBackground.resolveFrom(context),
-        // borderRadius: BorderRadius.circular(90),
+      height: 40,
+      // decoration: BoxDecoration(
+      //   color: CupertinoColors.systemGroupedBackground.resolveFrom(context),
+      //   // borderRadius: BorderRadius.circular(90),
         
-      ),
+      // ),
       // padding: EdgeInsets.symmetric(horizontal: 6),
       //padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Row(
+      child: Neumorphic (child: Row(
         mainAxisSize: MainAxisSize.max,
           
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,6 +102,6 @@ class ShortUrlCardCondensedLabels extends StatelessWidget {
         //action button
         // AutoSizeText("Actions", maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
         const SizedBox(width: 0,),
-        ]));
+        ])));
   }
 }

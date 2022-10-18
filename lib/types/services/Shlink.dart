@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shlink_app/common.dart';
+import 'package:shlink_app/database/DriftGetter.dart';
 import 'package:shlink_app/types/Domain.dart';
 import 'package:shlink_app/types/Health.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
@@ -24,6 +25,11 @@ part 'Shlink.g.dart';
 
 @JsonSerializable(nullable: false)
 class Shlink implements Service {
+
+  // late String id;
+  @override
+  String get id => name;
+
   @visibleForTesting
   ServiceType get type => ServiceType.Shlink;
   set type(t) => {}; // This is stupid.  Why is this required Json Serializable?
@@ -50,9 +56,9 @@ class Shlink implements Service {
 
   String name;
 
-  late DateTime dayAdded;
+  late DateTime dateAdded;
 
-  List<ShortUrl> historyCache = [];
+  // List<ShortUrl> historyCache = [];
 
   late ShlinkAPI.Shlink _shlinkAPI;
 
@@ -61,7 +67,7 @@ class Shlink implements Service {
   @JsonKey(
       fromJson: JSONTypeConverters.colorFromJSON,
       toJson: JSONTypeConverters.colorToJSON)
-  late Color? color;
+  late Color color;
 
   @override
   SupportedFeatures get features => new SupportedFeatures(
@@ -70,55 +76,89 @@ class Shlink implements Service {
       clickAnalytics: true,
       locationAnalytics: true);
 
-  Shlink(
-      {required this.host,
+  Shlink({
+      required this.host,
       required this.name,
       required this.apiKey,
       this.isShortishCloud = false,
-      this.color}) {
-    _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
-    dayAdded = new DateTime.now();
-    if (color == null) {
-      color = randomColor();
-    }
+      Color? color
+      }) {
+        _shlinkAPI = new ShlinkAPI.Shlink(host.toString(), apiKey);
+        dateAdded = new DateTime.now();
+        this.color = color ?? randomColor();
 
-    //name cannot be shortish cloud unless it is shortish cloud
-    if (name == "Shortish Cloud" && isShortishCloud == false) {
-      throw Exception(
-          "Only the Shortish Cloud service can be named Shortish Cloud");
-    }
-    //historyCache = [];
-    //temp
-    //domain = Uri.parse(this.host.host);
-    /*try {
-      print("GETTING DOMAINS");
-      _getDomains().then((value) => {_domainsCache = value}).catchError((err) {
-        print(err);
-        _domainsCache = [];
-      });
-    } catch (e) {
-      print(e);
-      _domainsCache = [];
-    }*/
 
-    //_domainsCache = await _getDomains();
-    //__setColor(color);
-  }
+        //name cannot be shortish cloud unless it is shortish cloud
+        if (name == "Shortish Cloud" && isShortishCloud == false) {
+          throw Exception(
+              "Only the Shortish Cloud service can be named Shortish Cloud");
+        }
+        //historyCache = [];
+        //temp
+        //domain = Uri.parse(this.host.host);
+        /*try {
+          print("GETTING DOMAINS");
+          _getDomains().then((value) => {_domainsCache = value}).catchError((err) {
+            print(err);
+            _domainsCache = [];
+          });
+        } catch (e) {
+          print(e);
+          _domainsCache = [];
+        }*/
+
+        //_domainsCache = await _getDomains();
+        //__setColor(color);
+      }
 
   factory Shlink.fromJson(Map<String, dynamic> json) => _$ShlinkFromJson(json);
   Map<String, dynamic> toJson() => _$ShlinkToJson(this);
 
-  /// history:  Will return a history of all links on the server
+  /// history:  Will return a history of all links on the server or locally stored if no internet is available
   @override
   Future<List<ShortUrl>> history() async {
-    print(host);
+    // print(host);
+    try{
+      return await refreshHistory();
+    } catch (e) {
+      //try to get local history
+      try {
+        var db = getDrift();
+        return await (db.select(db.dBShortUrl)..where((tbl) => tbl.serviceId.equals(id))).get();
+      } catch (e) {
+        throw e;
+      }
+    }
+  }
+
+  
+
+  /// refreshHistory: Will update the history from the server
+  @override
+  Future<List<ShortUrl>> refreshHistory() async {
     try {
       List<ShlinkAPI.ShortUrl> urls = await _shlinkAPI.list();
       //_shlinkAPI.listVisits(shortCode)
       final historyList = urls.map((url) {
-        return ShortUrl.fromShlinkAPI(url, serviceName: name);
+        return url.toShortUrl(service: this);
       }).toList();
       //historyCache = historyList;
+      var db = getDrift();
+
+      //delete all old history
+      await db.transaction(() async {
+        // await db.batch((batch) {
+        //     batch.deleteWhere(db.dBShortUrl, (tbl) => tbl.serviceId.equals(id));
+        // });
+        await (db.delete(db.dBShortUrl)..where((tbl) => tbl.serviceId.equals(id))).go();
+        await db.batch((batch) {
+          batch.insertAll(db.dBShortUrl, historyList.map((e) => e.toDB()));
+        });
+      });
+
+
+      //batch insert into db
+      
       return historyList;
     } catch (e) {
       if (e.runtimeType == ShlinkAPI.ShlinkException) {
@@ -127,28 +167,23 @@ class Shlink implements Service {
       }
       throw e;
     }
-  }
+    // try {
+    //   var historyBox = Hive.box<ShortUrl>("history");
+    //   List<ShortUrl> urls = await history();
+    //   print("refreshedHistory: ${urls.length}");
+    //   urls.forEach((e) {
+    //     historyBox.put(e.shortUrl.toString(), e);
+    //     //print(e.shortUrl.toString());
+    //   });
 
-  /// refreshHistory: Will update the hivedb history
-  @override
-  Future<bool> refreshHistory() async {
-    try {
-      var historyBox = Hive.box<ShortUrl>("history");
-      List<ShortUrl> urls = await history();
-      print("refreshedHistory: ${urls.length}");
-      urls.forEach((e) {
-        historyBox.put(e.shortUrl.toString(), e);
-        //print(e.shortUrl.toString());
-      });
-
-      return true;
-    } catch (e) {
-      if (e.runtimeType == ShlinkAPI.ShlinkException) {
-        throw ServiceException.fromShlinkException(
-            e as ShlinkAPI.ShlinkException);
-      }
-      throw e;
-    }
+    //   return true;
+    // } catch (e) {
+    //   if (e.runtimeType == ShlinkAPI.ShlinkException) {
+    //     throw ServiceException.fromShlinkException(
+    //         e as ShlinkAPI.ShlinkException);
+    //   }
+    //   throw e;
+    // }
   }
 
   /// Shorten:  Will shorten a link using the Shlink service
@@ -165,9 +200,10 @@ class Shlink implements Service {
             new ShlinkAPI.CreateShortURL(link.toString(), customSlug: slug));
       }
 
-      ShortUrl newShort = ShortUrl.fromShlinkAPI(short, serviceName: name);
-      var historyBox = Hive.box<ShortUrl>("history");
-      historyBox.put(newShort.shortUrl.toString(), newShort);
+      ShortUrl newShort = short.toShortUrl(service: this); //ShortUrl.fromShlinkAPI(short, service: this);
+      // var historyBox = Hive.box<ShortUrl>("history");
+      // historyBox.put(newShort.shortUrl.toString(), newShort);
+      await newShort.save();
       return newShort;
     } catch (err) {
       return Future.error(err);
@@ -214,7 +250,9 @@ class Shlink implements Service {
           location: visitLocation,
           referrer: e.referer,
           userAgent: e.userAgent,
-          date: e.date);
+          date: e.date,
+          shortUrlId: shortUrl.id,
+      );
     }).toList();
     return normalVisits;
     /*} catch (err) {
@@ -236,9 +274,6 @@ class Shlink implements Service {
       throw e;
     }
   }
-
-
-
 
 
 }

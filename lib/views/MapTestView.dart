@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shlink_app/Services.dart';
 import 'package:shlink_app/types/ShortUrl.dart';
+import 'package:shlink_app/types/SupportedFeatures.dart';
 import 'package:shlink_app/types/services/ServiceType.dart';
+import 'package:shlink_app/types/services/Shlink.dart';
 import 'package:shlink_app/widgets/maps/DeviceMap.dart';
 import 'package:shlink_app/widgets/maps/MapNavBar.dart';
 import 'package:shlink_app/widgets/maps/MapPOI.dart';
+
+import '../types/services/Service.dart';
 
 class MapTestView extends StatelessWidget {
   LatLng startingCoord = LatLng(29.719460, -95.388951);
@@ -71,8 +76,8 @@ class MapTestView extends StatelessWidget {
                         slug: "test",
                         visitCount: 69420,
                         dateCreated: DateTime.now(),
-                        serviceName: "Test Service",
-                        serviceType: ServiceType.GenericREST))),
+                        service: Services.list[0],
+            ))),
       ],
     ));
   }

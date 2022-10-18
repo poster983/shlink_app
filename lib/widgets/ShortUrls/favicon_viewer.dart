@@ -1,15 +1,18 @@
 import 'package:favicon/favicon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shlink_app/widgets/BetterIcon.dart';
 
 class FaviconViewer extends StatefulWidget {
-  const FaviconViewer({super.key, required this.url, this.onLoad, this.size = 32});
+  const FaviconViewer({super.key, required this.url, this.onLoad, this.size = 32, this.color = const Color(0xFF000000)});
 
   final Uri url;  
 
   final Function(Uri url)? onLoad;
 
   final double size;
+
+  final Color color;
 
   @override
   State<FaviconViewer> createState() => _FaviconViewerState();
@@ -38,10 +41,12 @@ class _FaviconViewerState extends State<FaviconViewer> {
   Widget build(BuildContext context) {
     print("Build favicon");
     if(kIsWeb) {
-      return Icon(CupertinoIcons.globe, size: widget.size);
+      return AspectRatio(aspectRatio: 1, child: Align(
+        alignment: Alignment.center, 
+        child: BetterIcon(CupertinoIcons.globe, size: widget.size, color: widget.color, )));    
     }
 
-    return FutureBuilder<Favicon?>(future: faviconFuture, builder: (context, snapshot) {
+    return AspectRatio(aspectRatio: 1, child: FutureBuilder<Favicon?>(future: faviconFuture, builder: (context, snapshot) {
       print("${widget.url} : ${snapshot.data}");
       if(snapshot.connectionState == ConnectionState.done) {
         if(snapshot.hasData) {
@@ -52,12 +57,12 @@ class _FaviconViewerState extends State<FaviconViewer> {
               :child
           );
         } else {
-          return Icon(CupertinoIcons.globe);
+          return BetterIcon(CupertinoIcons.globe);
         }
       } 
 
       return const CupertinoActivityIndicator();
-    } );
+    } ));
 
     // return Image.network("https://www.google.com/s2/favicons?domain=${widget.url.host}", width: widget.size, height: widget.size, 
     //   loadingBuilder: (context, child, loadingProgress) => loadingProgress != null 

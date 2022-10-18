@@ -16,6 +16,7 @@ class BetterIcon extends StatelessWidget {
     fit: fit,
     child: Text(
       String.fromCharCode(icon.codePoint),
+      // textAlign: TextAlign.center,
       style: TextStyle(
         inherit: false,
         shadows: shadows,

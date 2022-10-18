@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shlink_app/common.dart';
+import 'package:shlink_app/database/DriftGetter.dart';
 import 'package:shlink_app/types/Health.dart';
 import 'package:shlink_app/types/JSONTypeConverters.dart';
 import 'package:shlink_app/types/ShortUrlVisit.dart';
@@ -24,12 +25,17 @@ enum ContentType { FormEncoded, JSON }
 
 @JsonSerializable(nullable: false, anyMap: true)
 class GenericREST implements Service {
+
+  @override
+  String get id => name;
+
+
   ServiceType get type => ServiceType.GenericREST;
   set type(t) => {}; // This is stupid.  Why is this required Json Serializable?
 
   String name;
 
-  late DateTime dayAdded;
+  late DateTime dateAdded;
 
   Uri host;
 
@@ -45,7 +51,7 @@ class GenericREST implements Service {
   SupportedFeatures get features =>
       new SupportedFeatures(slug: (customSlugParameter != null) ? true : false);
 
-  late List<ShortUrl> historyCache;
+  // late List<ShortUrl> historyCache;
 
   @JsonKey(nullable: true)
   Map<String, String>? headers;
@@ -65,7 +71,7 @@ class GenericREST implements Service {
   @JsonKey(
       fromJson: JSONTypeConverters.colorFromJSON,
       toJson: JSONTypeConverters.colorToJSON)
-  late Color? color;
+  late Color color;
 
   /*int __color;
 
@@ -79,7 +85,7 @@ class GenericREST implements Service {
       {required this.host,
       required this.name,
       required this.longURLParameter,
-      this.color,
+      Color? color,
       this.headers,
       this.customSlugParameter,
       this.httpMethod = HTTPMethod.POST,
@@ -87,21 +93,18 @@ class GenericREST implements Service {
       this.reqBody,
       this.shortenedURLParameter,
       this.contentType = ContentType.JSON}) {
-    dayAdded = new DateTime.now();
-    historyCache = [];
-    if (urlParameters == null) {
-      urlParameters = Map<String, String>();
-    }
+        dateAdded = new DateTime.now();
+        // historyCache = [];
+        if (urlParameters == null) {
+          urlParameters = Map<String, String>();
+        }
 
-    if (name == "Shortish Cloud") {
-      throw Exception("Only the Shortish Cloud service can be named Shortish Cloud");
-    }
-
-    if (color == null) {
-      color = randomColor();
-    }
-    //__setColor(color);
-  }
+        if (name == "Shortish Cloud") {
+          throw Exception("Only the Shortish Cloud service can be named Shortish Cloud");
+        }
+        this.color = color ?? randomColor();
+        //__setColor(color);
+      }
 
   @override
   String get apiKey => throw UnimplementedError();
@@ -109,15 +112,17 @@ class GenericREST implements Service {
   List<Domain> get domains => throw UnimplementedError();
 
   @override
-  Future<List<ShortUrl>> history() async {
-    return historyCache;
+  Future<List<ShortUrl>> history() {
+    var db = getDrift();
+
+    return (db.select(db.dBShortUrl)..where((tbl) => tbl.serviceId.equals(id))).get(); 
   }
 
   @override
-  Future<bool> refreshHistory() async {
+  Future<List<ShortUrl>> refreshHistory() async {
     // TODO: implement refreshHistory
     //throw UnimplementedError();
-    return false;
+    return history();
   }
 
   @override
@@ -193,17 +198,16 @@ class GenericREST implements Service {
             longUrl: link,
             slug: (slug != null) ? slug : short.path,
             shortUrl: short,
-            serviceType: ServiceType.GenericREST,
-            serviceName: name);
+            // serviceType: ServiceType.GenericREST,
+            service: this);
         print(shortUrl.toJson());
-        historyCache.add(shortUrl);
-        try {
-          var historyBox = Hive.box<ShortUrl>("history");
-          historyBox.put(shortUrl.shortUrl.toString(), shortUrl);
-        } catch (e) {
-          throw e;
-        }
-
+        // try {
+        //   var historyBox = Hive.box<ShortUrl>("history");
+        //   historyBox.put(shortUrl.shortUrl.toString(), shortUrl);
+        // } catch (e) {
+        //   throw e;
+        // }
+        await shortUrl.save();
         return shortUrl;
       } else {
         throw Exception(res.body);

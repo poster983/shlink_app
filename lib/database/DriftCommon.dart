@@ -6,27 +6,22 @@ import 'package:shlink_app/types/services/Service.dart';
 
 part 'DriftCommon.g.dart';
 
-///MARK Service
-@UseRowClass(Service, constructor: "fromDB")
-class DBService extends Table {
-  TextColumn get id => text().withLength(min: 36, max: 36)();
-  // TextColumn get passId => text().withLength(min: 36, max: 36).references(DBPasses, #id, onDelete: KeyAction.cascade)();
-  // TextColumn get address => text().nullable()();
-  // RealColumn get latitude => real()();
-  // RealColumn get longitude => real()();
 
-  @override
-  Set < Column > get primaryKey => {
-    id
-  };
-}
 
 //MARK: Short Urls
 @UseRowClass(ShortUrl, constructor: "fromDB")
 class DBShortUrl extends Table {
   // IntColumn get id => integer().autoIncrement()();
   TextColumn get id => text().withLength(min: 36, max: 36)();
-  // TextColumn get format => text()();
+  TextColumn get longUrl => text()();
+  TextColumn get shortUrl => text()();
+  TextColumn get slug => text()();
+  DateTimeColumn get dateCreated => dateTime()();
+  IntColumn get visitCount => integer().nullable()();
+  TextColumn get notes => text().nullable()();
+  TextColumn get serviceId => text()();
+  TextColumn get title => text().nullable()();
+
   // TextColumn get dataType => text()();
   // TextColumn get rawData => text()();
   // IntColumn get color => integer()();
@@ -56,6 +51,23 @@ class DBShortUrl extends Table {
 @UseRowClass(ShortUrlVisit, constructor: "fromDB")
 class DBShortUrlVisit extends Table {
   TextColumn get id => text().withLength(min: 36, max: 36)();
+  TextColumn get shortUrlId => text().withLength(min: 36, max: 36).references(DBShortUrl, #id, onDelete: KeyAction.cascade)();
+  
+  //visit info 
+  TextColumn get referrer => text().nullable()();
+  TextColumn get userAgent => text().nullable()();
+  BoolColumn get potentialBot => boolean().nullable()();
+  DateTimeColumn get date => dateTime()();
+
+  //location info
+  TextColumn get locationCountry => text().nullable()();
+  TextColumn get locationRegion => text().nullable()();
+  TextColumn get locationCity => text().nullable()();
+  TextColumn get locationTimezone => text().nullable()();
+  RealColumn get locationLatitude => real().nullable()();
+  RealColumn get locationLongitude => real().nullable()();
+
+
   @override
   Set < Column > get primaryKey => {
     id
@@ -80,7 +92,7 @@ class DBShortUrlVisit extends Table {
 
 
 
-@DriftDatabase(tables: [DBService, DBShortUrl, DBShortUrlVisit])
+@DriftDatabase(tables: [DBShortUrl, DBShortUrlVisit])
 class ShortishDatabase extends _$ShortishDatabase {
   // we tell the database where to store the data with this constructor
 
