@@ -2,10 +2,6 @@
 
 part of 'DriftCommon.dart';
 
-// **************************************************************************
-// DriftDatabaseGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
 class DBShortUrlCompanion extends UpdateCompanion<ShortUrl> {
   final Value<String> id;
@@ -147,7 +143,7 @@ class $DBShortUrlTable extends DBShortUrl
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $DBShortUrlTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
       'id', aliasedName, false,
@@ -155,43 +151,47 @@ class $DBShortUrlTable extends DBShortUrl
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _longUrlMeta = const VerificationMeta('longUrl');
+  static const VerificationMeta _longUrlMeta =
+      const VerificationMeta('longUrl');
   @override
   late final GeneratedColumn<String> longUrl = GeneratedColumn<String>(
       'long_url', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _shortUrlMeta = const VerificationMeta('shortUrl');
+  static const VerificationMeta _shortUrlMeta =
+      const VerificationMeta('shortUrl');
   @override
   late final GeneratedColumn<String> shortUrl = GeneratedColumn<String>(
       'short_url', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _slugMeta = const VerificationMeta('slug');
+  static const VerificationMeta _slugMeta = const VerificationMeta('slug');
   @override
   late final GeneratedColumn<String> slug = GeneratedColumn<String>(
       'slug', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _dateCreatedMeta =
+  static const VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   @override
   late final GeneratedColumn<DateTime> dateCreated = GeneratedColumn<DateTime>(
       'date_created', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _visitCountMeta = const VerificationMeta('visitCount');
+  static const VerificationMeta _visitCountMeta =
+      const VerificationMeta('visitCount');
   @override
   late final GeneratedColumn<int> visitCount = GeneratedColumn<int>(
       'visit_count', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  final VerificationMeta _notesMeta = const VerificationMeta('notes');
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
       'notes', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _serviceIdMeta = const VerificationMeta('serviceId');
+  static const VerificationMeta _serviceIdMeta =
+      const VerificationMeta('serviceId');
   @override
   late final GeneratedColumn<String> serviceId = GeneratedColumn<String>(
       'service_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, true,
@@ -277,23 +277,23 @@ class $DBShortUrlTable extends DBShortUrl
   ShortUrl map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ShortUrl.fromDB(
-      longUrl: attachedDatabase.options.types
+      longUrl: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}long_url'])!,
-      shortUrl: attachedDatabase.options.types
+      shortUrl: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}short_url'])!,
-      slug: attachedDatabase.options.types
+      slug: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}slug'])!,
-      dateCreated: attachedDatabase.options.types
+      dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
-      visitCount: attachedDatabase.options.types
+      visitCount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}visit_count']),
-      serviceId: attachedDatabase.options.types
+      serviceId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}service_id'])!,
-      notes: attachedDatabase.options.types
+      notes: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      title: attachedDatabase.options.types
+      title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title']),
     );
   }
@@ -474,7 +474,7 @@ class $DBShortUrlVisitTable extends DBShortUrlVisit
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $DBShortUrlVisitTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
       'id', aliasedName, false,
@@ -482,7 +482,8 @@ class $DBShortUrlVisitTable extends DBShortUrlVisit
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _shortUrlIdMeta = const VerificationMeta('shortUrlId');
+  static const VerificationMeta _shortUrlIdMeta =
+      const VerificationMeta('shortUrlId');
   @override
   late final GeneratedColumn<String> shortUrlId = GeneratedColumn<String>(
       'short_url_id', aliasedName, false,
@@ -490,62 +491,68 @@ class $DBShortUrlVisitTable extends DBShortUrlVisit
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
       type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints:
-          'REFERENCES "d_b_short_url" ("id") ON DELETE CASCADE');
-  final VerificationMeta _referrerMeta = const VerificationMeta('referrer');
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES d_b_short_url (id) ON DELETE CASCADE'));
+  static const VerificationMeta _referrerMeta =
+      const VerificationMeta('referrer');
   @override
   late final GeneratedColumn<String> referrer = GeneratedColumn<String>(
       'referrer', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _userAgentMeta = const VerificationMeta('userAgent');
+  static const VerificationMeta _userAgentMeta =
+      const VerificationMeta('userAgent');
   @override
   late final GeneratedColumn<String> userAgent = GeneratedColumn<String>(
       'user_agent', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _potentialBotMeta =
+  static const VerificationMeta _potentialBotMeta =
       const VerificationMeta('potentialBot');
   @override
-  late final GeneratedColumn<bool> potentialBot = GeneratedColumn<bool>(
-      'potential_bot', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK ("potential_bot" IN (0, 1))');
-  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  late final GeneratedColumn<bool> potentialBot =
+      GeneratedColumn<bool>('potential_bot', aliasedName, true,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("potential_bot" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }));
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
   late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
       'date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _locationCountryMeta =
+  static const VerificationMeta _locationCountryMeta =
       const VerificationMeta('locationCountry');
   @override
   late final GeneratedColumn<String> locationCountry = GeneratedColumn<String>(
       'location_country', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _locationRegionMeta =
+  static const VerificationMeta _locationRegionMeta =
       const VerificationMeta('locationRegion');
   @override
   late final GeneratedColumn<String> locationRegion = GeneratedColumn<String>(
       'location_region', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _locationCityMeta =
+  static const VerificationMeta _locationCityMeta =
       const VerificationMeta('locationCity');
   @override
   late final GeneratedColumn<String> locationCity = GeneratedColumn<String>(
       'location_city', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _locationTimezoneMeta =
+  static const VerificationMeta _locationTimezoneMeta =
       const VerificationMeta('locationTimezone');
   @override
   late final GeneratedColumn<String> locationTimezone = GeneratedColumn<String>(
       'location_timezone', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _locationLatitudeMeta =
+  static const VerificationMeta _locationLatitudeMeta =
       const VerificationMeta('locationLatitude');
   @override
   late final GeneratedColumn<double> locationLatitude = GeneratedColumn<double>(
       'location_latitude', aliasedName, true,
       type: DriftSqlType.double, requiredDuringInsert: false);
-  final VerificationMeta _locationLongitudeMeta =
+  static const VerificationMeta _locationLongitudeMeta =
       const VerificationMeta('locationLongitude');
   @override
   late final GeneratedColumn<double> locationLongitude =
@@ -653,29 +660,29 @@ class $DBShortUrlVisitTable extends DBShortUrlVisit
   ShortUrlVisit map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ShortUrlVisit.fromDB(
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      referrer: attachedDatabase.options.types
+      referrer: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}referrer']),
-      date: attachedDatabase.options.types
+      date: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
-      userAgent: attachedDatabase.options.types
+      userAgent: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}user_agent']),
-      shortUrlId: attachedDatabase.options.types
+      shortUrlId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}short_url_id'])!,
-      potentialBot: attachedDatabase.options.types
+      potentialBot: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}potential_bot']),
-      locationCountry: attachedDatabase.options.types.read(
+      locationCountry: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}location_country']),
-      locationRegion: attachedDatabase.options.types
+      locationRegion: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location_region']),
-      locationCity: attachedDatabase.options.types
+      locationCity: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location_city']),
-      locationTimezone: attachedDatabase.options.types.read(
+      locationTimezone: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}location_timezone']),
-      locationLatitude: attachedDatabase.options.types.read(
+      locationLatitude: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}location_latitude']),
-      locationLongitude: attachedDatabase.options.types.read(
+      locationLongitude: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}location_longitude']),
     );
   }
@@ -692,9 +699,21 @@ abstract class _$ShortishDatabase extends GeneratedDatabase {
   late final $DBShortUrlVisitTable dBShortUrlVisit =
       $DBShortUrlVisitTable(this);
   @override
-  Iterable<TableInfo<Table, dynamic>> get allTables =>
+  Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [dBShortUrl, dBShortUrlVisit];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
+        [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('d_b_short_url',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('d_b_short_url_visit', kind: UpdateKind.delete),
+            ],
+          ),
+        ],
+      );
 }

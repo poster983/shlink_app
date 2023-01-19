@@ -130,27 +130,62 @@ class _ShortUrlCardCondensedState extends State < ShortUrlCardCondensed > {
                 //Favicon
                 SizedBox(width: 15, child: FaviconViewer(url: widget.shortUrl.longUrl),)
             ], ), ),
-          Expanded(flex: 5, child: GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            childAspectRatio: 8,
-            physics: NeverScrollableScrollPhysics(),
+          // Expanded(flex: 5, child: GridView.count(
+          //   crossAxisCount: 2,
+          //   shrinkWrap: true,
+          //   childAspectRatio: 8,
+          //   physics: NeverScrollableScrollPhysics(),
 
 
-            children: [
+          //   children: [
 
 
 
 
 
-              //long URL
-              Column(
+          //     //long URL
+          //     Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       mainAxisSize: MainAxisSize.min,
+          //       children: [
+          //         AutoSizeText(longDomain, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500), ),
+          //         if (longPath.length > 0) AutoSizeText(longPath, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, ), ),
+          //       ], ),
+
+
+
+
+          //     // SizedBox(width: 10,),
+
+          //     //short URL
+          //     Center(child: AutoSizeText(shortDomain + shortPath, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500), ), ),
+
+          //     // //visit button
+          //     // CupertinoButton(child: Icon(CupertinoIcons.link), onPressed: () {
+          //     //   launchUrl(widget.shortUrl.longUrl);
+          //     // }),
+          //     // //copy button
+          //     // CupertinoButton(child: Icon(CupertinoIcons.doc_on_clipboard), onPressed: () {
+          //     //   Clipboard.setData(ClipboardData(text: widget.shortUrl.shortUrl.toString()));
+
+          //     // }),
+
+
+          //   ]), ),
+
+
+            //long URL
+            Flexible(
+              flex: 2,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   AutoSizeText(longDomain, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500), ),
-                  if (longPath.length > 0) AutoSizeText(longPath, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, ), ),
-                ], ),
+                  if (longPath.length > 0) Flexible(child: AutoSizeText(longPath, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, ), ), ),
+                ], ),),
 
 
 
@@ -159,19 +194,6 @@ class _ShortUrlCardCondensedState extends State < ShortUrlCardCondensed > {
 
               //short URL
               Center(child: AutoSizeText(shortDomain + shortPath, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500), ), ),
-
-              // //visit button
-              // CupertinoButton(child: Icon(CupertinoIcons.link), onPressed: () {
-              //   launchUrl(widget.shortUrl.longUrl);
-              // }),
-              // //copy button
-              // CupertinoButton(child: Icon(CupertinoIcons.doc_on_clipboard), onPressed: () {
-              //   Clipboard.setData(ClipboardData(text: widget.shortUrl.shortUrl.toString()));
-
-              // }),
-
-
-            ]), ),
 
           //view count
           Row(
@@ -217,7 +239,9 @@ class _ShortUrlCardCondensedState extends State < ShortUrlCardCondensed > {
       
     return Container(
       padding: EdgeInsets.all(15),
-      child: Column(children: [
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
         
 
         Flexible(child:Row( 
